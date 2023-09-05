@@ -11,8 +11,7 @@ export const env = createEnv({
     NODE_ENV: z.enum(["development", "test", "production"]),
     OPENAI_API_KEY: z.string(),
     CLOUDINARY_NAME: z.string(),
-    CLERK_PUBLISHABLE_KEY: z.string(),
-    CLERK_SECRET_KEY: z.string()
+    
   },
 
   /**
@@ -33,10 +32,6 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     CLOUDINARY_NAME: process.env.CLOUDINARY_NAME,
-    CLERK_PUBLISHABLE_KEY:process.env.CLERK_PUBLISHABLE_KEY,
-    CLERK_SECRET_KEY:process.env.CLERK_SECRET_KEY
-    
-    // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
