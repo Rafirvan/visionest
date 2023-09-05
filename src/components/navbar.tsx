@@ -2,7 +2,7 @@
 
 import { Button } from "./ui/button"
 import Image from "next/image";
-import Logo from "../../public/logo.png"
+import Logo from "../../public/Logo.png"
 import { Input } from "./ui/input";
 import { Search } from "lucide-react";
 import { Label } from "./ui/label";
