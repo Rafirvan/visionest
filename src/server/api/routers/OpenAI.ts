@@ -65,9 +65,14 @@ export const AIRouter = createTRPCRouter({
       a couple more things to consider:
       -make the content exciting while remaining grounded
       -avidly describe scientific terms that may be alien to most people
+      -act like you are the creator of the paper, advertising your paper or product
       -if the scientific paper abstract input is gibberish,
       simply return the exact phrase "I am sorry, i cannot understand you"
+      --if the scientific paper abstract input is less than 500 letters,
+      simply return the exact phrase "minimum input is 500 letters"
       -do not return a title, also do not return a word count
+      -end every output with "THIS POST IS AI-GENERATED" in a newline if possible
+
       `
     const contentCompletion = await openai.chat.completions.create({
       messages: [{

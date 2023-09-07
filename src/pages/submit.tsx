@@ -1,14 +1,12 @@
 "use client"
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { Button } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { api } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
-import Link from "next/link";
-import { CldUploadButton } from 'next-cloudinary';
-
+import { useRouter } from "next/router";
 import Image from "next/image";
 import Onestwhite from "../../public/Onestwhite.png"
 import {
@@ -26,7 +24,7 @@ import {
 
 export default function Submit() {
 
-    const { isLoaded, isSignedIn, user } = useUser();
+    const { isLoaded, isSignedIn } = useUser();
 
     return (
         <React.Fragment>
@@ -49,19 +47,29 @@ export default function Submit() {
 function PostForm() {
     const [titleValue, setTitleValue] = useState('');
     const [authorValue, setAuthorValue] = useState('');
-    const [creationYearValue, setCreationYearValue] = useState("");
+    const [creationYearValue, setCreationYearValue] = useState(2000);
     const [descriptionValue, setDescriptionValue] = useState("")
     const [abstractValue, setAbstractValue] = useState('');
-    const [airesult, setAiresult] = useState('');
     const [aiLoading, setAiLoading] = useState(false);
+    const [paperLinkValue, setPaperLinkValue] = useState("");
+    const [imageURLValue, setImageURLValue] = useState("");
+    const router = useRouter()
 
 
     const AIcall = api.completion.content.useMutation({
         onSuccess: (result) => {
             if (result) {
-                console.log(result)
-                setAiresult(result)
+                setDescriptionValue(result)
+                setAiLoading(false)
             }
+        }
+    });
+
+    const DBpush = api.db.submit.useMutation({
+        onSuccess: () => {
+            alert("Submission succesful! Reloading page...")
+            // const timeout = setTimeout(() => { router.reload() }, 2000)
+            router.reload()
         }
     });
 
@@ -73,8 +81,12 @@ function PostForm() {
             title: titleValue,
             authors: authorValue,
             year: creationYearValue,
-            description: descriptionValue
+            description: descriptionValue,
+            link: paperLinkValue,
+            imageurl: imageURLValue
         }
+
+        DBpush.mutate(inputs)
 
     };
 
@@ -82,7 +94,12 @@ function PostForm() {
         if (abstractValue.length < 500 || abstractValue.length > 3000)
             alert("you need an input with minimum of 500 characters and maximum of 3000 characters")
 
-        else AIcall.mutate(abstractValue)
+        else {
+            setDescriptionValue("AI is generating output... this may take some time")
+            setAiLoading(true)
+            AIcall.mutate(abstractValue)
+        }
+
     }
 
 
@@ -118,6 +135,34 @@ function PostForm() {
                     ></input>
                 </div>
 
+                <div id="paperlinkinput">
+                    <label htmlFor="paperlink" className="block text-sm font-medium mb-2">
+                        Link to proof of publication <span className="text-slate-500">either restricted or full scientific literature access</span>
+                    </label>
+                    <input
+                        id="paperlink"
+                        type="text"
+                        value={paperLinkValue}
+                        onChange={(e) => setPaperLinkValue(e.target.value)}
+                        className="ml-5 mb-3 flex w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50  dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
+                        required
+                    ></input>
+                </div>
+
+                <div id="imageurlinput">
+                    <label htmlFor="imageurl" className="block text-sm font-medium mb-2">
+                        (placeholder) imageURL
+                    </label>
+                    <input
+                        id="imageurl"
+                        type="text"
+                        value={imageURLValue}
+                        onChange={(e) => setImageURLValue(e.target.value)}
+                        className="ml-5 mb-3 flex w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50  dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
+                        required
+                    ></input>
+                </div>
+
                 <div id="yearinput">
                     <label htmlFor="year" className="block text-sm font-medium mb-2">
                         Year created
@@ -126,8 +171,8 @@ function PostForm() {
                         id="year"
                         type="number"
                         value={creationYearValue}
-                        onChange={(e) => setCreationYearValue(e.target.value)}
-                        className="ml-5 mb-3 flex w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50  dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
+                        onChange={(e) => setCreationYearValue(Number(e.target.value))}
+                        className="ml-5 mb-3 flex w-50px rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50  dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
                         placeholder="1970"
                         min={1970}
                         max={2024}
@@ -141,7 +186,7 @@ function PostForm() {
 
 
                             <Dialog>
-                                <DialogTrigger>
+                                <DialogTrigger disabled={aiLoading} className="disabled:hidden">
                                     <p className="text-blue-700 hover:underline">{`Try generating your post's description using AI!`}</p>
                                 </DialogTrigger>
                                 <DialogContent>
@@ -156,7 +201,9 @@ function PostForm() {
                                                 placeholder="minimum of 500 characters, maximum of 3000 characters"
                                                 rows={15}
                                             />
-                                            <Button onClick={generateDescription}>Generate</Button>
+                                            <DialogTrigger asChild>
+                                                <Button onClick={generateDescription}>Generate</Button>
+                                            </DialogTrigger>
                                         </DialogDescription>
                                     </DialogHeader>
                                 </DialogContent>
@@ -166,18 +213,15 @@ function PostForm() {
                         </span>
                     </label>
                     <textarea
+                        disabled={aiLoading}
                         id="description"
                         value={descriptionValue}
                         onChange={(e) => setDescriptionValue(e.target.value)}
                         className="ml-5 mb-3 flex w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50  dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
+                        rows={15}
                         required
                     ></textarea>
                 </div>
-
-
-                {/* image upload here */}
-
-                <CldUploadButton />
 
                 <Button
                     type="submit"
@@ -192,4 +236,4 @@ function PostForm() {
 }
 
 
-//TODO: LEARN PRISMA, COMPLETE POSTING, GET USER ID WITH CLERK, SHOW AIRESULT IN UI WITH PASTE FN, CLOUDINARY UPLOAD
+//TODO: LEARN PRISMA, COMPLETE POSTING, CLOUDINARY UPLOAD

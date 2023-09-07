@@ -10,8 +10,25 @@ datasource db {
   relationMode = "prisma"
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model post {
+    id          String   @id @default(cuid())
+    createdAt   DateTime @default(now())
+    title       String   @db.VarChar(80)
+    description String   @db.VarChar(500)
+    authors     String   @db.VarChar(80)
+    year        Int      @db.Int 
+    originlink  String
+    userID      String
+    imageURL    String   
+    status      String
+    favcount    Int
+    
+
+    @@index([userID])
+}
+
+enum Status {
+  PENDING
+  ACCEPTED
+  REJECTED
 }
