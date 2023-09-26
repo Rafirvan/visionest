@@ -1,10 +1,9 @@
 import { authMiddleware } from "@clerk/nextjs";
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+
 
 
 export default authMiddleware({
-    publicRoutes: ["/", "/vision", "/sign-up", "/submit"]
+    publicRoutes: ["/(.*)"]
 });
 
 export const config = {

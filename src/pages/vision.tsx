@@ -10,9 +10,9 @@ import {
   AccordionTrigger,
 } from "~/components/ui/accordion";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import { api } from "~/utils/api";
+import { trpc } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
-import Link from "next/link";
+
 
 
 interface formProps {
@@ -85,7 +85,7 @@ function NewForm({ onSubmit, onSubmitStep2 }: formProps) {
 
 
 
-  const AIcall = api.completion.idea.useMutation({
+  const AIcall = trpc.completion.idea.useMutation({
     onSuccess: (data) => {
       if (data) {
         console.log(data)
@@ -142,7 +142,7 @@ function NewForm({ onSubmit, onSubmitStep2 }: formProps) {
 
         <div id="majorselect">
           <label htmlFor="major" className="block text-sm font-medium mb-2">
-            Select your major
+            Pilih Jurusan Anda
           </label>
           <select
             id="major"
@@ -158,7 +158,7 @@ function NewForm({ onSubmit, onSubmitStep2 }: formProps) {
 
         <div id="typeradio" className="mb-4">
           <label className="block text-sm font-medium mb-2">
-            Preferred project type
+            Tipe Projek Yang Diinginkan
           </label>
           <label className="mx-5">
             <input
@@ -169,7 +169,7 @@ function NewForm({ onSubmit, onSubmitStep2 }: formProps) {
               onChange={e => setTypeValue(e.target.value)}
               className="scale-125 mr-1"
             />
-            Practical
+            Praktikal
           </label>
 
           <label>
@@ -180,13 +180,13 @@ function NewForm({ onSubmit, onSubmitStep2 }: formProps) {
               onChange={e => setTypeValue(e.target.value)}
               className="scale-125 mr-1"
             />
-            Theoretical
+            Teoretikal
           </label>
         </div>
 
         <div id="fieldinput">
           <label htmlFor="field" className="block text-sm font-medium  mb-2">
-            What field(related to your major) are you interested in?
+            Bidang Apa (terhubung dengan jurusan anda) Yang Anda Paling Sukai
           </label>
           <input
             id="field"
@@ -200,7 +200,7 @@ function NewForm({ onSubmit, onSubmitStep2 }: formProps) {
 
         <div id="subjectinput">
           <label htmlFor="subject" className="block text-sm font-medium mb-2">
-            What research subject(s) and technologies are you familiar with, write as many as you can separated by commas(,)
+            Teknologi atau subjek riset apa yang anda bisa gunakan, sampaikan sebanyak mungkin dan pisahkan dengan koma(,)
           </label>
           <input
             id="subject"
@@ -213,11 +213,11 @@ function NewForm({ onSubmit, onSubmitStep2 }: formProps) {
 
         <Accordion type="single" id="optionalinput" collapsible>
           <AccordionItem value="item-1">
-            <AccordionTrigger className="text-red-700">Optional Inputs</AccordionTrigger>
+            <AccordionTrigger className="text-red-700">Input Opsional</AccordionTrigger>
             <AccordionContent>
               <div id="timeinput">
                 <label htmlFor="time" className="block text-sm font-medium mb-2">
-                  How much time are you given?
+                  Berapa Lama Waktu Pengerjaan Projek
                 </label>
                 <input
                   id="time"
@@ -227,7 +227,7 @@ function NewForm({ onSubmit, onSubmitStep2 }: formProps) {
                 ></input>
               </div> <div id="constraintinput">
                 <label htmlFor="constraint" className="block text-sm font-medium mb-2">
-                  What do you NOT want in your project?
+                  Apa yang anda tidak inginkan untuk projek ini?
                 </label>
                 <input
                   id="constraint"
@@ -244,7 +244,7 @@ function NewForm({ onSubmit, onSubmitStep2 }: formProps) {
           type="submit"
           className="bg-blue-700 mb-10 disabled:bg-gray-600 w-[105%]"
         >
-          Generate recommended project ideas
+          Generasi Ide Rekomendasi
         </Button>
       </form>
       <div id="errorDiv" className="h-[180px] flex w-full md:hidden"></div>
@@ -253,67 +253,64 @@ function NewForm({ onSubmit, onSubmitStep2 }: formProps) {
 }
 
 
-
 const majors = [
-  "Accounting",
-  "Agriculture",
-  "Architecture",
-  "Biology",
-  "Business Administration",
-  "Chemical Engineering",
-  "Civil Engineering",
-  "Communication Studies",
-  "Computer Science",
-  "Dentistry",
-  "Economics",
-  "Education",
-  "Electrical Engineering",
-  "Environmental Engineering",
-  "Fisheries",
-  "Forestry",
-  "Geography",
-  "Geology",
-  "History",
-  "Industrial Engineering",
-  "Informatics Engineering",
-  "International Relations",
-  "Law",
-  "Management",
-  "Marine Science",
-  "Mathematics",
-  "Mechanical Engineering",
-  "Medicine",
-  "Nursing",
-  "Pharmacy",
-  "Philosophy",
-  "Physics",
-  "Political Science",
-  "Psychology",
-  "Public Administration",
-  "Public Health",
-  "Sociology",
-  "Statistics",
-  "Tourism",
-  "Veterinary Medicine",
-  "Visual Arts",
-  "Zoology",
-  "Islamic Studies",
-  "Anthropology",
-  "Astronomy",
-  "Chemistry",
-  "Chinese Literature",
-  "Japanese Literature",
-  "Indonesian Literature",
-  "Dutch Literature",
-  "English Literature",
-  "Culinary Arts",
-  "Fashion Design",
-  "Film Studies",
-  "Finance",
-  "Graphic Design",
-  "Hospitality Management",
-  "Interior Design",
-  "Journalism",
-  "Marketing",
-  "Music"
+  "Administrasi Bisnis",
+  "Administrasi Publik",
+  "Akuntansi",
+  "Antropologi",
+  "Arsitektur",
+  "Astronomi",
+  "Biologi",
+  "Desain Grafis",
+  "Desain Interior",
+  "Desain Mode",
+  "Ekonomi",
+  "Farmasi",
+  "Filsafat",
+  "Fisika",
+  "Geografi",
+  "Geologi",
+  "Hubungan Internasional",
+  "Ilmu Kelautan",
+  "Ilmu Komputer",
+  "Ilmu Komunikasi",
+  "Ilmu Politik",
+  "Jurnalistik",
+  "Kedokteran",
+  "Kedokteran Gigi",
+  "Kedokteran Hewan",
+  "Kehutanan",
+  "Keperawatan",
+  "Kesehatan Masyarakat",
+  "Kimia",
+  "Manajemen",
+  "Manajemen Perhotelan",
+  "Matematika",
+  "Musik",
+  "Pariwisata",
+  "Pemasaran",
+  "Pendidikan",
+  "Perikanan",
+  "Pertanian",
+  "Psikologi",
+  "Sastra Belanda",
+  "Sastra Cina",
+  "Sastra Indonesia",
+  "Sastra Inggris",
+  "Sastra Jepang",
+  "Sejarah",
+  "Seni Kuliner",
+  "Seni Visual",
+  "Sosiologi",
+  "Statistika",
+  "Studi Film",
+  "Studi Islam",
+  "Teknik Elektro",
+  "Teknik Industri",
+  "Teknik Informatika",
+  "Teknik Kimia",
+  "Teknik Lingkungan",
+  "Teknik Mesin",
+  "Teknik Sipil",
+  "Zoologi"
 ]

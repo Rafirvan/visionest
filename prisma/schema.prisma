@@ -4,31 +4,54 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
-  provider = "mysql"
-  url = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
 model post {
-    id          String   @id @default(cuid())
-    createdAt   DateTime @default(now())
-    title       String   @db.VarChar(80)
-    description String   @db.VarChar(500)
-    authors     String   @db.VarChar(80)
-    year        Int      @db.Int 
-    originlink  String
-    userID      String
-    imageURL    String   
-    status      String
-    favcount    Int
-    
+  id          String        @id @default(cuid())
+  creatorID   String
+  createdAt   DateTime      @default(now())
+  title       String        @db.VarChar(200)
+  description String        @db.VarChar(3000)
+  authors     String        @db.VarChar(300)
+  year        Int           @db.Int
+  university  String
+  originlink  String
+  imageURL    String        @db.VarChar(500)
+  status      String
+  favcount    Int
+  rejection   String
+  favs        userfavpost[]
+  posttag     posttag[]
 
-    @@index([userID])
+  @@index([creatorID])
 }
 
-enum Status {
-  PENDING
-  ACCEPTED
-  REJECTED
+model userfavpost {
+  favID     String   @id @default(cuid())
+  userID    String
+  post      post     @relation(fields: [postID], references: [id])
+  postID    String
+  createdAt DateTime @default(now())
+
+  @@unique([userID, postID])
+}
+
+model tag {
+  id    String    @id @default(cuid())
+  name  String    @unique
+  posts posttag[]
+}
+
+model posttag {
+  post   post   @relation(fields: [postId], references: [id])
+  tag    tag    @relation(fields: [tagId], references: [id])
+  postId String
+  tagId  String
+
+  @@id([postId, tagId])
 }

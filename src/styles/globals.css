@@ -1,4 +1,25 @@
 @tailwind base;
+
+@layer base {
+
+    .no-tailwindcss-base h1,
+    .no-tailwindcss-base h2,
+    .no-tailwindcss-base h3,
+    .no-tailwindcss-base h4,
+    .no-tailwindcss-base h5,
+    .no-tailwindcss-base h6 {
+        font-size: revert;
+        font-weight: revert;
+    }
+
+    .no-tailwindcss-base ol,
+    .no-tailwindcss-base ul {
+        list-style: revert;
+        margin: revert;
+        padding: revert;
+    }
+}
+
 @tailwind components;
 @tailwind utilities;
 
@@ -9,11 +30,19 @@
     --vdarkgreen: rgb(21 128 61);
 }
 
+img {
+  max-width: 100%;
+}
+
 body {
   padding: 0 10% 0 10% !important;
   width: 100%;
+  max-width: 1600px;
   overflow-x: hidden;
-  overflow-y: scroll;
+}
+
+body.no-padding {
+  padding: 0 !important;
 }
 
 @media (max-width: 767px) {
@@ -61,3 +90,18 @@ input:not(:focus)::placeholder {
   color: transparent;
 }
 
+#carousel::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    background: transparent;
+}
+
+#carousel {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.1) rgba(255, 255, 255, 0.1);
+    -ms-overflow-style: none;
+}
+
+.tox .tox-menu.tox-collection.tox-collection--list.tox-selected-menu {
+    z-index: 100000 !important;
+}

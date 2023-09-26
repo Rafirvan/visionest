@@ -1,5 +1,6 @@
 import { type AppType } from "next/app";
-import { api } from "~/utils/api";
+import { trpc } from "~/utils/api";
+import "@uploadthing/react/styles.css";
 import "~/styles/globals.css";
 import Head from "next/head";
 import Layout from "~/components/layout";
@@ -14,6 +15,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       <Head>
         <link rel="icon" href="/icon.png" />
         <title>Visionest</title>
+
       </Head>
       <ClerkProvider {...pageProps}>
         <AnimatePresence mode="wait" initial={false}>
@@ -28,7 +30,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   );
 };
 
-export default api.withTRPC(MyApp);
+export default trpc.withTRPC(MyApp);
 
 
 

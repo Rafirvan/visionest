@@ -15,6 +15,8 @@ const config = {
     // Feel free to reconfigure them to your own preference.
     "@typescript-eslint/array-type": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
+    "@typescript-eslint/no-var-requires": "off",
+
 
     "@typescript-eslint/consistent-type-imports": [
       "warn",

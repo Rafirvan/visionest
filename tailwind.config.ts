@@ -1,12 +1,17 @@
+import { withUt } from "uploadthing/tw"
+
+
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+
+
+module.exports = withUt({
   darkMode: ["class"],
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   theme: {
     container: {
       center: true,
@@ -16,14 +21,22 @@ module.exports = {
       },
     },
     extend: {
+      colors: { 'vision': '#7D5643' },
+      gridTemplateRows: {
+        '20': 'repeat(20, minmax(0, 1fr))',
+      },
+      gridRowStart: {
+        '19': '19',
+        '18': '18',
+      },
       keyframes: {
         "accordion-down": {
-          from: { height: 0 },
+          from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: 0 },
+          to: { height: "0" },
         },
       },
       animation: {
@@ -33,4 +46,4 @@ module.exports = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+})

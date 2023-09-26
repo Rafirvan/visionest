@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useState, useEffect } from "react"
 import { Button } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
@@ -5,8 +6,8 @@ import { trpc } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import Onestwhite from "../../public/Onestwhite.png"
-import Loadingimage from "../../public/loadingimage.gif"
+import Onestwhite from "../../../public/Onestwhite.png"
+import Loadingimage from "../../../public/loadingimage.gif"
 import { Dialog, DialogContent, DialogTitle, DialogTrigger, } from "~/components/ui/dialog"
 import TextEditor from "~/components/texteditor";
 import { UploadButton } from "~/utils/uploadthing";
@@ -15,19 +16,27 @@ import { UploadButton } from "~/utils/uploadthing";
 
 
 
-export default function Submit() {
+
+export default function Edit() {
 
     const { isLoaded, isSignedIn } = useUser();
+
+
+
+
+
 
     // returns blank div if clerk is not loaded
     if (!isLoaded) return <div></div>
 
+
+
+
     return (
         <React.Fragment>
             <section id="Section1" className="h-[100vh] w-full flex flex-col justify-between place-items-center bg-[100vw] lg:flex-row gap-x-7 overflow-y-hidden">
-                <div id='Text' className='basis-2/5 h-full w-full flex flex-col place-content-center bg-blue-600 text-white text-center px-4'>
-                    <h1 className='font-bold text-7xl mb-2'>Submit a <div>P<span><Image src={Onestwhite} alt="o" className="inline w-[40px] aspect-square" /></span>st</div></h1>
-                    <p>Masukkan Penjelasan Mengenai Karya Ilmiah Anda</p>
+                <div id='Text' className='basis-2/5 h-full w-full flex flex-col place-content-center bg-vision text-white text-center px-4'>
+                    <h1 className='font-bold text-7xl mb-2'>Edit your <div>P<span><Image src={Onestwhite} alt="o" className="inline w-[40px] aspect-square" /></span>st</div></h1>
                 </div>
 
                 <div className="basis-3/5 h-full w-full flex place-content-center">
@@ -49,10 +58,34 @@ function PostForm() {
     const [descriptionValue, setDescriptionValue] = useState("")
     const [abstractValue, setAbstractValue] = useState('');
     const [aiLoading, setAiLoading] = useState(false);
+    const [creatorId, setCreatorId] = useState("");
     const [paperLinkValue, setPaperLinkValue] = useState("");
     const [imageURLValue, setImageURLValue] = useState<string | undefined>("");
     const [buttonOn, setButtonOn] = useState(true);
+    const [initload, setInitLoad] = useState(true)
+    const { user } = useUser()
     const router = useRouter()
+    const postId = router.query.slug?.toString()
+    const getpostfromid = trpc.db.callpostfromid.useMutation({
+        onSuccess: (result) => {
+            setInitLoad(false)
+            if (result) {
+                setTitleValue(result.title)
+                setAuthorValue(result.authors)
+                setCreationYearValue(result.year)
+                setDescriptionValue(result.description)
+                setImageURLValue(result.imageURL)
+                setUniversityValue(result.university)
+                setPaperLinkValue(result.originlink)
+                setCreatorId(result.creatorID)
+            }
+        }
+    })
+    useEffect(() => {
+        if (postId) getpostfromid.mutate(postId)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
 
     const filledInput = Boolean(titleValue || authorValue || descriptionValue || abstractValue || paperLinkValue || universityValue || imageURLValue)
 
@@ -84,7 +117,6 @@ function PostForm() {
     const AIcall = trpc.completion.content.useMutation({
         onSuccess: (result) => {
             if (result) {
-                console.log(result)
                 setDescriptionValue(result)
                 setAiLoading(false)
             }
@@ -92,9 +124,9 @@ function PostForm() {
     });
 
     //push to db API in server/api/routers/Dbcall
-    const DBpush = trpc.db.submit.useMutation({
+    const DBpush = trpc.db.edit.useMutation({
         onSuccess: () => {
-            alert("Berhasil Upload, post anda sekarang PENDING")
+            alert("Berhasil Edit, post anda sekarang PENDING")
             setTitleValue("")
             setAuthorValue("")
             setAbstractValue("")
@@ -104,6 +136,10 @@ function PostForm() {
             setUniversityValue("")
             setPaperLinkValue("")
             setButtonOn(true)
+            setTimeout(async () => {
+                await router.push("/")
+            }, 1);
+
         }
     });
 
@@ -112,17 +148,20 @@ function PostForm() {
         console.log("submit")
         setButtonOn(false)
 
-        const inputs = {
-            title: titleValue,
-            authors: authorValue,
-            year: creationYearValue,
-            description: descriptionValue,
-            link: paperLinkValue,
-            university: universityValue,
-            imageurl: imageURLValue!
+        if (postId) {
+            const inputs = {
+                id: postId,
+                title: titleValue,
+                authors: authorValue,
+                year: creationYearValue,
+                description: descriptionValue,
+                link: paperLinkValue,
+                university: universityValue,
+                imageurl: imageURLValue!
 
+            }
+            DBpush.mutate(inputs)
         }
-        DBpush.mutate(inputs)
     };
 
     //alert if abstract too little/big
@@ -139,6 +178,9 @@ function PostForm() {
 
     }
 
+
+    if (initload) return <div></div>
+    if (user?.id != creatorId) return <section>UNAUTHORIZED</section>
 
 
     return (
@@ -190,7 +232,7 @@ function PostForm() {
 
                 <div id="paperlinkinput">
                     <label htmlFor="paperlink" className="block text-sm font-medium mb-2">
-                        Link menuju bukti publikasi <span className="text-slate-500">{`Misal link menuju perpustakaan digital / webiste publikasi. Selalu mulai dengan "https://"`}</span>
+                        Link menuju bukti publikasi <span className="text-slate-500">{`Misal link menuju perpustakaan digital / webiste publikasi. Selalu mulai dengan https://"`}</span>
                     </label>
                     <input
                         id="paperlink"
@@ -229,13 +271,13 @@ function PostForm() {
                                     <p className="text-blue-700 hover:underline pl-2">{`Coba generasi deskripsi menggunakan AI!`}</p>
                                 </DialogTrigger>
                                 <DialogContent>
-                                    <DialogTitle>{`Masukkan Abstrak Literatur Ilmiah Anda`}</DialogTitle>
+                                    <DialogTitle>{`Insert your paper's abstract`}</DialogTitle>
                                     <textarea
                                         id="abstract"
                                         value={abstractValue}
                                         onChange={(e) => setAbstractValue(e.target.value)}
                                         className="text-justify my-2 flex w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50  dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
-                                        placeholder="minimal 300 karakter, maksimal 3000 karakter"
+                                        placeholder="minimum of 300 non-whitespace characters, maximum of 3000 characters"
                                         rows={15}
                                     />
                                     <div>Character count = {abstractValue.replace(/\s/g, '').length}</div>
@@ -280,7 +322,7 @@ function PostForm() {
                     className="bg-green-500 mb-10 disabled:bg-gray-600 w-[105%] "
                     disabled={!buttonOn}
                 >
-                    Post
+                    Edit
                 </Button>
             </form>
             <div id="errorDiv" className="h-[180px] flex w-full lg:hidden"></div>

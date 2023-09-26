@@ -1,6 +1,7 @@
 import { createTRPCRouter } from "~/server/api/trpc";
-import { AIRouter } from './routers/OpenAI';
-import { DBRouter } from "./routers/Dbcall";
+import { AIRouter } from './TRPCrouters/OpenAI';
+import { DBRouter } from "./TRPCrouters/Dbcall";
+import { APIRouter } from "./TRPCrouters/APIKeys";
 
 /**
  * This is the primary router for your server.
@@ -9,7 +10,8 @@ import { DBRouter } from "./routers/Dbcall";
  */
 export const appRouter = createTRPCRouter({
   completion: AIRouter,
-  db: DBRouter
+  db: DBRouter,
+  key: APIRouter
 });
 
 // export type definition of API
