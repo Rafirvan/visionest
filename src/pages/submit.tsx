@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import Onestwhite from "../../public/Onestwhite.png"
 import Loadingimage from "../../public/loadingimage.gif"
-import { Dialog, DialogContent, DialogTitle, DialogTrigger, } from "~/components/ui/dialog"
+import AImodal from "~/components/aigen";
 import TextEditor from "~/components/texteditor";
 import { UploadButton } from "~/utils/uploadthing";
 
@@ -47,14 +47,12 @@ function PostForm() {
     const [creationYearValue, setCreationYearValue] = useState(2000);
     const [universityValue, setUniversityValue] = useState('');
     const [descriptionValue, setDescriptionValue] = useState("")
-    const [abstractValue, setAbstractValue] = useState('');
-    const [aiLoading, setAiLoading] = useState(false);
     const [paperLinkValue, setPaperLinkValue] = useState("");
     const [imageURLValue, setImageURLValue] = useState<string | undefined>("");
     const [buttonOn, setButtonOn] = useState(true);
     const router = useRouter()
 
-    const filledInput = Boolean(titleValue || authorValue || descriptionValue || abstractValue || paperLinkValue || universityValue || imageURLValue)
+    const filledInput = Boolean(titleValue || authorValue || descriptionValue || paperLinkValue || universityValue || imageURLValue)
 
     //prevent closing if input is filled
     useEffect(() => {
@@ -78,18 +76,9 @@ function PostForm() {
             window.removeEventListener('beforeunload', handleBeforeUnload);
             router.events.off('routeChangeStart', handleRouteChange);
         };
-    }, [abstractValue, authorValue, descriptionValue, filledInput, imageURLValue, paperLinkValue, router, titleValue, universityValue]);
+    }, [authorValue, descriptionValue, filledInput, imageURLValue, paperLinkValue, router, titleValue, universityValue]);
 
-    //calls AI API in server/api/routers/openai
-    const AIcall = trpc.completion.content.useMutation({
-        onSuccess: (result) => {
-            if (result) {
-                console.log(result)
-                setDescriptionValue(result)
-                setAiLoading(false)
-            }
-        }
-    });
+
 
     //push to db API in server/api/routers/Dbcall
     const DBpush = trpc.db.submit.useMutation({
@@ -97,7 +86,6 @@ function PostForm() {
             alert("Berhasil Upload, post anda sekarang PENDING")
             setTitleValue("")
             setAuthorValue("")
-            setAbstractValue("")
             setCreationYearValue(2000)
             setDescriptionValue('')
             setImageURLValue('')
@@ -125,19 +113,7 @@ function PostForm() {
         DBpush.mutate(inputs)
     };
 
-    //alert if abstract too little/big
-    function generateDescription() {
-        const len = abstractValue.replace(/\s/g, '').length
-        if (len < 300 || len > 3000)
-            alert("Anda membutuhkan input minimal 300 karakter dan maksimal 3000 karakter")
 
-        else {
-            setDescriptionValue("AI sedang menggenerasi output, harap tunggu sebentar...")
-            setAiLoading(true)
-            AIcall.mutate({ text: abstractValue })
-        }
-
-    }
 
 
 
@@ -154,7 +130,7 @@ function PostForm() {
                         type="text"
                         value={titleValue}
                         onChange={(e) => setTitleValue(e.target.value)}
-                        className="ml-5 mb-5 flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50  dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
+                        className="ml-5 mb-5 flex h-10 w-full rounded-md border-2 border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50  dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
                         maxLength={200}
                         required
                     />
@@ -169,7 +145,7 @@ function PostForm() {
                         type="text"
                         value={authorValue}
                         onChange={(e) => setAuthorValue(e.target.value)}
-                        className="ml-5 mb-3 flex w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50  dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
+                        className="ml-5 mb-3 flex w-full rounded-md border-2 border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50  dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
                         required
                     ></input>
                 </div>
@@ -183,7 +159,7 @@ function PostForm() {
                         type="text"
                         value={universityValue}
                         onChange={(e) => setUniversityValue(e.target.value)}
-                        className="ml-5 mb-3 flex w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50  dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
+                        className="ml-5 mb-3 flex w-full rounded-md border-2 border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50  dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
                         required
                     ></input>
                 </div>
@@ -197,7 +173,7 @@ function PostForm() {
                         type="url"
                         value={paperLinkValue}
                         onChange={(e) => setPaperLinkValue(e.target.value)}
-                        className="ml-5 mb-3 flex w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50  dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
+                        className="ml-5 mb-3 flex w-full rounded-md border-2 border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50  dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
                         required
                     ></input>
                 </div>
@@ -222,34 +198,14 @@ function PostForm() {
                 <div id="descriptioninput" >
                     <label htmlFor="description" className="block text-sm font-medium mb-2">
                         Deskripsi
-                        <span>
-                            {/* Ai button dialog */}
-                            <Dialog>
-                                <DialogTrigger disabled={aiLoading} className="disabled:hidden">
-                                    <p className="text-blue-700 hover:underline pl-2">{`Coba generasi deskripsi menggunakan AI!`}</p>
-                                </DialogTrigger>
-                                <DialogContent>
-                                    <DialogTitle>{`Masukkan Abstrak Literatur Ilmiah Anda`}</DialogTitle>
-                                    <textarea
-                                        id="abstract"
-                                        value={abstractValue}
-                                        onChange={(e) => setAbstractValue(e.target.value)}
-                                        className="text-justify my-2 flex w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50  dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
-                                        placeholder="minimal 300 karakter, maksimal 3000 karakter"
-                                        rows={15}
-                                    />
-                                    <div>Character count = {abstractValue.replace(/\s/g, '').length}</div>
-                                    <DialogTrigger asChild>
-                                        <Button onClick={generateDescription}>Generate</Button>
-                                    </DialogTrigger>
-                                </DialogContent>
-                            </Dialog>
-                        </span>
-
+                        <AImodal setDescriptionValue={setDescriptionValue} />
                     </label>
-                    <TextEditor
-                        formData={descriptionValue}
-                        setFormData={(input: string) => { setDescriptionValue(input) }} />
+                    <div className="border rounded-xl border-slate-300 h-fit">
+                        <TextEditor
+
+                            formData={descriptionValue}
+                            setFormData={(input: string) => { setDescriptionValue(input) }} />
+                    </div>
                 </div>
 
 

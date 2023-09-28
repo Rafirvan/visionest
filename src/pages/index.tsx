@@ -18,7 +18,7 @@ export default function Home() {
 
 
       <section id="Section1"
-        className="min-h-[100vh] w-full full-bg-white flex flex-col-reverse justify-between place-items-center bg-[100vw] md:flex-row ">
+        className="min-h-[700px] w-full full-bg-white flex flex-col-reverse justify-between place-items-center bg-[100vw] md:flex-row ">
         <div id='Text' className='basis-2/5'>
           <h2 className='font-bold text-4xl mb-2 text-left'>Discover Innovations</h2>
           <p>{`"The Nest" adalah tempat di mana Anda dapat menyelam ke dalam koleksi tulisan yang telah dikurasi
@@ -36,8 +36,8 @@ export default function Home() {
       </section>
 
 
-      <section id="Section2" className="min-h-[100vh] w-full full-bg-blue text-justify flex flex-col justify-between  py-20 place-content-center justify-items-center">
-        <div id='postslider' className='basis-3/5 bg-gradient-to-b from-blue-400  to-blue-500 rounded-lg py-8 px-[32px] w-[364px] lg:w-[696px] xl:w-[1028px] mx-auto overflow-x-hidden '>
+      <section id="Section2" className="min-h-[700px] w-full full-bg-blue text-justify flex flex-col justify-between  py-20 place-content-center justify-items-center">
+        <div id='postslider' className='scale-75 md:scale-100 basis-3/5 bg-gradient-to-b from-blue-400  to-blue-500 rounded-lg py-8 px-[32px] w-[364px] lg:w-[696px] xl:w-[1028px] mx-auto overflow-x-hidden '>
           <PostCarousel />
         </div>
         <div id='submitintro' className=' basis-2/5 justify-center gap-10'>
@@ -55,11 +55,11 @@ export default function Home() {
 
 
 
-      <section id="Section3" className="min-h-[100vh] w-full full-bg-green flex flex-col-reverse justify-between place-items-center md:flex-row ">
+      <section id="Section3" className="min-h-full w-full full-bg-green flex flex-col-reverse justify-between place-items-center md:flex-row ">
 
         <div id='Text' className='basis-2/5'>
           <h2 className='font-bold text-4xl mb-2 text-left'>Ignite Your Imagination</h2>
-          <p>{`Kehabisan ide? Biarkan AI kami, "The Vision", membantu Anda! Hasilkan ide proyek unik yang disesuaikan dengan minat dan keahlian Anda.
+          <p>{`Ingin mencari ide untuk penelitian anda yang selanjutnya? AI kami, "The Vision", akan membantu Anda! Hasilkan ide proyek unik yang disesuaikan dengan minat dan keahlian Anda.
 Saatnya memulai perjalanan baru dalam inovasi dan kreativitas dengan bantuan teknologi canggih`}</p>
 
 
@@ -68,7 +68,7 @@ Saatnya memulai perjalanan baru dalam inovasi dan kreativitas dengan bantuan tek
         </div>
 
         <div className='basis-3/5 flex justify-items-end'>
-          <Image src={pixelbird} alt='VISION' className='scale-125 relative md:left-[100px] lg:left-[150px]' />
+          <Image src={pixelbird} alt='VISION' className=' relative md:left-[100px] lg:left-[150px]' />
         </div>
 
       </section>

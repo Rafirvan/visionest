@@ -21,6 +21,7 @@ function TextEditor({ formData, setFormData }: textEditorProps) {
     <>
       <Editor
 
+
         onInit={(evt, editor) => editorRef.current = editor}
         apiKey='if38s6jkec44dnzpo4kr297g8fa1qb6z4w1h2fnahy04mzoy'
         init={{
@@ -32,7 +33,7 @@ function TextEditor({ formData, setFormData }: textEditorProps) {
             'bold italic underline | forecolor | alignleft aligncenter ' +
             'alignright alignjustify | bullist numlist | ' +
             'removeformat |',
-          content_style: 'body { font-family:Inter,Arial,sans-serif; font-size:14px }'
+          content_style: 'body { font-family:Inter,Arial,sans-serif; font-size:14px  }',
         }}
         value={formData}
         onEditorChange={handleEditorChange}

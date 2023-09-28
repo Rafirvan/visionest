@@ -55,9 +55,9 @@ export default function Page() {
 
     return (
         <>
-            <nav id="postcontainer" className="pl-9 md:rounded-tr-3xl h-[calc(100vh-80px)] w-[calc(100vw-50px)] md:w-[calc(100vw-300px)] absolute right-0 top-[80px] border-2 border-black">
+            <nav id="postcontainer" className=" md:pl-9 md:rounded-tr-3xl h-[calc(100vh-80px)] w-[calc(100vw-50px)] md:w-[calc(100vw-300px)] absolute right-0 top-[80px] border-2 border-black">
                 <header className="relative top-0 w-[95%] h-[70px] flex flex-row justify-between place-items-center">
-                    <p className="text-xl place-self-center font-bold">{tab} POSTS</p>
+                    <p className="text-xl place-self-center font-bold pl-3">{tab} POSTS</p>
                     <div id="search" className={`place-items-center gap-5 flex ${Boolean(tab !== "ALL") && "hidden"}`} >
                         <Label htmlFor="searchbar" className="text-lg w-[100px]" ><Search /></Label>
 

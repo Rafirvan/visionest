@@ -39,16 +39,16 @@ export const AIRouter = createTRPCRouter({
     - jangan takut untuk merekomendasikan penggunaan teknologi / subjek yang berdekatan dengan yang mereka berikan
     - jika mungkin, coba condongkan ke proyek yang mungkin menghasilkan literatur ilmiah
     - tolong jangan pernah menggunakan titik dua sebagai pengganti tanda sama dengan
-    - Selalu jawab dengan bahasa Indonesia`
+    - Selalu jawab dengan bahasa Indonesia
+    - Jika suatu input non-opsional tidak jelas, mohon hanya kembalikan output "Coba Lagi"`
 
-    const ideaCompletion = await openai.chat.completions.create({
-      messages: [{
-        role: "user", content: prompt
-      }],
-      model: "gpt-3.5-turbo",
+    const ideaCompletion = await openai.completions.create({
+      prompt: prompt,
+      model: "gpt-3.5-turbo-instruct",
+      max_tokens: 300,
+      temperature: 1.1
     });
-
-    return ideaCompletion.choices[0]?.message.content
+    return ideaCompletion.choices[0]?.text
 
   }),
 
@@ -63,6 +63,7 @@ export const AIRouter = createTRPCRouter({
       dengan daftar berikut:
 
       abstrak makalah ilmiah = ${input.text}
+      
 
       harap kembalikan dengan format yang tepat:
 
@@ -73,7 +74,9 @@ export const AIRouter = createTRPCRouter({
       - jelaskan dengan detail istilah ilmiah yang mungkin asing bagi kebanyakan orang
         - anggaplah Anda adalah pencipta makalah tersebut, mempromosikan makalah atau produk Anda
           - Jangan mengembalikan judul, catatan, hitungan kata, atau pesan kesalahan
-          -Selalu Kembalikan Output anda dalam bahasa Indonesia`
+          -Selalu Kembalikan Output anda dalam bahasa Indonesia
+          
+          `
 
 
 

@@ -101,7 +101,7 @@ export default function BlogPost() {
 
 
     return (
-        <section className='overflow-y-hidden h-[calc(100vh-30px)]'>
+        <section className='overflow-y-hidden'>
 
             <ScrollArea className='h-full max-w-4xl mx-auto p-4 shadow-md rounded-md mb-10 border-2 border-black overflow-hidden'>
                 {fav}
@@ -145,7 +145,7 @@ export default function BlogPost() {
                         <div className='no-tailwindcss-base'><div dangerouslySetInnerHTML={{ __html: postData.description }}></div></div>
 
 
-                        <div id="linkArea" className="border p-2 mt-4 rounded">
+                        <div id="linkArea" className="border-4 p-2 mt-4 rounded-lg brightness-90">
                             <span className="mr-2">Baca Lebih Lanjut:</span>
                             <a
                                 href={postData.originlink}

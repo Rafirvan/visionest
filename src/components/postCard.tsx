@@ -109,7 +109,7 @@ export default function PostCard({ postID }: { postID: string }) {
 
 
     return (
-        <Card className="w-[300px] h-[350px] snap-end border-4 text-left border-vision cursor-pointer hover:border-yellow-600" onClick={async () => { postData?.id && await router.push(`nest/${postData?.id}`, undefined, { scroll: false }) }} >
+        <Card className="scale-90 md:scale-100 w-[300px] h-[350px] snap-end border-4 text-left border-vision cursor-pointer hover:border-yellow-600" onClick={async () => { postData?.id && await router.push(`nest/${postData?.id}`, undefined, { scroll: false }) }} >
             <CardContent className="h-full py-2">
                 <div className="flex flex-col h-full justify-between gap-2">
                     <div>
