@@ -61,7 +61,7 @@ export default function Vision() {
 
           {(isLoaded && isSignedIn) ?
             <NewForm onSubmit={handleSubmit} onSubmitStep2={handleSubmitValue} buttonDisabled={loading} />
-            : <p className="place-self-center font-bold text-2xl md:text-4xl text-center">Login Required to Access This Feature</p>}
+            : <p className="place-self-center font-bold text-2xl md:text-4xl text-center">Login Untuk Mengakses Fitur</p>}
         </div>
       </section>
       {showResult && <section id="Section2" className="pt-10 min-h-[100vh] w-full full-bg-darkgreen flex flex-col justify-center text-center">

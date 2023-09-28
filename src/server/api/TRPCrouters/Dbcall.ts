@@ -233,6 +233,29 @@ export const DBRouter = createTRPCRouter({
             }
         })
         return yourpostids.map((e) => e.id)
+    }),
+
+    callforsearch: publicProcedure.query(async () => {
+        const searched = await prisma.post.findMany({
+            where: { status: "ACCEPTED" },
+            select: {
+                id: true,
+                title: true,
+                authors: true,
+                university: true,
+                posttag: {
+                    select: {
+                        tag: {
+                            select: {
+                                name: true
+                            }
+                        }
+                    }
+                },
+                imageURL: true
+            }
+        })
+        return searched
     })
 
 

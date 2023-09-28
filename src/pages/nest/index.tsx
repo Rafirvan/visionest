@@ -6,10 +6,10 @@ import { Globe2, Star, Bird, Upload, Eye } from "lucide-react"
 import Onest from "../../../public/Onest.png"
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Label } from "~/components/ui/label";
-import { Input } from "~/components/ui/input";
 import PostCard from "~/components/postCard";
 import { trpc } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
+import { Search } from "lucide-react";
 
 
 export default function Page() {
@@ -59,8 +59,8 @@ export default function Page() {
                 <header className="relative top-0 w-[95%] h-[70px] flex flex-row justify-between place-items-center">
                     <p className="text-xl place-self-center font-bold">{tab} POSTS</p>
                     <div id="search" className={`place-items-center gap-5 flex ${Boolean(tab !== "ALL") && "hidden"}`} >
-                        <Label htmlFor="searchbar" className="text-lg w-[100px]" >Search : </Label>
-                        <Input></Input>
+                        <Label htmlFor="searchbar" className="text-lg w-[100px]" ><Search /></Label>
+
                     </div>
                 </header>
                 <ScrollArea className="h-[calc(100%-80px)] w-full ">

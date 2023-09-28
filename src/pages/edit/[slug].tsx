@@ -43,7 +43,7 @@ export default function Edit() {
 
                     {(isLoaded && isSignedIn) ?
                         <PostForm />
-                        : <p className="place-self-center font-bold text-2xl md:text-4xl text-center">Login Required to Access This Feature</p>}
+                        : <p className="place-self-center font-bold text-2xl md:text-4xl text-center">Login Untuk Mengakses Fitur</p>}
                 </div>
             </section>
         </React.Fragment>

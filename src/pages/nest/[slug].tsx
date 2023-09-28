@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image'
 import { ScrollArea } from '~/components/ui/scroll-area';
 import { useRouter } from 'next/router';
-import Loadingimage from "../../../public/loadingimage.gif"
+import Loadingimage from "public/loadingimage.gif"
 import { trpc } from '~/utils/api';
 import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
@@ -146,13 +146,13 @@ export default function BlogPost() {
 
 
                         <div id="linkArea" className="border p-2 mt-4 rounded">
-                            <span className="mr-2">Read More:</span>
+                            <span className="mr-2">Baca Lebih Lanjut:</span>
                             <a
                                 href={postData.originlink}
                                 className="text-blue-500 hover:text-blue-600 hover:underline"
                                 target="_blank"
                             >
-                                Link to paper
+                                Link
                             </a>
                         </div>
 
