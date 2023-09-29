@@ -37,7 +37,7 @@ export default function Home() {
 
 
       <section id="Section2" className="min-h-[650px] w-full full-bg-blue text-justify flex flex-col justify-between py-8 place-content-center justify-items-center">
-        <div id='postslider' className='scale-75 md:scale-100 basis-3/5 bg-gradient-to-b from-blue-400  to-blue-500 rounded-lg py-8 px-[32px] w-[364px] lg:w-[696px] xl:w-[1028px] mx-auto overflow-x-hidden '>
+        <div id='postslider' className='scale-75 sm:scale-100 basis-3/5 bg-gradient-to-b from-blue-400  to-blue-500 rounded-lg py-8 px-[32px] w-[364px] lg:w-[696px] xl:w-[1028px] overflow-x-hidden '>
           <PostCarousel />
         </div>
         <div id='submitintro' className=' basis-2/5 justify-center gap-10'>

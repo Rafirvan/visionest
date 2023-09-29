@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useRef } from "react";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 import PostCard from "./postCard";
 import { trpc } from "~/utils/api";
 
 export default function PostCarousel() {
     const carouselRef = useRef<HTMLDivElement>(null);
-    const { data: CardContents } = trpc.db.callpostid.useQuery({ many: 5 })
-    const [loadedCardContents, setLoadedCardContents] = useState<string[] | undefined>(["", "", "", "", ""])
+    const { data: CardContents, isLoading } = trpc.db.callpostid.useQuery({ many: 5 })
 
     const scroll = (direction: 'left' | 'right') => {
         if (carouselRef.current) {
@@ -19,12 +19,8 @@ export default function PostCarousel() {
         }
     };
 
-    useEffect(() => {
-        setLoadedCardContents(CardContents)
-    }, [CardContents])
-
     return (
-        <div className="relative ">
+        <div className="relative">
             <div>
                 <button
                     className="absolute top-1/2 left-[-30px] transform -translate-y-1/2 z-10"
@@ -45,7 +41,7 @@ export default function PostCarousel() {
                 <div
                     className="flex w-[1628px] h-[350px] gap-[32px]"
                 >
-                    {loadedCardContents?.map((id, index) => (
+                    {isLoading ? <div>LOADING...</div> : CardContents?.map((id, index) => (
                         <PostCard key={index} postID={id} />
                     ))}
                 </div>

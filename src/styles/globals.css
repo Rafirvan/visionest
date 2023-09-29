@@ -139,3 +139,7 @@ input, textarea{
 * {
     -ms-overflow-style: -ms-autohiding-scrollbar;
 }
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
