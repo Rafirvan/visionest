@@ -31,20 +31,21 @@ export default function PostCarousel() {
                 >
                     <ArrowLeft
                         style={{ color: leftColor }}
-                        onMouseEnter={() => setLeftColor("white")}
-                        onTouchStart={() => setLeftColor("white")}
-                        onMouseLeave={() => setLeftColor("black")}
-                        onTouchEnd={() => setLeftColor("black")} />
+                        onPointerEnter={() => setLeftColor("white")}
+                        onPointerDown={() => setLeftColor("white")}
+
+                        onPointerLeave={() => setLeftColor("black")}
+                        onPointerUp={() => setLeftColor("black")} />
                 </button>
                 <button
                     className="absolute top-1/2 right-[-30px]  transform -translate-y-1/2 z-10"
                     onClick={() => scroll('right')}
                 >
                     <ArrowRight style={{ color: rightColor }}
-                        onMouseEnter={() => setRightColor("white")}
-                        onTouchStart={() => setRightColor("white")}
-                        onMouseLeave={() => setRightColor("black")}
-                        onTouchEnd={() => setRightColor("black")} />
+                        onPointerEnter={() => setRightColor("white")}
+                        onPointerDown={() => setRightColor("white")}
+                        onPointerLeave={() => setRightColor("black")}
+                        onPointerUp={() => setRightColor("black")} />
                 </button>
             </div>
 

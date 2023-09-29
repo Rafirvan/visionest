@@ -51,12 +51,11 @@ export default function Page() {
 
     return (
         <>
-            <nav id="postcontainer" className=" md:pl-9 md:rounded-tr-3xl h-[calc(100vh-80px)] w-[calc(100vw-50px)] md:w-[calc(100vw-300px)] absolute right-0 top-[80px] border-2 border-black">
+            <nav id="postcontainer" className=" min-h-[600px] md:pl-9 md:rounded-tr-3xl h-[calc(100vh-80px)] w-[calc(100vw-50px)] md:w-[calc(100vw-300px)] absolute right-0 top-[80px] border-2 border-black">
                 <header className="relative top-0 w-[95%] h-[70px] flex flex-row justify-between place-items-center">
                     <p className="text-xl place-self-center font-bold pl-3">{tab} POSTS</p>
-                    <div id="search" className={`place-items-center gap-5 flex ${Boolean(tab !== "ALL") && "hidden"}`} >
-                        <Label htmlFor="searchbar" className="text-lg w-[100px]" ><Search /></Label>
-
+                    <div id="search" className={`place-items-center gap-5 flex text-slate-500`} >
+                        {!active ? "0" : active.length}  Result(s) Found
                     </div>
                 </header>
                 <ScrollArea className="h-[calc(100%-80px)] w-full ">
@@ -67,12 +66,12 @@ export default function Page() {
 
             </nav>
 
-            <nav id="sidebar" className=" w-[50px] md:rounded-tr-3xl overflow-hidden md:w-[300px] absolute left-0 top-[80px]  box-border h-[calc(100vh-80px)]  bg-white border-2 border-red-700 grid grid-cols-1 grid-rows-20 z-10 gap-2" >
+            <nav id="sidebar" className=" min-h-[600px] w-[50px] md:rounded-tr-3xl overflow-hidden md:w-[300px] absolute left-0 top-[80px]  box-border h-[calc(100vh-80px)]  bg-white border-2 border-red-700 grid grid-cols-1 grid-rows-20 z-10 gap-2" >
                 <div id="nest" className="row-span-3 h-full w-full border-b-2 border-black bg-contain bg-center bg-opacity-70 md:bg-cover bg-no-repeat flex justify-center items-center font-boltext-black text-5xl" style={{ backgroundImage: `url(${Onest.src})`, }} ><p className="hidden md:flex">Nest</p></div>
                 <nav id="All" className="cursor-pointer gap-2  md:pl-5 row-span-2 h-full w-full rounded-md hover:outline  hover:outline-slate-950 flex place-items-center justify-center md:justify-start text-lg" style={TabStyle('ALL')} onClick={() => { setTab("ALL") }}><Globe2 /><span className="hidden md:flex">All Posts</span></nav>
                 <nav id="Fav" className={`${!isSignedIn && "hidden"} cursor-pointer gap-2  md:pl-5 row-span-2 h-full w-full rounded-md hover:outline hover:outline-2 hover:outline-slate-950 place-items-center justify-center md:justify-start flex text-lg`} style={TabStyle('FAVORITE')} onClick={() => { setTab("FAVORITE") }}><Star /><span className="hidden md:flex  ">Favorite Posts</span></nav>
                 <nav id="You" className={`${!isSignedIn && "hidden"} cursor-pointer gap-2  md:pl-5 row-span-2 h-full w-full rounded-md hover:outline hover:outline-2 hover:outline-slate-950 place-items-center justify-center md:justify-start flex text-lg`} style={TabStyle('YOUR')} onClick={() => { setTab("YOUR") }}><Bird /><span className="hidden md:flex ">Your Posts</span></nav>
-                <nav id="submit" className="hover:underline row-start-18 h-full w-full flex justify-center md:justify-end md:pr-5 border-t-2 pt-2 border-black"><Link href="submit" className="flex gap-2"><span className="hidden md:flex">Submit your own now!</span><Upload /></Link></nav>
+                <nav id="submit" className="hover:underline row-start-18 h-full w-full flex justify-center md:justify-end md:pr-5 border-t-2 pt-2 border-black"><Link href="submit" className="flex gap-2"><span className="hidden md:flex">Upload Post</span><Upload /></Link></nav>
                 <nav id="vision" className="hover:underline row-start-19 h-full w-full flex justify-center md:justify-end md:pr-5"><Link href="vision" className="flex gap-2 pt-2"><span className="hidden md:flex">The Vision AI</span><Eye /></Link></nav>
             </nav>
 
