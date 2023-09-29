@@ -33,7 +33,6 @@ export const DBRouter = createTRPCRouter({
                 university: input.university,
                 imageURL: input.imageurl,
                 status: "PENDING",
-                favcount: 0,
                 rejection: ""
             }
 
@@ -65,8 +64,8 @@ export const DBRouter = createTRPCRouter({
                 university: input.university,
                 imageURL: input.imageurl,
                 status: "PENDING",
-                favcount: 0,
-                rejection: ""
+                rejection: "",
+                posttag: undefined
             }
 
         })
@@ -138,9 +137,44 @@ export const DBRouter = createTRPCRouter({
             where: {
                 id: input
             },
-        })
-        return postwithid
+            select: {
+                id: true,
+                title: true,
+                creatorID: true,
+                description: true,
+                authors: true,
+                year: true,
+                originlink: true,
+                imageURL: true,
+                status: true,
+                rejection: true,
+                university: true,
+                posttag: {
+                    select: {
+                        tag: {
+                            select: {
+                                name: true
+                            }
+                        }
+                    }
+                },
+            }
+        });
+
+        return { postwithid }
     }),
+
+    favcount: publicProcedure.input(z.string()).mutation(async ({ input }) => {
+
+        const favs = await prisma.userfavpost.findMany({
+            where: {
+                postID: input
+            }
+        });
+
+        return favs.length
+    }),
+
 
     savepost: privateProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
         const save = await prisma.userfavpost.create({

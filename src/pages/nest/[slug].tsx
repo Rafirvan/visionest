@@ -16,16 +16,20 @@ import Spinner from '~/components/ui/spinner';
 interface posttype {
     id: string;
     creatorID: string;
-    createdAt: Date;
     title: string;
     description: string;
     authors: string;
-    year: number; originlink: string;
+    year: number;
+    originlink: string;
     imageURL: string;
     status: string;
-    favcount: number;
     rejection: string;
     university: string;
+    posttag: {
+        tag: {
+            name: string;
+        };
+    }[];
 }
 
 export default function BlogPost() {
@@ -35,12 +39,17 @@ export default function BlogPost() {
     const [saved, setSaved] = useState<boolean | undefined>(false)
     const [saveLoad, setSaveLoad] = useState(false)
     const [loaded, setLoaded] = useState(false)
+    const [favCount, setFavCount] = useState<number | undefined>()
     const getpostfromid = trpc.db.callpostfromid.useMutation({
         onSuccess: (result) => {
-            setPostData(result)
+            setPostData(result.postwithid)
             setLoaded(true)
         }
     })
+    const getFavCount = trpc.db.favcount.useMutation({
+        onSuccess: (result) => setFavCount(result)
+    })
+
     const { user, isLoaded, isSignedIn } = useUser()
     const idmatch = (user?.id == postData?.creatorID)
     const adminmatch = (user?.publicMetadata.role == "admin")
@@ -56,8 +65,12 @@ export default function BlogPost() {
 
     const refreshCheck = trpc.db.checksave.useMutation({
         onSuccess: (result) => {
-            if (postId) setSaved(result?.includes(postId))
+            if (postId) {
+                setSaved(result?.includes(postId));
+                getFavCount.mutate(postId)
+            }
             setSaveLoad(false)
+
         }
     })
 
@@ -82,9 +95,9 @@ export default function BlogPost() {
 
     const fav =
         !isSignedIn || postData?.status != "ACCEPTED" ? <div></div> :
-            (saveLoad) ? <div className='absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-10 flex place-items-center justify-center z-10 bg-white'><Spinner /></div> :
-                saved ? <div className='absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-10 flex place-items-center justify-center z-10 bg-white'><Star className='cursor-pointer' onClick={e => toggleSave(e, false)} fill="yellow" /></div> :
-                    <div className='absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-10 flex place-items-center justify-center z-10 bg-white'><Star className='cursor-pointer' onClick={e => toggleSave(e, true)} /></div>;
+            (saveLoad) ? <div className='absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-fit px-1 flex place-items-center justify-center z-10 bg-white'><Spinner />{favCount}</div> :
+                saved ? <div className='absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-fit px-1 flex place-items-center justify-center z-10 bg-white'><Star className='cursor-pointer' onClick={e => toggleSave(e, false)} fill="yellow" />{favCount}</div> :
+                    <div className='absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-fit px-1 flex place-items-center justify-center z-10 bg-white'><Star className='cursor-pointer' onClick={e => toggleSave(e, true)} />{favCount}</div>;
 
 
     if (!isLoaded || !loaded) return <section>Loading...</section>
@@ -106,7 +119,7 @@ export default function BlogPost() {
             <ScrollArea className='h-full max-w-4xl mx-auto p-4 shadow-md rounded-md mb-10 border-2 border-black overflow-hidden'>
                 {fav}
                 <div className='grid'>
-                    <div>
+                    <div id='header'>
                         {((idmatch || adminmatch) && pending) && <div id="statusarea" className='pb-6 font-bold'>Saat ini post ini <span className='text-yellow-500'>Pending</span> </div>}
                         {((idmatch || adminmatch) && rejected) &&
                             <>
@@ -133,7 +146,7 @@ export default function BlogPost() {
 
 
 
-                    <div>
+                    <div id='descriptionArea'>
                         <h1 id="titleArea" className="text-2xl font-bold mb-2">{postData.title} <ShareButton link={router.asPath} /> </h1>
                         <p id="authorArea" className="text-gray-600 mb-1">
                             By <span className="break-words">{postData.authors}</span> • {postData.year}
@@ -156,6 +169,12 @@ export default function BlogPost() {
                             </a>
                         </div>
 
+                        {!(pending || rejected) &&
+                            <div
+                                id='tagsArea'
+                                className='text-slate-600 pt-2'>
+                                Kategori:{postData.posttag.map(e => e.tag.name).join(", ")}
+                            </div>}
 
                     </div>
                 </div>

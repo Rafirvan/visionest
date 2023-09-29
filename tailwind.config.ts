@@ -21,6 +21,7 @@ module.exports = withUt({
       },
     },
     extend: {
+      screens: { "xs": "380px" },
       colors: { 'vision': '#7D5643' },
       gridTemplateRows: {
         '20': 'repeat(20, minmax(0, 1fr))',

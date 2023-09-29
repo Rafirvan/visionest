@@ -5,11 +5,9 @@ import Link from "next/link"
 import { Globe2, Star, Bird, Upload, Eye } from "lucide-react"
 import Onest from "../../../public/Onest.png"
 import { ScrollArea } from "~/components/ui/scroll-area";
-import { Label } from "~/components/ui/label";
 import PostCard from "~/components/postCard";
 import { trpc } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
-import { Search } from "lucide-react";
 
 
 export default function Page() {
@@ -38,7 +36,7 @@ export default function Page() {
     }, [allFetched])
 
     const CardsArea = active?.map((content, index) => (
-        <div className="mb-5 place-self-center" key={index}><PostCard postID={content} /></div>
+        <div className=" place-self-center" key={index}><PostCard postID={content} /></div>
     ))
 
 
@@ -51,17 +49,19 @@ export default function Page() {
 
     return (
         <>
-            <nav id="postcontainer" className=" min-h-[600px] md:pl-9 md:rounded-tr-3xl h-[calc(100vh-80px)] w-[calc(100vw-50px)] md:w-[calc(100vw-300px)] absolute right-0 top-[80px] border-2 border-black">
+            <nav id="postcontainer" className="min-h-[600px] md:pl-9 md:rounded-tr-3xl h-[calc(100vh-80px)] w-[calc(100vw-50px)] md:w-[calc(100vw-300px)] absolute right-0 top-[80px] border-2 border-black">
                 <header className="relative top-0 w-[95%] h-[70px] flex flex-row justify-between place-items-center">
                     <p className="text-xl place-self-center font-bold pl-3">{tab} POSTS</p>
-                    <div id="search" className={`place-items-center gap-5 flex text-slate-500`} >
+                    <div id="found" className={`place-items-center gap-5 flex text-slate-500`} >
                         {!active ? "0" : active.length}  Result(s) Found
                     </div>
                 </header>
-                <ScrollArea className="h-[calc(100%-80px)] w-full ">
-                    <div className="w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5">
+                <ScrollArea className="h-[calc(100%-80px)] w-full">
+                    <div className="w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 pb-10">
                         {(cardLoading || !allFetched) ? <div className="pt-10 pl-10">LOADING...</div> : CardsArea}
+
                     </div>
+                    <hr className="text-center outline-dashed outline-2 outline-slate-600"></hr>
                 </ScrollArea>
 
             </nav>

@@ -23,7 +23,6 @@ model post {
   originlink  String
   imageURL    String        @db.VarChar(500)
   status      String
-  favcount    Int
   rejection   String
   favs        userfavpost[]
   posttag     posttag[]

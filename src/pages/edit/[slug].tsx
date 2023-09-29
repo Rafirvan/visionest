@@ -59,7 +59,8 @@ function PostForm() {
     const router = useRouter()
     const postId = router.query.slug?.toString()
     const getpostfromid = trpc.db.callpostfromid.useMutation({
-        onSuccess: (result) => {
+        onSuccess: (res) => {
+            const result = res.postwithid
             setInitLoad(false)
             if (result) {
                 setTitleValue(result.title)

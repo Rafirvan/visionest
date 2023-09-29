@@ -15,9 +15,6 @@ import Searchbar from "./searchbar";
 
 
 
-
-
-
 export default function Navbar() {
     const { isLoaded, isSignedIn, user } = useUser();
     const router = useRouter();
@@ -28,6 +25,7 @@ export default function Navbar() {
 
             <Link href="/" scroll={false}>
                 <Image src={Logo} alt="VISIONEST" className=" h-[30px] w-[127px]  sm:h-[50px] sm:w-[212px] " />
+                <title className="hidden">Visionest</title>
             </Link>
 
             <Searchbar />

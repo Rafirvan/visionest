@@ -15,7 +15,6 @@ import Spinner from "./ui/spinner";
 interface posttype {
     id: string;
     creatorID: string;
-    createdAt: Date;
     title: string;
     description: string;
     authors: string;
@@ -23,7 +22,6 @@ interface posttype {
     originlink: string;
     imageURL: string;
     status: string;
-    favcount: number;
     rejection: string;
     university: string;
 }
@@ -33,6 +31,7 @@ export default function PostCard({ postID }: { postID: string }) {
     const [saveLoad, setSaveLoad] = useState(false)
     const [postData, setPostData] = useState<posttype | null | undefined>();
     const [saved, setSaved] = useState<boolean | undefined>(false)
+    const [favCount, setFavCount] = useState<number | undefined>()
     const [borderColor, setBorderColor] = useState<string>("vision")
     const router = useRouter()
     const { isSignedIn } = useUser()
@@ -45,7 +44,8 @@ export default function PostCard({ postID }: { postID: string }) {
     }, [postID])
 
     const getpostfromid = trpc.db.callpostfromid.useMutation({
-        onSuccess: (result) => {
+        onSuccess: (res) => {
+            const result = res.postwithid
             setPostData(result)
             setLoaded(true)
             if (result?.status == "PENDING") setBorderColor("yellow-600")
@@ -53,9 +53,14 @@ export default function PostCard({ postID }: { postID: string }) {
         }
     })
 
+    const getFavCount = trpc.db.favcount.useMutation({
+        onSuccess: (result) => setFavCount(result)
+    })
+
     const refreshCheck = trpc.db.checksave.useMutation({
         onSuccess: (result) => {
             setSaved(result?.includes(postID))
+            getFavCount.mutate(postID)
             setSaveLoad(false)
         }
     })
@@ -85,8 +90,10 @@ export default function PostCard({ postID }: { postID: string }) {
             alt="Loading"
             placeholder="blur"
             blurDataURL={Loadingimage.src}
-            layout="fill" objectFit="contain"
-            style={{ borderRadius: "8%", borderColor: "brown", objectFit: "contain" }}
+            // layout="fill" objectFit="contain"
+            height={300}
+            width={300}
+            style={{ borderColor: "brown", objectFit: "contain", display: "flex", }}
         />
         : <Skeleton className="w-full h-full" />
 
@@ -109,20 +116,23 @@ export default function PostCard({ postID }: { postID: string }) {
 
 
     return (
-        <Card className=" w-[300px] h-[350px] snap-end border-4 text-left border-vision cursor-pointer hover:border-yellow-600" onClick={async () => { postData?.id && await router.push(`nest/${postData?.id}`, undefined, { scroll: false }) }} >
-            <CardContent className="h-full py-2">
+        <Card className="w-[300px] h-[350px]  scale-x-90 xs:scale-x-100 snap-end border-4 text-left border-vision cursor-pointer hover:border-yellow-600" onClick={async () => { postData?.id && await router.push(`nest/${postData?.id}`, undefined, { scroll: false }) }} >
+            <CardContent className="h-full pb-10">
                 <div className="flex flex-col h-full justify-between gap-2">
                     <div>
-                        <div id="cardimage" className=" place-content-center w-full max-h-[150px] mb-4 aspect-square overflow-hidden relative">{cardimage}</div>
+                        <div className="bg-vision">
+                            <div id="cardimage" className=" place-content-center w-full max-h-[180px] aspect-square overflow-hidden relative rounded-md">{cardimage}</div>
+                        </div>
                         <div id="cardtitle" className={`text-white bg-${borderColor} col-span-5 row-span-2 overflow-ellipsis overflow-hidden font-bold text-md w-[295px] h-[75px] line-clamp-3 px-2`}>{cardtitle}</div>
                         <div className="flex gap-3">
                             <div id="cardauthors" className="pl-2 pt-1 col-span-3 row-span-2 overflow-ellipsis text-gray-700 h-[50px] basis-4/5 overflow-hidden line-clamp-2">{cardauthors}</div>
-                            <div id="cardyear" className="w-full h-full basis-1/5 place-self-center">{cardyear}</div>
+                            <div id="cardyear" className="w-full h-full basis-1/5 place-self-center flex place-items-center">{cardyear}</div>
                         </div>
                     </div>
-                    <div className="px-2 flex justify-between place-items-center border-t-2 border-black h-[25px]">
+                    <div id="cardfooter" className="px-2 flex justify-between place-items-center border-t-2 border-black h-[25px] relative bottom-1">
                         <div id="univ" className="text-sm align-self-start overflow-hidden overflow-ellipsis line-clamp-1 w-[200px] relative top-1">{carduni}</div>
                         <div id="share" className=" scale-95 mr-5 relative top-1">{cardshare}</div>
+                        <div id="cardfavcount" className="relative top-1 pr-1">{favCount}</div>
                         <div id="cardfav" className="col-start-5 row-start-10 text-green-700 relative top-1 hover:text-green-400 cursor-pointer">{cardfav}</div>
                     </div>
                 </div>
