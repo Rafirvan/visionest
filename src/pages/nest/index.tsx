@@ -16,7 +16,7 @@ export default function Page() {
     const [cardLoading, setCardLoading] = useState(false)
     const { isSignedIn } = useUser()
     const [tab, setTab] = useState<'ALL' | 'FAVORITE' | 'YOUR'>('ALL');
-    const { data: allCards, isFetched: allFetching } = trpc.db.callpostid.useQuery({ many: 20 })
+    const { data: allCards, isFetched: allFetched } = trpc.db.callpostid.useQuery({ many: 20 })
     const favCardsCall = trpc.db.callfavpostid.useMutation({
         onSuccess: (result) => { setActive(undefined), setTimeout(() => { setActive(result) }, 1); setCardLoading(false) }
     })
@@ -26,12 +26,6 @@ export default function Page() {
 
     const [active, setActive] = useState<string[] | undefined>()
 
-
-    useEffect(() => {
-        if (allFetching) setCardLoading(false)
-        else setCardLoading(true)
-    }, [allFetching])
-
     useEffect(() => {
         if (tab == "ALL") { setActive(undefined); setTimeout(() => setActive(allCards), 1) }
         if (tab == "FAVORITE") { favCardsCall.mutate(); setCardLoading(true) }
@@ -40,11 +34,8 @@ export default function Page() {
 
 
     useEffect(() => {
-        setActive(allCards)
-    }, [allCards])
-
-
-
+        if (allFetched) setActive(allCards)
+    }, [allFetched])
 
     const CardsArea = active?.map((content, index) => (
         <div className="mb-5 place-self-center" key={index}><PostCard postID={content} /></div>
@@ -70,7 +61,7 @@ export default function Page() {
                 </header>
                 <ScrollArea className="h-[calc(100%-80px)] w-full ">
                     <div className="w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5">
-                        {cardLoading ? <div className="pt-10 pl-10">LOADING...</div> : CardsArea}
+                        {(cardLoading || !allFetched) ? <div className="pt-10 pl-10">LOADING...</div> : CardsArea}
                     </div>
                 </ScrollArea>
 

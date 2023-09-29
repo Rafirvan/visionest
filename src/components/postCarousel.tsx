@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 import PostCard from "./postCard";
 import { trpc } from "~/utils/api";
@@ -7,6 +7,9 @@ import { trpc } from "~/utils/api";
 export default function PostCarousel() {
     const carouselRef = useRef<HTMLDivElement>(null);
     const { data: CardContents, isLoading } = trpc.db.callpostid.useQuery({ many: 5 })
+    const [rightColor, setRightColor] = useState('black');
+    const [leftColor, setLeftColor] = useState('black');
+
 
     const scroll = (direction: 'left' | 'right') => {
         if (carouselRef.current) {
@@ -26,13 +29,22 @@ export default function PostCarousel() {
                     className="absolute top-1/2 left-[-30px] transform -translate-y-1/2 z-10"
                     onClick={() => scroll('left')}
                 >
-                    <ArrowLeft className="hover:text-white" />
+                    <ArrowLeft
+                        style={{ color: leftColor }}
+                        onMouseEnter={() => setLeftColor("white")}
+                        onTouchStart={() => setLeftColor("white")}
+                        onMouseLeave={() => setLeftColor("black")}
+                        onTouchEnd={() => setLeftColor("black")} />
                 </button>
                 <button
                     className="absolute top-1/2 right-[-30px]  transform -translate-y-1/2 z-10"
                     onClick={() => scroll('right')}
                 >
-                    <ArrowRight className="hover:text-white" />
+                    <ArrowRight style={{ color: rightColor }}
+                        onMouseEnter={() => setRightColor("white")}
+                        onTouchStart={() => setRightColor("white")}
+                        onMouseLeave={() => setRightColor("black")}
+                        onTouchEnd={() => setRightColor("black")} />
                 </button>
             </div>
 
