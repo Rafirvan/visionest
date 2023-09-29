@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image'
 import { ScrollArea } from '~/components/ui/scroll-area';
 import { useRouter } from 'next/router';
@@ -86,12 +86,12 @@ export default function BlogPost() {
         }
     })
 
-    function toggleSave(e: React.MouseEvent, save?: boolean) {
+    const toggleSave = useCallback((e: React.MouseEvent, save?: boolean) => {
         e.stopPropagation()
         setSaveLoad(true)
         if (save && postId) savepost.mutate(postId)
         else if (postId) unsavepost.mutate(postId)
-    }
+    }, [postId, savepost, unsavepost])
 
     const fav =
         !isSignedIn || postData?.status != "ACCEPTED" ? <div></div> :
@@ -139,7 +139,6 @@ export default function BlogPost() {
                             blurDataURL={Loadingimage.src}
                             height={300}
                             width={1000}
-                        // style={{ aspectRatio: "16/9" }}
                         />
 
                     </div>
@@ -173,7 +172,7 @@ export default function BlogPost() {
                             <div
                                 id='tagsArea'
                                 className='text-slate-600 pt-2'>
-                                Kategori:{postData.posttag.map(e => e.tag.name).join(", ")}
+                                Kategori : {postData.posttag.map(e => e.tag.name).join(", ")}
                             </div>}
 
                     </div>
@@ -183,5 +182,3 @@ export default function BlogPost() {
     );
 }
 
-
-//TODO : work on editing posts, setup link for sharebutton, place univ name, maybe save button here too?

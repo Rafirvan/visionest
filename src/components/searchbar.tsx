@@ -65,7 +65,7 @@ export default function Searchbar() {
     return (<div id="search" className="w-[10%] lg:w-[40%] place-items-center gap-5 flex">
         <Label htmlFor="searchbar" className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}><Search /></Label>
         <Input
-            className={`${!isOpen && "hidden"} fixed top-[80px] left-[10%] lg:left-[20%]  w-[80%] lg:w-full lg:static lg:flex rounded-md`}
+            className={`${!isOpen && "hidden"} fixed top-[80px] left-[10%] lg:left-[20%]  w-[80%] lg:w-full lg:static lg:flex rounded-md border-2`}
             id="searchbar"
             autoComplete="off"
             placeholder="Cari judul/penulis/universitas..."

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import Onestwhite from "../../public/Onestwhite.png"
 import Image from 'next/image';
 import { Button } from "~/components/ui/button";
@@ -12,41 +12,36 @@ import {
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { trpc } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
+import type { Dispatch, SetStateAction } from "react";
 
 
 
 interface formProps {
-  onSubmit: () => void
-  onSubmitStep2: (result: string, description: string) => void
-  buttonDisabled: boolean
+  onSubmitScroll: () => void;
+  setTitle: Dispatch<SetStateAction<string>>;
+  setDescription: Dispatch<SetStateAction<string>>
 }
 
 export default function Vision() {
+  const [triggerScroll, setTriggerScroll] = useState(false);
   const [showResult, setShowResult] = useState(false)
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
-  const [loading, setLoading] = useState(true)
-
   const { isLoaded, isSignedIn } = useUser();
 
   function handleSubmit() {
-    if (!showResult) { setShowResult(true) }
-    else {
-      document.getElementById("Section2")?.scrollIntoView({ behavior: "smooth" })
-      console.log("scroll")
-    }
-    setLoading(true)
-
-  }
-  useEffect(() => {
+    if (!showResult) { setShowResult(true); }
+    setTriggerScroll(prev => !prev);
     document.getElementById("Section2")?.scrollIntoView({ behavior: "smooth" })
-  }, [showResult])
-
-  function handleSubmitValue(title: string, description: string) {
-    setTitle(title)
-    setDescription(description)
-    setLoading(false)
   }
+
+  useEffect(() => {
+    if (showResult) {
+      document.getElementById("Section2")?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [showResult, triggerScroll]);
+
+
 
 
   return (
@@ -60,28 +55,27 @@ export default function Vision() {
         <div className="basis-3/5 h-full w-full flex place-content-center">
 
           {(isLoaded && isSignedIn) ?
-            <NewForm onSubmit={handleSubmit} onSubmitStep2={handleSubmitValue} buttonDisabled={loading} />
+            <NewForm onSubmitScroll={handleSubmit} setTitle={setTitle} setDescription={setDescription} />
             : <p className="place-self-center font-bold text-2xl md:text-4xl text-center">Login Untuk Mengakses Fitur</p>}
         </div>
       </section>
-      {showResult && <section id="Section2" className="pt-10 min-h-[100vh] w-full full-bg-darkgreen flex flex-col justify-center text-center">
+      {showResult && <section id="Section2" className="py-10 min-h-[100vh] w-full full-bg-darkgreen flex flex-col justify-center text-center">
         <p className="text-[4vw] text-white mb-8">{title == "" ? "Loading..." : title}</p>
-        <p className="text-[3vw] text-gray-400">{loading ? "" : description}</p>
+        <p className="text-[3vw] text-gray-400">{description}</p>
 
       </section>}
     </React.Fragment>
   )
 }
 
-function NewForm({ onSubmit, onSubmitStep2 }: formProps) {
+function NewForm({ onSubmitScroll, setTitle, setDescription }: formProps) {
   const [majorValue, setMajorValue] = useState<string>('');
   const [fieldValue, setFieldValue] = useState<string>('');
   const [subjectValue, setSubjectValue] = useState<string>('');
   const [typeValue, setTypeValue] = useState<string>("Practical")
   const [timeValue, setTimeValue] = useState<string>("")
   const [constraintValue, setConstraintValue] = useState<string>("")
-  const [resultTitle, setResultTitle] = useState<string | undefined>("")
-  const [resultDescription, setResultDescription] = useState<string | undefined>("")
+  const [loading, setLoading] = useState(false)
 
 
 
@@ -89,7 +83,6 @@ function NewForm({ onSubmit, onSubmitStep2 }: formProps) {
     onSuccess: (data) => {
       if (data) {
         console.log(data)
-
         const matches = data.match(/=(.+)/g);
         let matchArray;
         if (matches) {
@@ -97,30 +90,24 @@ function NewForm({ onSubmit, onSubmitStep2 }: formProps) {
         }
 
         if (matchArray) {
-          setResultTitle(matchArray[0]);
-          setResultDescription(matchArray[1]);
+          if (matchArray[0]) setTitle(matchArray[0]);
+          if (matchArray[1]) setDescription(matchArray[1]);
           console.log("match")
         }
-        else handleSubmit()
-
       }
+      else handleSubmit()
+      setLoading(false)
     }
   });
 
 
-  useEffect(() => {
-    if (typeof resultTitle == "string" && typeof resultDescription == "string") { onSubmitStep2(resultTitle, resultDescription) }
-  }
-    , [onSubmitStep2, resultDescription, resultTitle])
-
-
-
-  function handleSubmit(e?: React.FormEvent) {
+  const handleSubmit = useCallback((e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    setResultTitle("")
-    setResultDescription("")
-    console.log("submit")
-    onSubmit()
+    console.log("h")
+    setLoading(true)
+    setTitle("")
+    setDescription("")
+    onSubmitScroll()
 
     const inputs = {
       major: majorValue,
@@ -133,9 +120,7 @@ function NewForm({ onSubmit, onSubmitStep2 }: formProps) {
 
     AIcall.mutate(inputs);
 
-  };
-
-
+  }, [AIcall, constraintValue, fieldValue, majorValue, onSubmitScroll, setDescription, setTitle, subjectValue, timeValue, typeValue]);
 
   return (
     <ScrollArea className="h-full w-full">
@@ -244,6 +229,7 @@ function NewForm({ onSubmit, onSubmitStep2 }: formProps) {
         <Button
           type="submit"
           className="bg-blue-700 mb-10 disabled:bg-gray-600 w-[105%]"
+          disabled={loading}
         >
           Generasi Ide Rekomendasi
         </Button>

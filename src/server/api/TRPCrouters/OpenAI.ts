@@ -42,13 +42,12 @@ export const AIRouter = createTRPCRouter({
     - Selalu jawab dengan bahasa Indonesia
     - Jika suatu input non-opsional tidak jelas, mohon hanya kembalikan output "Coba Lagi"`
 
-    const ideaCompletion = await openai.completions.create({
-      prompt: prompt,
-      model: "gpt-3.5-turbo-instruct",
+    const ideaCompletion = await openai.chat.completions.create({
+      messages: [{ role: 'user', content: prompt }],
+      model: "gpt-3.5-turbo",
       max_tokens: 300,
-      temperature: 1.1
     });
-    return ideaCompletion.choices[0]?.text
+    return ideaCompletion.choices[0]?.message.content
 
   }),
 
@@ -80,12 +79,12 @@ export const AIRouter = createTRPCRouter({
 
 
 
-    const contentCompletion = await openai.completions.create({
-      prompt: prompt,
-      model: "gpt-3.5-turbo-instruct",
+    const contentCompletion = await openai.chat.completions.create({
+      messages: [{ role: 'user', content: prompt }],
+      model: "gpt-3.5-turbo",
       max_tokens: 3000,
       temperature: 1.1
     });
-    return contentCompletion.choices[0]?.text
+    return contentCompletion.choices[0]?.message.content
   }),
 });

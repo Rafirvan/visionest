@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { Card, CardContent } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { trpc } from "~/utils/api";
 import Image from "next/image";
 import { Star } from "lucide-react";
@@ -78,12 +78,12 @@ export default function PostCard({ postID }: { postID: string }) {
         }
     })
 
-    function toggleSave(e: React.MouseEvent, save?: boolean) {
+    const toggleSave = useCallback((e: React.MouseEvent, save?: boolean) => {
         e.stopPropagation()
         setSaveLoad(true)
         if (save) savepost.mutate(postID)
         else unsavepost.mutate(postID)
-    }
+    }, [savepost, unsavepost, setSaveLoad])
 
     const cardimage = loaded ?
         <Image src={postData?.imageURL ? postData?.imageURL : "https://utfs.io/f/a18934b5-b279-40cf-a84e-4813b44a72ac_placeholder.png"}
