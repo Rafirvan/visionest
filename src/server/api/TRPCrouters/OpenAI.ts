@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   createTRPCRouter,
   publicProcedure,
+  privateProcedure
 } from "~/server/api/trpc";
 import OpenAI from "openai";
 import { env } from "~/env.mjs";
@@ -13,7 +14,7 @@ const openai = new OpenAI({
 
 export const AIRouter = createTRPCRouter({
 
-  idea: publicProcedure.input(z.object({
+  idea: privateProcedure.input(z.object({
     major: z.string(),
     type: z.string(),
     field: z.string(),
@@ -51,7 +52,7 @@ export const AIRouter = createTRPCRouter({
 
   }),
 
-  content: publicProcedure.input(z.object({
+  content: privateProcedure.input(z.object({
     text: z.string(),
     language: z.string().optional()
   })).mutation(async ({ input }) => {

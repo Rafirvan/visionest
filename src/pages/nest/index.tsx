@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import Link from "next/link"
 import { Globe2, Star, Bird, Upload, Eye } from "lucide-react"
 import Onest from "../../../public/Onest.png"
@@ -10,32 +10,54 @@ import { trpc } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
 
 
-export default function Page() {
-    const [cardLoading, setCardLoading] = useState(false)
+type State = {
+    active: string[] | undefined;
+};
+
+type Action =
+    | { type: 'SET_ACTIVE', payload: string[] | undefined };
+
+const initialState: State = {
+    active: undefined,
+};
+
+function reducer(state: State, action: Action): State {
+    switch (action.type) {
+        case 'SET_ACTIVE':
+            return { ...state, active: action.payload };
+        default:
+            throw new Error();
+    }
+}
+
+
+export default function Nest() {
     const { isSignedIn } = useUser()
     const [tab, setTab] = useState<'ALL' | 'FAVORITE' | 'YOUR'>('ALL');
     const { data: allCards, isFetched: allFetched } = trpc.db.callpostid.useQuery({ many: 20 })
-    const favCardsCall = trpc.db.callfavpostid.useMutation({
-        onSuccess: (result) => { setActive(undefined), setTimeout(() => { setActive(result) }, 1); setCardLoading(false) }
-    })
-    const yourCardsCall = trpc.db.callyourpostid.useMutation({
-        onSuccess: (result) => { setActive(undefined), setTimeout(() => { setActive(result) }, 1); setCardLoading(false) }
-    })
+    const { data: favCards, } = trpc.db.callfavpostid.useQuery()
+    const { data: yourCards, } = trpc.db.callyourpostid.useQuery()
 
-    const [active, setActive] = useState<string[] | undefined>()
-
-    useEffect(() => {
-        if (tab == "ALL") { setActive(undefined); setTimeout(() => setActive(allCards), 1) }
-        if (tab == "FAVORITE") { favCardsCall.mutate(); setCardLoading(true) }
-        if (tab == "YOUR") { yourCardsCall.mutate(); setCardLoading(true) }
-    }, [tab])
+    const [state, dispatch] = useReducer(reducer, initialState);
 
 
     useEffect(() => {
-        if (allFetched) setActive(allCards)
+        if (tab === "ALL") {
+            dispatch({ type: 'SET_ACTIVE', payload: allCards })
+        }
+        if (tab === "FAVORITE") {
+            setTimeout(() => dispatch({ type: 'SET_ACTIVE', payload: favCards }), 1);
+        }
+        if (tab === "YOUR") {
+            setTimeout(() => dispatch({ type: 'SET_ACTIVE', payload: yourCards }), 1);
+        }
+    }, [tab]);
+
+    useEffect(() => {
+        if (allFetched) dispatch({ type: 'SET_ACTIVE', payload: allCards });
     }, [allFetched])
 
-    const CardsArea = active?.map((content, index) => (
+    const CardsArea = state.active?.map((content, index) => (
         <div className=" place-self-center" key={index}><PostCard postID={content} /></div>
     ))
 
@@ -53,12 +75,12 @@ export default function Page() {
                 <header className="relative top-0 w-[95%] h-[70px] flex flex-row justify-between place-items-center">
                     <p className="text-xl place-self-center font-bold pl-3">{tab} POSTS</p>
                     <div id="found" className={`place-items-center gap-5 flex text-slate-500`} >
-                        {!active ? "0" : active.length}  Result(s) Found
+                        {!state.active ? "0" : state.active.length}  Result(s) Found
                     </div>
                 </header>
                 <ScrollArea className="h-[calc(100%-80px)] w-full">
                     <div className="w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 pb-10">
-                        {(cardLoading || !allFetched) ? <div className="pt-10 pl-10">LOADING...</div> : CardsArea}
+                        {!allFetched ? <div className="pt-10 pl-10">LOADING...</div> : CardsArea}
 
                     </div>
                     <hr className="text-center outline-dashed outline-2 outline-slate-600"></hr>

@@ -235,7 +235,7 @@ export const DBRouter = createTRPCRouter({
     }
     ),
 
-    callfavpostid: privateProcedure.mutation(async ({ ctx }) => {
+    callfavpostid: privateProcedure.query(async ({ ctx }) => {
         const favpostids = await prisma.userfavpost.findMany({
             where: {
                 userID: ctx.userId
@@ -250,13 +250,13 @@ export const DBRouter = createTRPCRouter({
         return favpostids.map((e) => e.postID)
     }),
 
-    callyourpostid: privateProcedure.mutation(async ({ ctx }) => {
+    callyourpostid: privateProcedure.query(async ({ ctx }) => {
         const yourpostids = await prisma.post.findMany({
             where: {
                 creatorID: ctx.userId
             },
             orderBy: [
-                { status: "desc" },
+                { status: "asc" },
                 {
                     createdAt: 'desc'
                 },
