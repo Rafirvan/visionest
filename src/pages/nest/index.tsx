@@ -35,7 +35,9 @@ export default function Nest() {
     const { isSignedIn } = useUser()
     const [tab, setTab] = useState<'ALL' | 'FAVORITE' | 'YOUR'>('ALL');
     const { data: allCards, isFetched: allFetched } = trpc.db.callpostid.useQuery({ many: 20 })
-    const { data: favCards, } = trpc.db.callfavpostid.useQuery()
+    const { mutate: callfav, isLoading: favLoading } = trpc.db.callfavpostid.useMutation({
+        onSuccess: (result) => dispatch({ type: 'SET_ACTIVE', payload: result }),
+    })
     const { data: yourCards, } = trpc.db.callyourpostid.useQuery()
 
     const [state, dispatch] = useReducer(reducer, initialState);
@@ -46,10 +48,10 @@ export default function Nest() {
             dispatch({ type: 'SET_ACTIVE', payload: allCards })
         }
         if (tab === "FAVORITE") {
-            setTimeout(() => dispatch({ type: 'SET_ACTIVE', payload: favCards }), 1);
+            callfav();
         }
         if (tab === "YOUR") {
-            setTimeout(() => dispatch({ type: 'SET_ACTIVE', payload: yourCards }), 1);
+            dispatch({ type: 'SET_ACTIVE', payload: yourCards })
         }
     }, [tab]);
 
@@ -74,13 +76,15 @@ export default function Nest() {
             <nav id="postcontainer" className="min-h-[600px] md:pl-9 md:rounded-tr-3xl h-[calc(100vh-80px)] w-[calc(100vw-50px)] md:w-[calc(100vw-300px)] absolute right-0 top-[80px] border-2 border-black">
                 <header className="relative top-0 w-[95%] h-[70px] flex flex-row justify-between place-items-center">
                     <p className="text-xl place-self-center font-bold pl-3">{tab} POSTS</p>
-                    <div id="found" className={`place-items-center gap-5 flex text-slate-500`} >
-                        {!state.active ? "0" : state.active.length}  Result(s) Found
-                    </div>
+                    {allFetched &&
+                        <div id="found" className={`place-items-center gap-5 flex text-slate-500`} >
+                            {!state.active ? "0" : state.active.length}  Result(s) Found
+                        </div>
+                    }
                 </header>
                 <ScrollArea className="h-[calc(100%-80px)] w-full">
                     <div className="w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 pb-10">
-                        {!allFetched ? <div className="pt-10 pl-10">LOADING...</div> : CardsArea}
+                        {(!allFetched || favLoading) ? <div className="pt-10 pl-10">LOADING...</div> : CardsArea}
 
                     </div>
                     <hr className="text-center outline-dashed outline-2 outline-slate-600"></hr>

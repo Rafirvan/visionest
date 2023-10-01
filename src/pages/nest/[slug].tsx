@@ -94,89 +94,92 @@ export default function BlogPost() {
     }, [postId, savepost, unsavepost])
 
     const fav =
-        !isSignedIn || postData?.status != "ACCEPTED" ? <div></div> :
+        (!isSignedIn || postData?.status != "ACCEPTED") ? <div></div> :
             (saveLoad) ? <div className='absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-fit px-1 flex place-items-center justify-center z-10 bg-white'><Spinner />{favCount}</div> :
                 saved ? <div className='absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-fit px-1 flex place-items-center justify-center z-10 bg-white'><Star className='cursor-pointer' onClick={e => toggleSave(e, false)} fill="yellow" />{favCount}</div> :
                     <div className='absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-fit px-1 flex place-items-center justify-center z-10 bg-white'><Star className='cursor-pointer' onClick={e => toggleSave(e, true)} />{favCount}</div>;
 
 
-    if (!isLoaded || !loaded) return <section>Loading...</section>
-
-    if (!postData) return <section>post dengan ID ini tidak diketemukan, postID : {postId}</section>
-
+    // rejected or pending, only visible by admin or post creator
     if ((rejected || pending) && !idmatch && !adminmatch) {
         return (
-            <section className='font-bold relative top-[100px] rounded-xl h-[50vh] w-full flex justify-center place-items-center border-4 border-yellow-500 bg-yellow-200'>
-                Post Sedang Tidak Diperlihatkan untuk Publik
+            <section className='font-bold relative top-[100px] rounded-xl h-[300px] w-[60%]  left-[20%] flex justify-center place-items-center border-4 border-yellow-500 '>
+                Post Privat
             </section>
-        )
+        );
     }
 
 
+    // wrong id
+    if (!postData) return <section className='font-bold relative top-[100px] rounded-xl h-[300px] w-[60%]  left-[20%] flex justify-center place-items-center border-4 border-yellow-500'>post dengan ID ini tidak ditemukan, postID : {postId}</section>;
+
     return (
         <section className='overflow-y-hidden'>
-
-            <ScrollArea className='h-full max-w-4xl mx-auto p-4 shadow-md rounded-md mb-10 border-2 border-black overflow-hidden'>
+            <ScrollArea className='h-full max-w-4xl mx-auto p-4 shadow-md rounded-md mb-10 border-2 border-black overflow-hidden min-h-[500px]'>
                 {fav}
-                <div className='grid'>
-                    <div id='header'>
-                        {((idmatch || adminmatch) && pending) && <div id="statusarea" className='pb-6 font-bold'>Saat ini post ini <span className='text-yellow-500'>Pending</span> </div>}
-                        {((idmatch || adminmatch) && rejected) &&
-                            <>
-                                <div id="statusarea" className='pb-3 font-bold'>
-                                    Saat ini post ini <span className='text-red-500'>Rejected</span>
-                                </div>
-                                <p>Alasan = {postData.rejection}</p>
-                            </>
-                        }
-                        {idmatch && <div>Anda pembuat post ini!<Link href={`/edit/${postId}`}><p className='font-bold text-blue-600 underline pb-4'>Edit post ini</p></Link></div>}
-                    </div>
-                    <hr />
-                    <div id='imageArea' className="mb-2 overflow-hidden h-fit w-[100%] place-self-start relative md:place-self-center">
-                        <Image src={postData.imageURL ? postData.imageURL : "https://utfs.io/f/a18934b5-b279-40cf-a84e-4813b44a72ac_placeholder.png"}
-                            alt={postData.title}
-                            placeholder="blur"
-                            blurDataURL={Loadingimage.src}
-                            height={300}
-                            width={1000}
-                        />
+                {(!isLoaded || loaded) ? <div className='flex h-[500px] scale-[400%] justify-center items-center'><Spinner /></div> :
+                    <div className='grid'>
 
-                    </div>
-
-
-
-                    <div id='descriptionArea'>
-                        <h1 id="titleArea" className="text-2xl font-bold mb-2">{postData.title} <ShareButton link={router.asPath} /> </h1>
-                        <p id="authorArea" className="text-gray-600 mb-1">
-                            By <span className="break-words">{postData.authors}</span> • {postData.year}
-                        </p>
-                        <p id="uniArea" className="text-gray-600 mb-4">
-                            <span className="break-words">{postData.university}</span>
-                        </p>
-                        <hr />
-                        <div className='no-tailwindcss-base'><div dangerouslySetInnerHTML={{ __html: postData.description }}></div></div>
-
-
-                        <div id="linkArea" className="border-4 p-2 mt-4 rounded-lg brightness-90">
-                            <span className="mr-2">Baca Lebih Lanjut:</span>
-                            <a
-                                href={postData.originlink}
-                                className="text-blue-500 hover:text-blue-600 hover:underline"
-                                target="_blank"
-                            >
-                                Link
-                            </a>
+                        {/* header only visible for post creator */}
+                        <div id='header'>
+                            {((idmatch || adminmatch) && pending) && <div id="statusarea" className='pb-6 font-bold'>Saat ini post ini <span className='text-yellow-500'>Pending</span> </div>}
+                            {((idmatch || adminmatch) && rejected) &&
+                                <>
+                                    <div id="statusarea" className='pb-3 font-bold'>
+                                        Saat ini post ini <span className='text-red-500'>Rejected</span>
+                                    </div>
+                                    <p>Alasan = {postData.rejection}</p>
+                                </>
+                            }
+                            {idmatch && <div>Anda pembuat post ini!<Link href={`/edit/${postId}`}><p className='font-bold text-blue-600 underline pb-4'>Edit post ini</p></Link></div>}
                         </div>
 
-                        {!(pending || rejected) &&
-                            <div
-                                id='tagsArea'
-                                className='text-slate-600 pt-2'>
-                                Kategori : {postData.posttag.map(e => e.tag.name).join(", ")}
-                            </div>}
+                        <hr />
+                        <div id='imageArea' className="mb-2 overflow-hidden h-fit w-[100%] place-self-start relative md:place-self-center">
+                            <Image src={postData.imageURL ? postData.imageURL : "https://utfs.io/f/a18934b5-b279-40cf-a84e-4813b44a72ac_placeholder.png"}
+                                alt={postData.title}
+                                placeholder="blur"
+                                blurDataURL={Loadingimage.src}
+                                height={300}
+                                width={1000}
+                            />
 
-                    </div>
-                </div>
+                        </div>
+
+
+
+                        <div id='descriptionArea'>
+                            <h1 id="titleArea" className="text-2xl font-bold mb-2">{postData.title} <ShareButton link={`https://visionest.xyz/nest/${postData.id}`} /> </h1>
+                            <p id="authorArea" className="text-gray-600 mb-1">
+                                By <span className="break-words">{postData.authors}</span> • {postData.year}
+                            </p>
+                            <p id="uniArea" className="text-gray-600 mb-4">
+                                <span className="break-words">{postData.university}</span>
+                            </p>
+                            <hr />
+                            <div className='no-tailwindcss-base'><div dangerouslySetInnerHTML={{ __html: postData.description }}></div></div>
+
+
+                            <div id="linkArea" className="border-4 p-2 mt-4 rounded-lg brightness-90">
+                                <span className="mr-2">Baca Lebih Lanjut:</span>
+                                <a
+                                    href={postData.originlink}
+                                    className="text-blue-500 hover:text-blue-600 hover:underline"
+                                    target="_blank"
+                                >
+                                    Link
+                                </a>
+                            </div>
+
+                            {!(pending || rejected) &&
+                                <div
+                                    id='tagsArea'
+                                    className='text-slate-600 pt-2'>
+                                    Kategori : {postData.posttag.map(e => e.tag.name).join(", ")}
+                                </div>}
+
+                        </div>
+                    </div>}
             </ScrollArea>
         </section>
     );

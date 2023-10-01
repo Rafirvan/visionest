@@ -54,14 +54,15 @@ export default function PostCard({ postID }: { postID: string }) {
     })
 
     const getFavCount = trpc.db.favcount.useMutation({
-        onSuccess: (result) => setFavCount(result)
+        onSuccess: (result) => {
+            setFavCount(result); setSaveLoad(false)
+        }
     })
 
     const refreshCheck = trpc.db.checksave.useMutation({
         onSuccess: (result) => {
             setSaved(result?.includes(postID))
             getFavCount.mutate(postID)
-            setSaveLoad(false)
         }
     })
 
@@ -97,15 +98,13 @@ export default function PostCard({ postID }: { postID: string }) {
         />
         : <Skeleton className="w-full h-full" />
 
-    //bug: savelist not showing on pageload
-
 
 
     const cardtitle = loaded ? postData?.title : <div className="w-full h-full" />
     const cardauthors = loaded ? postData?.authors : <Skeleton className="w-full h-[85%] mt-2" />
     const cardyear = loaded ? postData?.year : <Skeleton className="w-full h-full" />
     const carduni = loaded ? postData?.university : <Skeleton className="w-full h-full" />
-    const cardshare = loaded && <ShareButton link="google.com" />
+    const cardshare = loaded && <ShareButton link={postData ? `https://visionest.xyz/nest/${postData.id}` : ""} />
     const cardfav =
         !isSignedIn || postData?.status != "ACCEPTED" ? <div></div> :
             (!loaded || saveLoad) ? <Spinner /> :
