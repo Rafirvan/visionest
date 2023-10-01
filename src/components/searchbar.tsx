@@ -74,14 +74,15 @@ export default function Searchbar() {
             onFocus={() => setIsOpen(true)}
         />
 
-        {(isOpen && callposts) && (
+
+        {(isOpen) && (
             <div
                 id="dropdown"
                 ref={dropdownRef}
                 className=" w-full border-4 rounded-xl bg-white absolute left-0  lg:left-[20%]  max-w-[100%]  lg:max-w-[60%] top-[125px] lg:top-full"
                 onMouseDown={(e) => {
                     e.preventDefault();
-                    e.stopPropagation()
+                    e.stopPropagation();
                 }}
             >
                 <p className=" underline decoration-slate-300">Rekomendasi</p>
