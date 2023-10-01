@@ -74,16 +74,16 @@ export default function Nest() {
     return (
 
         <section className="flex">
-            <nav id="sidebar" className=" w-[50px] md:w-[200px] min-h-[600px]  overflow-hidden  top-[80px]  box-border h-[calc(100vh-80px)] text-white  bg-black grid grid-cols-1 grid-rows-20 z-10 gap-2" >
+            <nav id="sidebar" className=" w-[50px] md:w-[200px] min-h-[600px]  overflow-hidden  top-[80px]  box-border h-[calc(100svh-80px)] text-white  bg-black grid grid-cols-1 grid-rows-20 z-10 gap-2" >
                 <div id="nest" className="row-span-3 hidden md:flex h-full w-full border-b-2 border-black bg-contain bg-center bg-opacity-70 md:bg-cover bg-no-repeat justify-center items-center font-boltext-black text-5xl" ><p className="hidden md:flex">NEST</p></div>
-                <nav id="All" className="cursor-pointer gap-2  md:pl-5 row-span-2 h-full w-full rounded-md hover:outline  hover:outline-slate-950 flex place-items-center justify-center md:justify-start text-lg" style={TabStyle('ALL')} onClick={() => { setTab("ALL") }}><Globe2 /><span className="hidden md:flex">All Posts</span></nav>
+                <nav id="All" className="cursor-pointer gap-2 pt-5  md:pt-0  md:pl-5 row-span-2 h-full w-full rounded-md hover:outline  hover:outline-slate-950 flex place-items-center justify-center md:justify-start text-lg" style={TabStyle('ALL')} onClick={() => { setTab("ALL") }}><Globe2 /><span className="hidden md:flex">All Posts</span></nav>
                 <nav id="Fav" className={`${!isSignedIn && "hidden"} cursor-pointer gap-2  md:pl-5 row-span-2 h-full w-full rounded-md hover:outline hover:outline-2 hover:outline-slate-950 place-items-center justify-center md:justify-start flex text-lg`} style={TabStyle('FAVORITE')} onClick={() => { setTab("FAVORITE") }}><Star /><span className="hidden md:flex  ">Favorite Posts</span></nav>
                 <nav id="You" className={`${!isSignedIn && "hidden"} cursor-pointer gap-2  md:pl-5 row-span-2 h-full w-full rounded-md hover:outline hover:outline-2 hover:outline-slate-950 place-items-center justify-center md:justify-start flex text-lg`} style={TabStyle('YOUR')} onClick={() => { setTab("YOUR") }}><Bird /><span className="hidden md:flex ">Your Posts</span></nav>
                 <nav id="submit" className="hover:underline row-start-18 h-full w-full flex justify-center md:justify-end md:pr-5 border-t-2 pt-2 border-black"><Link href="submit" className="flex gap-2"><span className="hidden md:flex">Upload Post</span><Upload /></Link></nav>
                 <nav id="vision" className="hover:underline row-start-19 h-full w-full flex justify-center md:justify-end md:pr-5"><Link href="vision" className="flex gap-2 pt-2"><span className="hidden md:flex">The Vision AI</span><Eye /></Link></nav>
             </nav>
 
-            <nav id="postcontainer" className="min-h-[600px]  md:px-4 h-[calc(100%-80px)] w-[calc(100vw-50px)] md:w-[calc(100vw-300px)]border border-black">
+            <nav id="postcontainer" className="min-h-[600px]  md:px-4 h-[calc(100svh-80px)] w-[calc(100vw-50px)] md:w-[calc(100vw-300px)]border border-black">
                 <header className="relative top-0 w-[95%] h-[70px] flex flex-row justify-between place-items-center">
                     <p className="text-xl place-self-center font-bold pl-3">{tab} POSTS</p>
                     {(!allLoading && !favLoading) &&

@@ -29,6 +29,8 @@ interface post {
 
 export default function Searchbar() {
 
+
+    const [isScrollAreaActive, setIsScrollAreaActive] = useState(false);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [input, setInput] = useState("")
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -70,7 +72,11 @@ export default function Searchbar() {
             autoComplete="off"
             placeholder="Cari judul/penulis/universitas..."
             onChange={(e) => setInput(e.target.value)}
-            onBlur={(e) => { if (dropdownRef.current && !dropdownRef.current.contains(e.relatedTarget)) setIsOpen(false) }}
+            onBlur={(e) => {
+                if (dropdownRef.current && !dropdownRef.current.contains(e.relatedTarget) && !isScrollAreaActive) {
+                    setIsOpen(false);
+                }
+            }}
             onFocus={(e) => {
                 e.preventDefault();
                 setIsOpen(true);
@@ -83,14 +89,10 @@ export default function Searchbar() {
                 id="dropdown"
                 ref={dropdownRef}
                 className=" w-full border-4 rounded-xl bg-white absolute left-0  lg:left-[20%]  max-w-[100%]  lg:max-w-[60%] top-[125px] lg:top-full"
-                onMouseDown={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }}
-                onTouchStart={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }}
+                onMouseDown={() => setIsScrollAreaActive(true)}
+                onMouseUp={() => setIsScrollAreaActive(false)}
+                onTouchStart={() => setIsScrollAreaActive(true)}
+                onTouchEnd={() => setIsScrollAreaActive(false)}
             >
                 <p className=" underline decoration-slate-300">Rekomendasi</p>
                 <ScrollArea id="posts" className="h-[280px]">
