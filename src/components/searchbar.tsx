@@ -39,6 +39,7 @@ export default function Searchbar() {
     const inputRef = useRef<HTMLInputElement>(null);
     const router = useRouter()
 
+    //set tags on or off
     useEffect(() => {
         if (input == "" && (!selectedTags || selectedTags.length == 0)) {
             setFilteredPosts(undefined); setTimeout(() => {
@@ -118,7 +119,7 @@ export default function Searchbar() {
             <div
                 id="dropdown"
                 ref={dropdownRef}
-                className=" w-full border-4 rounded-xl bg-white absolute left-0  lg:left-[20%]  max-w-[100%]  lg:max-w-[60%] top-[125px] lg:top-full"
+                className=" w-full border-4 rounded-xl bg-white absolute left-[6%]  lg:left-[20%]  max-w-[88%]  lg:max-w-[60%] top-[125px] lg:top-full"
             >
                 <p className=" underline decoration-slate-300">Rekomendasi</p>
                 <ScrollArea id="posts" className="h-[280px]">

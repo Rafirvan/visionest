@@ -27,7 +27,7 @@ module.exports = withUt({
         '20': 'repeat(20, minmax(0, 1fr))',
       },
       gridRowStart: {
-        '19': '19',
+        '17': '17',
         '18': '18',
       },
       keyframes: {
