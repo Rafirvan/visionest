@@ -74,6 +74,7 @@ export default function Searchbar() {
         };
         document.addEventListener('mousedown', handleClickOutside);
         document.addEventListener('touchstart', handleClickOutside);
+
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
             document.removeEventListener('touchstart', handleClickOutside);
@@ -104,10 +105,6 @@ export default function Searchbar() {
                 id="dropdown"
                 ref={dropdownRef}
                 className=" w-full border-4 rounded-xl bg-white absolute left-0  lg:left-[20%]  max-w-[100%]  lg:max-w-[60%] top-[125px] lg:top-full"
-                onMouseDown={() => setIsScrollAreaActive(true)}
-                onMouseUp={() => setIsScrollAreaActive(false)}
-                onTouchStart={() => setIsScrollAreaActive(true)}
-                onTouchEnd={() => setIsScrollAreaActive(false)}
             >
                 <p className=" underline decoration-slate-300">Rekomendasi</p>
                 <ScrollArea id="posts" className="h-[280px]">
