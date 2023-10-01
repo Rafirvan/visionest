@@ -92,7 +92,7 @@ export default function Nest() {
                         </div>
                     }
                 </header>
-                <ScrollArea className="h-[calc(100%-80px)] w-full">
+                <ScrollArea className="h-[calc(100svh-80px)] w-full">
                     <div className="w-full grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-5 pb-10">
                         {(!allFetched || favLoading) ? <div className="pt-10 pl-10">LOADING...</div> : CardsArea}
 
