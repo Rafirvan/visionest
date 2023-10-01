@@ -71,7 +71,10 @@ export default function Searchbar() {
             placeholder="Cari judul/penulis/universitas..."
             onChange={(e) => setInput(e.target.value)}
             onBlur={(e) => { if (dropdownRef.current && !dropdownRef.current.contains(e.relatedTarget)) setIsOpen(false) }}
-            onFocus={() => setIsOpen(true)}
+            onFocus={(e) => {
+                e.preventDefault();
+                setIsOpen(true);
+            }}
         />
 
 
