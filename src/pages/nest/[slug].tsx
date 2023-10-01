@@ -48,7 +48,7 @@ export default function BlogPost() {
         }
     })
     const getFavCount = trpc.db.favcount.useMutation({
-        onSuccess: (result) => setFavCount(result)
+        onSuccess: (result) => { setFavCount(result); setSaveLoad(false) }
     })
 
 
@@ -71,7 +71,6 @@ export default function BlogPost() {
                 setSaved(result?.includes(postId));
                 getFavCount.mutate(postId)
             }
-            setSaveLoad(false)
 
         }
     })

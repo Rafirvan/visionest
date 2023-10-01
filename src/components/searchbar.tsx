@@ -61,6 +61,8 @@ export default function Searchbar() {
         }
     };
 
+
+    //close if click outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent | TouchEvent) => {
             if (
@@ -80,6 +82,18 @@ export default function Searchbar() {
             document.removeEventListener('touchstart', handleClickOutside);
         };
     }, []);
+
+
+    //close if route change
+    useEffect(() => {
+        const handleRouteChange = () => {
+            setIsOpen(false);
+        };
+        router.events.on('routeChangeStart', handleRouteChange);
+        return () => {
+            router.events.off('routeChangeStart', handleRouteChange);
+        };
+    }, [router]);
 
 
 
