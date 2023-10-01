@@ -83,7 +83,7 @@ export default function Nest() {
                 <nav id="vision" className="hover:underline row-start-19 h-full w-full flex justify-center md:justify-end md:pr-5"><Link href="vision" className="flex gap-2 pt-2"><span className="hidden md:flex">The Vision AI</span><Eye /></Link></nav>
             </nav>
 
-            <nav id="postcontainer" className="min-h-[600px]  md:px-4 h-[calc(100vh-80px)] w-[calc(100vw-50px)] md:w-[calc(100vw-300px)] top-[80px] border border-black">
+            <nav id="postcontainer" className="min-h-[600px]  md:px-4 h-[calc(100svh-80px)] w-[calc(100vw-50px)] md:w-[calc(100vw-300px)] top-[80px] border border-black">
                 <header className="relative top-0 w-[95%] h-[70px] flex flex-row justify-between place-items-center">
                     <p className="text-xl place-self-center font-bold pl-3">{tab} POSTS</p>
                     {(!allLoading && !favLoading) &&

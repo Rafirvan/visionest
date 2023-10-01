@@ -84,6 +84,10 @@ export default function Searchbar() {
                     e.preventDefault();
                     e.stopPropagation();
                 }}
+                onTouchStart={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }}
             >
                 <p className=" underline decoration-slate-300">Rekomendasi</p>
                 <ScrollArea id="posts" className="h-[280px]">
