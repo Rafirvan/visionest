@@ -131,7 +131,7 @@ export default function PostCard({ postID }: { postID: string }) {
                     <div id="cardfooter" className="px-2 flex justify-between place-items-center border-t-2 border-black h-[25px] relative bottom-1">
                         <div id="univ" className="text-sm align-self-start overflow-hidden overflow-ellipsis line-clamp-1 w-[200px] relative top-1">{carduni}</div>
                         <div id="share" className=" scale-95 mr-5 relative top-1">{cardshare}</div>
-                        <div id="cardfavcount" className="relative top-1 pr-1">{favCount}</div>
+                        {postData?.status == "ACCEPTED" && <div id="cardfavcount" className="relative top-1 pr-1 w-3">{favCount}</div>}
                         <div id="cardfav" className="col-start-5 row-start-10 text-green-700 relative top-1 hover:text-green-400 cursor-pointer">{cardfav}</div>
                     </div>
                 </div>

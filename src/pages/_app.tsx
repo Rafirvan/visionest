@@ -4,23 +4,24 @@ import "@uploadthing/react/styles.css";
 import "~/styles/globals.css";
 import Head from "next/head";
 import Layout from "~/components/layout";
-import { useRouter } from "next/router";
-
+// import { useRouter } from "next/router";
 import { ClerkProvider } from "@clerk/nextjs";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
-  const Router = useRouter()
+  // const Router = useRouter()
   return (
     <>
       <Head>
-        <link rel="icon" href="/icon.png" />
+        <link rel="icon" href="/Onest.png" />
         <title>Visionest</title>
-
       </Head>
+
       <ClerkProvider {...pageProps}>
 
         <Layout>
+
           <Component {...pageProps} />
+
         </Layout>
 
       </ClerkProvider>

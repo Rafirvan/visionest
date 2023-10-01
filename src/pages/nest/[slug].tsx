@@ -40,6 +40,7 @@ export default function BlogPost() {
     const [saveLoad, setSaveLoad] = useState(false)
     const [loaded, setLoaded] = useState(false)
     const [favCount, setFavCount] = useState<number | undefined>()
+    const { user, isLoaded: userLoaded, isSignedIn } = useUser()
     const getpostfromid = trpc.db.callpostfromid.useMutation({
         onSuccess: (result) => {
             setPostData(result.postwithid)
@@ -50,11 +51,12 @@ export default function BlogPost() {
         onSuccess: (result) => setFavCount(result)
     })
 
-    const { user, isLoaded, isSignedIn } = useUser()
+
     const idmatch = (user?.id == postData?.creatorID)
     const adminmatch = (user?.publicMetadata.role == "admin")
     const pending = (postData?.status == "PENDING")
     const rejected = (postData?.status == "REJECTED")
+    const accepted = (postData?.status == "ACCEPTED")
 
 
     useEffect(() => {
@@ -100,86 +102,89 @@ export default function BlogPost() {
                     <div className='absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-fit px-1 flex place-items-center justify-center z-10 bg-white'><Star className='cursor-pointer' onClick={e => toggleSave(e, true)} />{favCount}</div>;
 
 
+    if (!userLoaded || !loaded) {
+        return <section className='font-bold relative top-[100px] rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-4 border-yellow-500'><div className='flex scale-[400%] justify-center items-center'><Spinner /></div></section>;
+
+    }
+
     // rejected or pending, only visible by admin or post creator
-    if ((rejected || pending) && !idmatch && !adminmatch) {
+    if (!accepted && !idmatch && !adminmatch) {
         return (
-            <section className='font-bold relative top-[100px] rounded-xl h-[300px] w-[60%]  left-[20%] flex justify-center place-items-center border-4 border-yellow-500 '>
-                Post Privat
+            <section className='font-bold relative top-[100px] rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-4 border-yellow-500 '>
+                Post hanya bisa dilihat oleh pembuat atau admin
             </section>
         );
     }
 
-
     // wrong id
-    if (!postData) return <section className='font-bold relative top-[100px] rounded-xl h-[300px] w-[60%]  left-[20%] flex justify-center place-items-center border-4 border-yellow-500'>post dengan ID ini tidak ditemukan, postID : {postId}</section>;
+    if (!postData) return <section className='font-bold relative top-[100px] rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-4 border-yellow-500'>post dengan ID ini tidak ditemukan, postID : {postId}</section>;
 
     return (
         <section className='overflow-y-hidden'>
             <ScrollArea className='h-full max-w-4xl mx-auto p-4 shadow-md rounded-md mb-10 border-2 border-black overflow-hidden min-h-[500px]'>
                 {fav}
-                {(!isLoaded || loaded) ? <div className='flex h-[500px] scale-[400%] justify-center items-center'><Spinner /></div> :
-                    <div className='grid'>
+                <div className='grid'>
 
-                        {/* header only visible for post creator */}
-                        <div id='header'>
-                            {((idmatch || adminmatch) && pending) && <div id="statusarea" className='pb-6 font-bold'>Saat ini post ini <span className='text-yellow-500'>Pending</span> </div>}
-                            {((idmatch || adminmatch) && rejected) &&
-                                <>
-                                    <div id="statusarea" className='pb-3 font-bold'>
-                                        Saat ini post ini <span className='text-red-500'>Rejected</span>
-                                    </div>
-                                    <p>Alasan = {postData.rejection}</p>
-                                </>
-                            }
-                            {idmatch && <div>Anda pembuat post ini!<Link href={`/edit/${postId}`}><p className='font-bold text-blue-600 underline pb-4'>Edit post ini</p></Link></div>}
-                        </div>
+                    {/* header only visible for post creator */}
+                    <div id='header'>
+                        {((idmatch || adminmatch) && pending) && <div id="statusarea" className='pb-6 font-bold'>Saat ini post ini <span className='text-yellow-500'>Pending</span> </div>}
+                        {((idmatch || adminmatch) && rejected) &&
+                            <>
+                                <div id="statusarea" className='pb-3 font-bold'>
+                                    Saat ini post ini <span className='text-red-500'>Rejected</span>
+                                </div>
+                                <p>Alasan = {postData.rejection}</p>
+                            </>
+                        }
+                        {idmatch && <div>Anda pembuat post ini!<Link href={`/edit/${postId}`}><p className='font-bold text-blue-600 underline pb-4'>Edit post ini</p></Link></div>}
+                    </div>
 
+                    <hr />
+                    <div id='imageArea' className="mb-2 overflow-hidden h-fit w-[100%] place-self-start relative md:place-self-center">
+                        <Image src={postData.imageURL ? postData.imageURL : "https://utfs.io/f/a18934b5-b279-40cf-a84e-4813b44a72ac_placeholder.png"}
+                            alt={postData.title}
+                            placeholder="blur"
+                            blurDataURL={Loadingimage.src}
+                            height={300}
+                            width={1000}
+                        />
+
+                    </div>
+
+
+
+                    <div id='descriptionArea'>
+                        <h1 id="titleArea" className="text-2xl font-bold mb-2">{postData.title} <ShareButton link={`https://visionest.xyz/nest/${postData.id}`} /> </h1>
+                        <p id="authorArea" className="text-gray-600 mb-1">
+                            By <span className="break-words">{postData.authors}</span> • {postData.year}
+                        </p>
+                        <p id="uniArea" className="text-gray-600 mb-4">
+                            <span className="break-words">{postData.university}</span>
+                        </p>
                         <hr />
-                        <div id='imageArea' className="mb-2 overflow-hidden h-fit w-[100%] place-self-start relative md:place-self-center">
-                            <Image src={postData.imageURL ? postData.imageURL : "https://utfs.io/f/a18934b5-b279-40cf-a84e-4813b44a72ac_placeholder.png"}
-                                alt={postData.title}
-                                placeholder="blur"
-                                blurDataURL={Loadingimage.src}
-                                height={300}
-                                width={1000}
-                            />
+                        <div className='no-tailwindcss-base'><div dangerouslySetInnerHTML={{ __html: postData.description }}></div></div>
 
+
+                        <div id="linkArea" className="border-4 p-2 mt-4 rounded-lg brightness-90">
+                            <span className="mr-2">Baca Lebih Lanjut:</span>
+                            <a
+                                href={postData.originlink}
+                                className="text-blue-500 hover:text-blue-600 hover:underline"
+                                target="_blank"
+                            >
+                                Link
+                            </a>
                         </div>
 
+                        {!(pending || rejected) &&
+                            <div
+                                id='tagsArea'
+                                className='text-slate-600 pt-2'>
+                                Kategori : {postData.posttag.map(e => e.tag.name).join(", ")}
+                            </div>}
 
-
-                        <div id='descriptionArea'>
-                            <h1 id="titleArea" className="text-2xl font-bold mb-2">{postData.title} <ShareButton link={`https://visionest.xyz/nest/${postData.id}`} /> </h1>
-                            <p id="authorArea" className="text-gray-600 mb-1">
-                                By <span className="break-words">{postData.authors}</span> • {postData.year}
-                            </p>
-                            <p id="uniArea" className="text-gray-600 mb-4">
-                                <span className="break-words">{postData.university}</span>
-                            </p>
-                            <hr />
-                            <div className='no-tailwindcss-base'><div dangerouslySetInnerHTML={{ __html: postData.description }}></div></div>
-
-
-                            <div id="linkArea" className="border-4 p-2 mt-4 rounded-lg brightness-90">
-                                <span className="mr-2">Baca Lebih Lanjut:</span>
-                                <a
-                                    href={postData.originlink}
-                                    className="text-blue-500 hover:text-blue-600 hover:underline"
-                                    target="_blank"
-                                >
-                                    Link
-                                </a>
-                            </div>
-
-                            {!(pending || rejected) &&
-                                <div
-                                    id='tagsArea'
-                                    className='text-slate-600 pt-2'>
-                                    Kategori : {postData.posttag.map(e => e.tag.name).join(", ")}
-                                </div>}
-
-                        </div>
-                    </div>}
+                    </div>
+                </div>
             </ScrollArea>
         </section>
     );

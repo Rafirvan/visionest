@@ -78,9 +78,10 @@ export default function Searchbar() {
             <div
                 id="dropdown"
                 ref={dropdownRef}
-                className=" w-full border-4 rounded-xl bg-white absolute  left-[5.5%]  lg:left-[10%]  max-w-[85%]  lg:max-w-[60%] top-[125px] lg:top-full"
+                className=" w-full border-4 rounded-xl bg-white absolute left-0  lg:left-[20%]  max-w-[100%]  lg:max-w-[60%] top-[125px] lg:top-full"
                 onMouseDown={(e) => {
                     e.preventDefault();
+                    e.stopPropagation()
                 }}
             >
                 <p className=" underline decoration-slate-300">Rekomendasi</p>
@@ -118,7 +119,7 @@ export default function Searchbar() {
                             <button
                                 key={tag}
                                 onClick={() => handleTagToggle(tag)}
-                                className={`text-sm px-2 py-1 m-1 border rounded 
+                                className={` text-sm px-2 py-1 m-1 border rounded 
                       ${selectedTags.includes(tag) ? 'bg-orange-500 text-white' : 'bg-gray-300 text-gray-700'}`}
                             >
                                 {tag}

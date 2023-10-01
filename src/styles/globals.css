@@ -35,15 +35,12 @@ img {
 }
 
 body {
-  padding: 0 10% 0 10% !important;
+  padding: 0 8% !important;
   width: 100%;
   max-width: 1600px;
   overflow-x: hidden;
 }
 
-body.no-padding {
-  padding: 0 !important;
-}
 
 @media (max-width: 767px) {
   body {
@@ -143,3 +140,5 @@ input, textarea{
 * {
   -webkit-tap-highlight-color: transparent;
 }
+
+
