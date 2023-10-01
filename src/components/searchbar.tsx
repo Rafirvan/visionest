@@ -30,13 +30,13 @@ interface post {
 export default function Searchbar() {
 
 
-    const [isScrollAreaActive, setIsScrollAreaActive] = useState(false);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [input, setInput] = useState("")
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const { data: callposts, isLoading: isLoading } = trpc.db.callforsearch.useQuery()
     const [filteredPosts, setFilteredPosts] = useState<post[] | undefined>();
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
     const router = useRouter()
 
     useEffect(() => {
@@ -61,22 +61,37 @@ export default function Searchbar() {
         }
     };
 
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target as Node) &&
+                inputRef.current &&
+                !inputRef.current.contains(event.target as Node)
+            ) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('touchstart', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('touchstart', handleClickOutside);
+        };
+    }, []);
+
 
 
 
     return (<div id="search" className="w-[10%] lg:w-[40%] place-items-center gap-5 flex">
         <Label htmlFor="searchbar" className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}><Search /></Label>
         <Input
+            ref={inputRef}
             className={`${!isOpen && "hidden"} fixed top-[80px] left-[10%] lg:left-[20%]  w-[80%] lg:w-full lg:static lg:flex rounded-md border-2`}
             id="searchbar"
             autoComplete="off"
             placeholder="Cari judul/penulis/universitas..."
             onChange={(e) => setInput(e.target.value)}
-            onBlur={(e) => {
-                if (dropdownRef.current && !dropdownRef.current.contains(e.relatedTarget) && !isScrollAreaActive) {
-                    setIsOpen(false);
-                }
-            }}
             onFocus={(e) => {
                 e.preventDefault();
                 setIsOpen(true);
