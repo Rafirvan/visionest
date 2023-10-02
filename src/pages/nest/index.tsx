@@ -17,31 +17,29 @@ type State = {
 type Action =
     | { type: 'SET_ACTIVE', payload: string[] | undefined };
 
-const initialState: State = {
-    active: undefined,
-};
 
-function reducer(state: State, action: Action): State {
-    switch (action.type) {
-        case 'SET_ACTIVE':
-            return { ...state, active: action.payload };
-        default:
-            throw new Error();
-    }
-}
 
 
 export default function Nest() {
     const { isSignedIn } = useUser()
     const [tab, setTab] = useState<'ALL' | 'FAVORITE' | 'YOUR'>('ALL');
+
+    const [cards, dispatch] = useReducer((state: State, action: Action) => {
+        switch (action.type) {
+            case 'SET_ACTIVE':
+                return { ...state, active: action.payload };
+            default:
+                throw new Error();
+        }
+    }, { active: undefined });
+
     const { data: allCards, isFetched: allFetched, isLoading: allLoading } = trpc.db.callpostid.useQuery({ many: 20 })
     const { mutate: callfav, isLoading: favLoading } = trpc.db.callfavpostid.useMutation({
         onSuccess: (result) => { if (tab === "FAVORITE") dispatch({ type: 'SET_ACTIVE', payload: result }) }
     })
-
     const { data: yourCards, } = trpc.db.callyourpostid.useQuery()
 
-    const [state, dispatch] = useReducer(reducer, initialState);
+
 
 
     useEffect(() => {
@@ -60,8 +58,8 @@ export default function Nest() {
         if (allFetched) dispatch({ type: 'SET_ACTIVE', payload: allCards });
     }, [allFetched])
 
-    const CardsArea = state.active?.map((content, index) => (
-        <div className=" place-self-center" key={index}><PostCard postID={content} /></div>
+    const CardsArea = cards.active?.map((content) => (
+        <div className=" place-self-center" key={content}><PostCard postID={content} /></div>
     ))
 
 
@@ -90,7 +88,7 @@ export default function Nest() {
                     <p className="text-xl place-self-center font-bold pl-3">{tab} POSTS</p>
                     {(!allLoading && !favLoading) &&
                         <div id="found" className={`place-items-center gap-5 flex text-slate-500`} >
-                            {!state.active ? "0" : state.active.length}  Result(s) Found
+                            {!cards.active ? "0" : cards.active.length}  Result(s) Found
                         </div>
                     }
                 </header>

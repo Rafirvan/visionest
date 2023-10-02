@@ -50,6 +50,7 @@ export default function PostCard({ postID }: { postID: string }) {
             setLoaded(true)
             if (result?.status == "PENDING") setBorderColor("yellow-600")
             else if (result?.status == "REJECTED") setBorderColor("red-500")
+            else setBorderColor("vision")
         }
     })
 
