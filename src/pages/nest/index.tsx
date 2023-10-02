@@ -79,8 +79,8 @@ export default function Nest() {
                 <nav id="Fav" className={`${!isSignedIn && "hidden"} cursor-pointer gap-2  md:pl-5 row-span-2 h-full w-full rounded-md hover:outline hover:outline-2 hover:outline-vision place-items-center justify-center md:justify-start flex text-lg`} style={TabStyle('FAVORITE')} onClick={() => { setTab("FAVORITE") }}><Star /><span className="hidden md:flex  ">Favorite</span></nav>
                 <nav id="You" className={`${!isSignedIn && "hidden"} cursor-pointer gap-2  md:pl-5 row-span-2 h-full w-full rounded-md hover:outline hover:outline-2 hover:outline-vision place-items-center justify-center md:justify-start flex text-lg`} style={TabStyle('YOUR')} onClick={() => { setTab("YOUR") }}><Bird /><span className="hidden md:flex ">Your Posts</span></nav>
 
-                <nav id="submit" className="hover:underline row-start-17 h-full w-full flex justify-center md:justify-end md:pr-5 border-t-2 pt-2 border-black"><Link href="submit" className="flex gap-2"><span className="hidden md:flex">Upload Post</span><Upload /></Link></nav>
-                <nav id="vision" className="hover:underline row-start-18 h-full w-full flex justify-center md:justify-end md:pr-5"><Link href="vision" className="flex gap-2 pt-2"><span className="hidden md:flex">The Vision AI</span><Eye /></Link></nav>
+                <nav id="submit" className="hover:underline row-start-17 h-full w-full flex justify-center md:justify-end md:pr-3 border-t-2 pt-2 border-black"><Link href="submit" className="flex gap-2"><span className="hidden md:flex">Upload Post</span><Upload /></Link></nav>
+                <nav id="vision" className="hover:underline row-start-18 h-full w-full flex justify-center md:justify-end md:pr-3"><Link href="vision" className="flex gap-2 pt-2"><span className="hidden md:flex">The Vision AI</span><Eye /></Link></nav>
             </nav>
 
             <nav id="postcontainer" className="min-h-[400px] md:px-4 h-[calc(100lvh-80px)] w-[calc(100vw-50px)] md:w-[calc(100vw-300px)]border border-black">

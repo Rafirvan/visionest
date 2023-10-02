@@ -9,16 +9,29 @@ export default function PostCarousel() {
     const { data: CardContents, isLoading } = trpc.db.callpostid.useQuery({ many: 5 })
     const [rightColor, setRightColor] = useState('black');
     const [leftColor, setLeftColor] = useState('black');
+    const [atStart, setAtStart] = useState(true)
+    const [atEnd, setAtEnd] = useState(false)
 
 
+
+    // handle visibility of left/right arrows
+    const handleScroll = () => {
+        const element = carouselRef.current;
+        if (element) {
+            setAtStart(element.scrollLeft === 0)
+            setAtEnd(element.scrollWidth - element.scrollLeft === element.clientWidth)
+        }
+    };
+
+    //scroll using button
     const scroll = (direction: 'left' | 'right') => {
         if (carouselRef.current) {
-            console.log("scroll")
             carouselRef.current.scrollBy({
                 top: 0,
                 left: direction === 'left' ? -332 : 332,
                 behavior: 'smooth'
             });
+            handleScroll()
         }
     };
 
@@ -26,7 +39,7 @@ export default function PostCarousel() {
         <div className="relative">
             <div>
                 <button
-                    className="absolute top-1/2 left-[-30px] transform -translate-y-1/2 z-10"
+                    className={`absolute top-1/2 left-[-30px] transform -translate-y-1/2 z-10 ${atStart && "invisible"} `}
                     onClick={() => scroll('left')}
                 >
                     <ArrowLeft
@@ -38,7 +51,7 @@ export default function PostCarousel() {
                         onPointerUp={() => setLeftColor("black")} />
                 </button>
                 <button
-                    className="absolute top-1/2 right-[-30px]  transform -translate-y-1/2 z-10"
+                    className={`absolute top-1/2 right-[-30px]  transform -translate-y-1/2 z-10 ${atEnd && "invisible"}`}
                     onClick={() => scroll('right')}
                 >
                     <ArrowRight style={{ color: rightColor }}
@@ -50,7 +63,7 @@ export default function PostCarousel() {
             </div>
 
 
-            <div id="carousel" className="relative overflow-x-auto snap-x snap-mandatory" ref={carouselRef}>
+            <div id="carousel" className="relative overflow-x-auto snap-x snap-mandatory" ref={carouselRef} onScroll={handleScroll}>
                 <div
                     className="flex w-[1628px] h-[350px] gap-[32px]"
                 >

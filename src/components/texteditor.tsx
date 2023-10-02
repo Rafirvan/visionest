@@ -20,9 +20,8 @@ function TextEditor({ formData, setFormData }: textEditorProps) {
   return (
     <>
       <Editor
-
-
         onInit={(evt, editor) => editorRef.current = editor}
+        //free
         apiKey='if38s6jkec44dnzpo4kr297g8fa1qb6z4w1h2fnahy04mzoy'
         init={{
           height: 500,
