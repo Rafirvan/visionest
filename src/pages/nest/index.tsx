@@ -59,7 +59,7 @@ export default function Nest() {
     }, [allFetched])
 
     const CardsArea = cards.active?.map((content) => (
-        <div className=" place-self-center" key={content}><PostCard postID={content} /></div>
+        <div className=" place-self-center" key={content}><PostCard postID={content} showAsDialog /></div>
     ))
 
 
@@ -71,11 +71,10 @@ export default function Nest() {
 
 
     return (
-
         <section className="flex">
             <nav id="sidebar" className=" w-[50px] md:w-[200px] min-h-[400px] pt-5 md:pt-0  overflow-hidden  h-[calc(100lvh-80px)] text-white  bg-black grid grid-cols-1 grid-rows-20 z-10 gap-[2px]" >
                 <div id="nest" className="row-span-3 hidden md:flex h-full w-full border-b-2 border-black bg-contain bg-center bg-opacity-70 md:bg-cover bg-no-repeat justify-center items-center font-boltext-black text-5xl" ><p className="hidden md:flex">NEST</p></div>
-                
+
                 <nav id="All" className="cursor-pointer gap-2  md:pt-0  md:pl-5 row-span-2 h-full w-full rounded-md hover:outline  hover:outline-vision flex place-items-center justify-center md:justify-start text-lg"
                     style={TabStyle('ALL')}
                     onClick={() => { setTab("ALL") }}

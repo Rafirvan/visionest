@@ -11,6 +11,7 @@ import ShareButton from "./shareButton";
 import { useRouter } from "next/router";
 import { useUser } from "@clerk/nextjs";
 import Spinner from "./ui/spinner";
+import useDialogStore from "~/stores/store";
 
 interface posttype {
     id: string;
@@ -26,7 +27,7 @@ interface posttype {
     university: string;
 }
 
-export default function PostCard({ postID }: { postID: string }) {
+export default function PostCard({ postID, showAsDialog }: { postID: string, showAsDialog?: boolean }) {
     const [loaded, setLoaded] = useState(false)
     const [saveLoad, setSaveLoad] = useState(false)
     const [postData, setPostData] = useState<posttype | null | undefined>();
@@ -35,6 +36,7 @@ export default function PostCard({ postID }: { postID: string }) {
     const [borderColor, setBorderColor] = useState<string>("vision")
     const router = useRouter()
     const { isSignedIn } = useUser()
+    const { toggleModal } = useDialogStore();
 
 
 
@@ -87,6 +89,18 @@ export default function PostCard({ postID }: { postID: string }) {
         else unsavepost.mutate(postID)
     }, [savepost, unsavepost, setSaveLoad])
 
+    const handleClick = () => {
+        const navigate = async () => {
+            if (showAsDialog) {
+                toggleModal();
+                await router.push(`nest/${postData?.id}`);
+            } else {
+                postData?.id && await router.push(`nest/${postData?.id}`, undefined, { scroll: false });
+            }
+        };
+        void navigate();
+    };
+
     const cardimage = loaded ?
         <Image src={postData?.imageURL ? postData?.imageURL : "https://utfs.io/f/a18934b5-b279-40cf-a84e-4813b44a72ac_placeholder.png"}
             alt="Loading"
@@ -116,7 +130,7 @@ export default function PostCard({ postID }: { postID: string }) {
 
 
     return (
-        <Card className="w-[300px] h-[350px]  scale-x-90 xs:scale-x-100 snap-end border-4 text-left border-vision cursor-pointer hover:border-yellow-600" onClick={async () => { postData?.id && await router.push(`nest/${postData?.id}`, undefined, { scroll: false }) }} >
+        <Card className="w-[300px] h-[350px]  scale-x-90 xs:scale-x-100 snap-end border-4 text-left border-vision cursor-pointer hover:border-yellow-600" onClick={handleClick} >
             <CardContent className="h-full pb-10">
                 <div className="flex flex-col h-full justify-between gap-2">
                     <div>
