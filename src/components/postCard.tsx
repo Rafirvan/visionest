@@ -11,7 +11,6 @@ import ShareButton from "./shareButton";
 import { useRouter } from "next/router";
 import { useUser } from "@clerk/nextjs";
 import Spinner from "./ui/spinner";
-import useDialogStore from "~/stores/store";
 
 interface posttype {
     id: string;
@@ -27,7 +26,12 @@ interface posttype {
     university: string;
 }
 
-export default function PostCard({ postID, showAsDialog }: { postID: string, showAsDialog?: boolean }) {
+interface cardType {
+    postID: string,
+    setmodal?: React.Dispatch<React.SetStateAction<string | undefined>>
+}
+
+export default function PostCard({ postID, setmodal }: cardType) {
     const [loaded, setLoaded] = useState(false)
     const [saveLoad, setSaveLoad] = useState(false)
     const [postData, setPostData] = useState<posttype | null | undefined>();
@@ -36,7 +40,7 @@ export default function PostCard({ postID, showAsDialog }: { postID: string, sho
     const [borderColor, setBorderColor] = useState<string>("vision")
     const router = useRouter()
     const { isSignedIn } = useUser()
-    const { toggleModal } = useDialogStore();
+
 
 
 
@@ -91,11 +95,14 @@ export default function PostCard({ postID, showAsDialog }: { postID: string, sho
 
     const handleClick = () => {
         const navigate = async () => {
-            if (showAsDialog) {
-                toggleModal();
-                await router.push(`nest/${postData?.id}`);
-            } else {
-                postData?.id && await router.push(`nest/${postData?.id}`, undefined, { scroll: false });
+
+
+            if (!setmodal) {
+                await router.push(`nest/${postData?.id}`, undefined, { scroll: false });
+            }
+            else {
+                setmodal(postData?.id)
+                void router.push(`/nest?${postData?.id}`, undefined, { shallow: true });
             }
         };
         void navigate();
@@ -119,6 +126,8 @@ export default function PostCard({ postID, showAsDialog }: { postID: string, sho
     const cardauthors = loaded ? postData?.authors : <Skeleton className="w-full h-[85%] mt-2" />
     const cardyear = loaded ? postData?.year : <Skeleton className="w-full h-full" />
     const carduni = loaded ? postData?.university : <Skeleton className="w-full h-full" />
+
+    //CHANGE
     const cardshare = loaded && <ShareButton link={postData ? `https://visionest.xyz/nest/${postData.id}` : ""} />
     const cardfav =
         !isSignedIn || postData?.status != "ACCEPTED" ? <div></div> :

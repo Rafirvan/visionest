@@ -35,7 +35,7 @@ interface posttype {
 
 export default function BlogPost({ DialogId }: { DialogId?: string }) {
     const router = useRouter()
-    const postId = router.query.slug?.toString()
+    const postId = DialogId ? DialogId : router.query.slug?.toString()
     const [postData, setPostData] = useState<posttype | null | undefined>();
     const [saved, setSaved] = useState<boolean | undefined>(false)
     const [saveLoad, setSaveLoad] = useState(false)
@@ -64,10 +64,12 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
         if (postId) getpostfromid.mutate(postId)
         refreshCheck.mutate()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [postId]);
+    }, [postId, DialogId]);
 
     const refreshCheck = trpc.db.checksave.useMutation({
         onSuccess: (result) => {
+
+
             if (postId) {
                 setSaved(result?.includes(postId));
                 getFavCount.mutate(postId)
@@ -103,92 +105,95 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
 
     const mainContent = () => {
         if (!userLoaded || !loaded) {
-            return <section className='font-bold relative top-[100px] rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-4 border-yellow-500'><div className='flex scale-[400%] justify-center items-center'><Spinner /></div></section>;
+            return <section className='w-[calc(100vw-48px)] h-[110%] font-bold relative rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-2 border-black'><div className='flex scale-[400%] justify-center items-center'><Spinner /></div></section>;
 
         }
 
         // rejected or pending, only visible by admin or post creator
         if (!accepted && !idmatch && !adminmatch) {
             return (
-                <section className='font-bold relative top-[100px] rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-4 border-yellow-500 '>
+                <section className='w-[calc(100vw-48px)] font-bold relative top-[100px] rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-4 border-yellow-500 '>
                     Post hanya bisa dilihat oleh pembuat atau admin
                 </section>
             );
         }
 
         // wrong id
-        if (!postData) return <section className='font-bold relative top-[100px] rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-4 border-yellow-500'>post dengan ID ini tidak ditemukan, postID : {postId}</section>;
+        if (!postData) return <section className='w-[calc(100vw-48px)] font-bold relative top-[100px] rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-4 border-yellow-500'>post dengan ID ini tidak ditemukan, postID : {postId}</section>;
 
         return (
-            <section className='overflow-y-hidden h-[100vh]'>
-                <ScrollArea className='max-w-4xl mx-auto p-4 shadow-md rounded-md mb-10 border-2 border-black overflow-hidden min-h-[500px] h-full'>
-                    {favArea}
-                    <div className='grid'>
 
-                        {/* header only visible for post creator */}
-                        <div id='header'>
-                            {((idmatch || adminmatch) && pending) && <div id="statusarea" className='pb-6 font-bold'>Saat ini post ini <span className='text-yellow-500'>Pending</span> </div>}
-                            {((idmatch || adminmatch) && rejected) &&
-                                <>
-                                    <div id="statusarea" className='pb-3 font-bold'>
-                                        Saat ini post ini <span className='text-red-500'>Rejected</span>
-                                    </div>
-                                    <p>Alasan = {postData.rejection}</p>
-                                </>
-                            }
-                            {idmatch && <div>Anda pembuat post ini!<Link href={`/edit/${postId}`}><p className='font-bold text-blue-600 underline pb-4'>Edit post ini</p></Link></div>}
-                        </div>
+            <ScrollArea className='max-w-4xl mx-auto p-4 shadow-md rounded-md mb-10 border-2 border-black overflow-hidden min-h-[500px] h-full'>
+                {favArea}
+                <div className='grid'>
 
-                        <hr />
-                        <div id='imageArea' className="mb-2 overflow-hidden h-fit w-[100%] place-self-start relative md:place-self-center">
-                            <Image src={postData.imageURL ? postData.imageURL : "https://utfs.io/f/a18934b5-b279-40cf-a84e-4813b44a72ac_placeholder.png"}
-                                alt={postData.title}
-                                placeholder="blur"
-                                blurDataURL={Loadingimage.src}
-                                height={300}
-                                width={1000}
-                            />
-
-                        </div>
-
-                        <div id='descriptionArea'>
-                            <h1 id="titleArea" className="text-2xl font-bold mb-2">{postData.title} <ShareButton link={`https://visionest.xyz/nest/${postData.id}`} /> </h1>
-                            <p id="authorArea" className="text-gray-600 mb-1">
-                                By <span className="break-words">{postData.authors}</span> • {postData.year}
-                            </p>
-                            <p id="uniArea" className="text-gray-600 mb-4">
-                                <span className="break-words">{postData.university}</span>
-                            </p>
-                            <hr />
-                            <div className='no-tailwindcss-base'><div dangerouslySetInnerHTML={{ __html: postData.description }}></div></div>
-
-
-                            <div id="linkArea" className="border-4 p-2 mt-4 rounded-lg brightness-90">
-                                <span className="mr-2">Baca Lebih Lanjut:</span>
-                                <a
-                                    href={postData.originlink}
-                                    className="text-blue-500 hover:text-blue-600 hover:underline"
-                                    target="_blank"
-                                >
-                                    Link
-                                </a>
-                            </div>
-
-                            {!(pending || rejected) &&
-                                <div
-                                    id='tagsArea'
-                                    className='text-slate-600 pt-2'>
-                                    Kategori : {postData.posttag.map(e => e.tag.name).join(", ")}
-                                </div>}
-
-                        </div>
+                    {/* header only visible for post creator */}
+                    <div id='header'>
+                        {((idmatch || adminmatch) && pending) && <div id="statusarea" className='pb-6 font-bold'>Saat ini post ini <span className='text-yellow-500'>Pending</span> </div>}
+                        {((idmatch || adminmatch) && rejected) &&
+                            <>
+                                <div id="statusarea" className='pb-3 font-bold'>
+                                    Saat ini post ini <span className='text-red-500'>Rejected</span>
+                                </div>
+                                <p>Alasan = {postData.rejection}</p>
+                            </>
+                        }
+                        {idmatch && <div>Anda pembuat post ini!<Link href={`/edit/${postId}`}><p className='font-bold text-blue-600 underline pb-4'>Edit post ini</p></Link></div>}
                     </div>
-                </ScrollArea>
-            </section>
+
+                    <hr />
+                    <div id='imageArea' className="mb-2 overflow-hidden h-fit w-[100%] place-self-start relative md:place-self-center">
+                        <Image src={postData.imageURL ? postData.imageURL : "https://utfs.io/f/a18934b5-b279-40cf-a84e-4813b44a72ac_placeholder.png"}
+                            alt={postData.title}
+                            placeholder="blur"
+                            blurDataURL={Loadingimage.src}
+                            height={300}
+                            width={1000}
+                        />
+
+                    </div>
+
+                    <div id='descriptionArea'>
+                        <h1 id="titleArea" className="text-2xl font-bold mb-2">{postData.title} <ShareButton link={router.asPath.replace("?", "/")} /> </h1>
+                        <p id="authorArea" className="text-gray-600 mb-1">
+                            By <span className="break-words">{postData.authors}</span> • {postData.year}
+                        </p>
+                        <p id="uniArea" className="text-gray-600 mb-4">
+                            <span className="break-words">{postData.university}</span>
+                        </p>
+                        <hr />
+                        <div className='no-tailwindcss-base'><div dangerouslySetInnerHTML={{ __html: postData.description }}></div></div>
+
+
+                        <div id="linkArea" className="border-4 p-2 mt-4 rounded-lg brightness-90">
+                            <span className="mr-2">Baca Lebih Lanjut:</span>
+                            <a
+                                href={postData.originlink}
+                                className="text-blue-500 hover:text-blue-600 hover:underline"
+                                target="_blank"
+                            >
+                                Link
+                            </a>
+                        </div>
+
+                        {!(pending || rejected) &&
+                            <div
+                                id='tagsArea'
+                                className='text-slate-600 pt-2'>
+                                Kategori : {postData.posttag.map(e => e.tag.name).join(", ")}
+                            </div>}
+
+                    </div>
+                </div>
+            </ScrollArea>
+
         );
     }
 
-    return mainContent()
+
+    if (DialogId) return <div className='h-[80vh] min-h-[700px] pb-[2vh]'>{mainContent()}</div>
+
+    return <section className='overflow-y-hidden h-[100vh] min-h-[500px]'>{mainContent()}</section>
 
 
 }

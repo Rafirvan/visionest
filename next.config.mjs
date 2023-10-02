@@ -11,6 +11,7 @@ const config = {
     esmExternals: false, 
   },
     
+    
     images: {
     remotePatterns: [
       {
@@ -35,6 +36,7 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  
 };
 
 export default config;

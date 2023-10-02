@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 
 interface DialogState {
-    isModal: boolean;
-    toggleModal: () => void;
+    isDialog: boolean;
+    toggleDialog: () => void;
 }
 
 const useDialogStore = create<DialogState>((set) => ({
-    isModal: false,
-    toggleModal: () => set((state) => ({ isModal: !state.isModal })),
+    isDialog: false,
+    toggleDialog: () => set((state) => ({ isDialog: !state.isDialog })),
 }));
 
 export default useDialogStore;

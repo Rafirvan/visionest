@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React, { useState, useEffect, useReducer } from "react";
@@ -8,6 +9,10 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 import PostCard from "~/components/postCard";
 import { trpc } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
+import useDialogStore from "~/stores/store";
+import { useRouter } from "next/router";
+import BlogPost from "./[slug]";
+import Modal from "~/components/nestmodal";
 
 
 type State = {
@@ -23,6 +28,14 @@ type Action =
 export default function Nest() {
     const { isSignedIn } = useUser()
     const [tab, setTab] = useState<'ALL' | 'FAVORITE' | 'YOUR'>('ALL');
+    const { isDialog, toggleDialog } = useDialogStore();
+    const router = useRouter();
+    const [modalId, setModalId] = useState<string>();
+
+    const handleClose = async () => {
+        toggleDialog();
+        await router.push('/nest', undefined, { shallow: true });
+    };
 
     const [cards, dispatch] = useReducer((state: State, action: Action) => {
         switch (action.type) {
@@ -38,9 +51,6 @@ export default function Nest() {
         onSuccess: (result) => { if (tab === "FAVORITE") dispatch({ type: 'SET_ACTIVE', payload: result }) }
     })
     const { data: yourCards } = trpc.db.callyourpostid.useQuery()
-
-
-
 
     useEffect(() => {
         if (tab === "ALL") {
@@ -59,7 +69,7 @@ export default function Nest() {
     }, [allFetched])
 
     const CardsArea = cards.active?.map((content) => (
-        <div className=" place-self-center" key={content}><PostCard postID={content} showAsDialog /></div>
+        <div onClick={toggleDialog} className=" place-self-center" key={content}><PostCard postID={content} setmodal={setModalId} /></div>
     ))
 
 
@@ -72,6 +82,14 @@ export default function Nest() {
 
     return (
         <section className="flex">
+
+            {isDialog && (
+                <Modal onClose={handleClose}>
+                    <BlogPost DialogId={modalId} />
+                </Modal>
+            )}
+
+
             <nav id="sidebar" className=" w-[50px] md:w-[200px] min-h-[400px] pt-5 md:pt-0  overflow-hidden  h-[calc(100lvh-80px)] text-white  bg-black grid grid-cols-1 grid-rows-20 z-10 gap-[2px]" >
                 <div id="nest" className="row-span-3 hidden md:flex h-full w-full border-b-2 border-black bg-contain bg-center bg-opacity-70 md:bg-cover bg-no-repeat justify-center items-center font-boltext-black text-5xl" ><p className="hidden md:flex">NEST</p></div>
 
@@ -86,7 +104,7 @@ export default function Nest() {
                     style={TabStyle('FAVORITE')}
                     onClick={() => { allFetched && setTab("FAVORITE") }}
                 >
-                    <Star /><span className="hidden md:flex  ">Favorite</span>
+                    <Star /><span className="hidden md:flex  ">Favorites</span>
                 </nav>
 
                 <nav id="You" className={`${!isSignedIn && "hidden"} gap-2  md:pl-5 row-span-2 h-full w-full rounded-md  ${allFetched && "cursor-pointer hover:outline hover:outline-2 hover:outline-vision"} place-items-center justify-center md:justify-start flex text-lg`}
