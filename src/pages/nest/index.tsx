@@ -37,7 +37,7 @@ export default function Nest() {
     const { mutate: callfav, isLoading: favLoading } = trpc.db.callfavpostid.useMutation({
         onSuccess: (result) => { if (tab === "FAVORITE") dispatch({ type: 'SET_ACTIVE', payload: result }) }
     })
-    const { data: yourCards, } = trpc.db.callyourpostid.useQuery()
+    const { data: yourCards } = trpc.db.callyourpostid.useQuery()
 
 
 
@@ -75,9 +75,27 @@ export default function Nest() {
         <section className="flex">
             <nav id="sidebar" className=" w-[50px] md:w-[200px] min-h-[400px] pt-5 md:pt-0  overflow-hidden  h-[calc(100lvh-80px)] text-white  bg-black grid grid-cols-1 grid-rows-20 z-10 gap-[2px]" >
                 <div id="nest" className="row-span-3 hidden md:flex h-full w-full border-b-2 border-black bg-contain bg-center bg-opacity-70 md:bg-cover bg-no-repeat justify-center items-center font-boltext-black text-5xl" ><p className="hidden md:flex">NEST</p></div>
-                <nav id="All" className="cursor-pointer gap-2  md:pt-0  md:pl-5 row-span-2 h-full w-full rounded-md hover:outline  hover:outline-vision flex place-items-center justify-center md:justify-start text-lg" style={TabStyle('ALL')} onClick={() => { setTab("ALL") }}><Globe2 /><span className="hidden md:flex">All Posts</span></nav>
-                <nav id="Fav" className={`${!isSignedIn && "hidden"} cursor-pointer gap-2  md:pl-5 row-span-2 h-full w-full rounded-md hover:outline hover:outline-2 hover:outline-vision place-items-center justify-center md:justify-start flex text-lg`} style={TabStyle('FAVORITE')} onClick={() => { setTab("FAVORITE") }}><Star /><span className="hidden md:flex  ">Favorite</span></nav>
-                <nav id="You" className={`${!isSignedIn && "hidden"} cursor-pointer gap-2  md:pl-5 row-span-2 h-full w-full rounded-md hover:outline hover:outline-2 hover:outline-vision place-items-center justify-center md:justify-start flex text-lg`} style={TabStyle('YOUR')} onClick={() => { setTab("YOUR") }}><Bird /><span className="hidden md:flex ">Your Posts</span></nav>
+                
+                <nav id="All" className="cursor-pointer gap-2  md:pt-0  md:pl-5 row-span-2 h-full w-full rounded-md hover:outline  hover:outline-vision flex place-items-center justify-center md:justify-start text-lg"
+                    style={TabStyle('ALL')}
+                    onClick={() => { setTab("ALL") }}
+                >
+                    <Globe2 /><span className="hidden md:flex">All Posts</span>
+                </nav>
+
+                <nav id="Fav" className={`${!isSignedIn && "hidden"}  gap-2  md:pl-5 row-span-2 h-full w-full rounded-md ${allFetched && "cursor-pointer hover:outline hover:outline-2 hover:outline-vision"} place-items-center justify-center md:justify-start flex text-lg`}
+                    style={TabStyle('FAVORITE')}
+                    onClick={() => { allFetched && setTab("FAVORITE") }}
+                >
+                    <Star /><span className="hidden md:flex  ">Favorite</span>
+                </nav>
+
+                <nav id="You" className={`${!isSignedIn && "hidden"} gap-2  md:pl-5 row-span-2 h-full w-full rounded-md  ${allFetched && "cursor-pointer hover:outline hover:outline-2 hover:outline-vision"} place-items-center justify-center md:justify-start flex text-lg`}
+                    style={TabStyle('YOUR')}
+                    onClick={() => { allFetched && setTab("YOUR") }}
+                >
+                    <Bird /><span className="hidden md:flex ">Your Posts</span>
+                </nav>
 
                 <nav id="submit" className="hover:underline row-start-17 h-full w-full flex justify-center md:justify-end md:pr-3 border-t-2 pt-2 border-black"><Link href="submit" className="flex gap-2"><span className="hidden md:flex">Upload Post</span><Upload /></Link></nav>
                 <nav id="vision" className="hover:underline row-start-18 h-full w-full flex justify-center md:justify-end md:pr-3"><Link href="vision" className="flex gap-2 pt-2"><span className="hidden md:flex">The Vision AI</span><Eye /></Link></nav>
