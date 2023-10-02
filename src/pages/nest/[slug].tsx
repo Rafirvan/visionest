@@ -105,8 +105,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
 
     const mainContent = () => {
         if (!userLoaded || !loaded) {
-            return <section className='w-[calc(100vw-48px)] h-[110%] font-bold relative rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-2 border-black'><div className='flex scale-[400%] justify-center items-center'><Spinner /></div></section>;
-
+            return <section className='w-[calc(100vw-48px)] h-[98%] font-bold relative rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-2 border-black'><div className='flex scale-[400%] justify-center items-center'><Spinner /></div></section>;
         }
 
         // rejected or pending, only visible by admin or post creator
@@ -123,13 +122,13 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
 
         return (
 
-            <ScrollArea className='max-w-4xl mx-auto p-4 shadow-md rounded-md mb-10 border-2 border-black overflow-hidden min-h-[500px] h-full'>
+            <ScrollArea className='max-w-4xl mx-auto p-4 shadow-md rounded-md mb-10 border-2 border-black overflow-hidden min-h-[500px] h-[98%]'>
                 {favArea}
                 <div className='grid'>
 
                     {/* header only visible for post creator */}
                     <div id='header'>
-                        {((idmatch || adminmatch) && pending) && <div id="statusarea" className='pb-6 font-bold'>Saat ini post ini <span className='text-yellow-500'>Pending</span> </div>}
+                        {((idmatch || adminmatch) && pending) && <div id="statusarea" className='pb-6 font-bold'>Post ini <span className='text-yellow-500'>Pending</span> </div>}
                         {((idmatch || adminmatch) && rejected) &&
                             <>
                                 <div id="statusarea" className='pb-3 font-bold'>
