@@ -18,8 +18,8 @@ export default function Home() {
     <>
 
 
-      <section id="Section1"
-        className="min-h-[700px] w-full full-bg-white flex text-center justify-center place-items-center bg-[100vw]">
+      {/* <section id="Section1"
+        className="min-h-[700px] w-full full-bg-white flex text-center justify-center place-items-center">
         <div id='Text' className=' md:basis-3/5 z-10'>
           <h1 className='font-bold text-6xl md:text-9xl mb-2 text-center'>Discover Innovations</h1>
           <p>{`"The Nest" adalah tempat di mana Anda dapat menyelam ke dalam koleksi tulisan yang telah dikurasi
@@ -34,7 +34,7 @@ export default function Home() {
         <div className='basis-3/5 animate-spin duration-100000 opacity-30 absolute z-0'>
           <Image src={nestimg} placeholder="empty" style={{ objectFit: "contain", }} alt='NEST' />
         </div>
-      </section>
+      </section> */}
 
 
       <section id="Section2"
