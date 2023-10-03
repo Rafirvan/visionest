@@ -32,9 +32,9 @@ export default function Home() {
           </Link>
         </div>
 
-        <motion.div className='basis-3/5  opacity-30 absolute z-0'
+        <motion.div className=' opacity-30 absolute z-0'
           animate={{ rotate: [0, 360] }}
-          transition={{ duration: 100, repeat: Infinity, ease: "linear" }}>
+          transition={{ duration: 150, repeat: Infinity, ease: "linear" }}>
           <Image src={nestimg} placeholder="empty" style={{ objectFit: "contain", }} alt='NEST' />
         </motion.div>
       </section>
