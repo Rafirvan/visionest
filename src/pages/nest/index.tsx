@@ -10,7 +10,6 @@ import PostCard from "~/components/postCard";
 import { trpc } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
 import useDialogStore from "~/stores/store";
-import { useRouter } from "next/router";
 import BlogPost from "./[slug]";
 import Modal from "~/components/nestmodal";
 import { AnimatePresence} from 'framer-motion';
@@ -31,12 +30,10 @@ export default function Nest() {
     const { isSignedIn } = useUser()
     const [tab, setTab] = useState<'ALL' | 'FAVORITE' | 'YOUR'>('ALL');
     const { isDialog, toggleDialog } = useDialogStore();
-    const router = useRouter();
     const [modalId, setModalId] = useState<string>();
 
-    const handleClose = async () => {
+    const handleClose = () => {
         toggleDialog();
-
     };
 
     const [cards, dispatch] = useReducer((state: State, action: Action) => {

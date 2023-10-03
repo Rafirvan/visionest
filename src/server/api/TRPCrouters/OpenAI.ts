@@ -1,7 +1,6 @@
 import { z } from "zod";
 import {
   createTRPCRouter,
-  publicProcedure,
   privateProcedure
 } from "~/server/api/trpc";
 import OpenAI from "openai";

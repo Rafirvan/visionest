@@ -9,7 +9,6 @@ import {
 import { Share2 } from "lucide-react"
 
 import {
-    EmailShareButton,
     FacebookShareButton,
     LineShareButton,
     TwitterShareButton,
@@ -17,7 +16,6 @@ import {
 } from "react-share";
 
 import {
-    EmailIcon,
     FacebookIcon,
     LineIcon,
     TwitterIcon,
