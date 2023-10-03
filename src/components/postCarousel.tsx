@@ -19,7 +19,7 @@ export default function PostCarousel() {
         const element = carouselRef.current;
         if (element) {
             setAtStart(element.scrollLeft === 0)
-            setAtEnd(element.scrollWidth - element.scrollLeft === element.clientWidth)
+            setAtEnd(element.scrollWidth - element.scrollLeft <= element.clientWidth+20)
         }
     };
 
