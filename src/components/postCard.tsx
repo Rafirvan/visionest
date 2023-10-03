@@ -113,14 +113,8 @@ export default function PostCard({ postID, setmodal }: cardType) {
     };
 
     const cardimage = loaded ?
-        <Image src={postData?.imageURL ? postData?.imageURL : "https://utfs.io/f/a18934b5-b279-40cf-a84e-4813b44a72ac_placeholder.png"}
-            alt="Loading"
-            placeholder="blur"
-            blurDataURL={Loadingimage.src}
-            // height={300}
-            // width={300}
-            fill
-            style={{ borderColor: "brown", }}
+        <img src={postData?.imageURL ? postData?.imageURL : "https://utfs.io/f/a18934b5-b279-40cf-a84e-4813b44a72ac_placeholder.png"}
+        alt=""
         />
         : <Skeleton className="w-full h-full" />
 
@@ -149,7 +143,7 @@ export default function PostCard({ postID, setmodal }: cardType) {
                 <div className="flex flex-col h-full justify-between gap-2">
                     <div>
                         
-                            <div id="cardimage" className=" place-content-center w-[292px] max-h-[180px] aspect-square overflow-hidden relative rounded-md">{cardimage}</div>
+                            <div id="cardimage" className=" place-content-center w-[294px] h-[180px] aspect-square overflow-hidden rounded-md relative">{cardimage}</div>
                         
                         <div id="cardtitle" className={`text-white bg-${borderColor} col-span-5 row-span-2 overflow-ellipsis overflow-hidden font-bold text-md w-[295px] h-[75px] line-clamp-3 px-2`}>{cardtitle}</div>
                         <div className="flex gap-3 ">
