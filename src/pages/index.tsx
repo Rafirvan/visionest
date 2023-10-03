@@ -31,9 +31,9 @@ export default function Home() {
           </Link>
         </div>
 
-        {/* <div className='basis-3/5 animate-spin duration-100000 opacity-30 absolute z-0'>
+        <div className='basis-3/5  opacity-30 absolute z-0'>
           <Image src={nestimg} placeholder="empty" style={{ objectFit: "contain", }} alt='NEST' />
-        </div> */}
+        </div>
       </section>
 
 
