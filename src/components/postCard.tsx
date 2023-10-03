@@ -113,8 +113,14 @@ export default function PostCard({ postID, setmodal }: cardType) {
     };
 
     const cardimage = loaded ?
-        <img src={postData?.imageURL ? postData?.imageURL : "https://utfs.io/f/a18934b5-b279-40cf-a84e-4813b44a72ac_placeholder.png"}
-        alt=""
+        <Image src={postData?.imageURL ? postData?.imageURL : "https://utfs.io/f/a18934b5-b279-40cf-a84e-4813b44a72ac_placeholder.png"}
+            alt="Loading"
+            placeholder="blur"
+            blurDataURL={Loadingimage.src}
+            // height={300}
+            // width={300}
+            fill
+            style={{ borderColor: "brown", }}
         />
         : <Skeleton className="w-full h-full" />
 
