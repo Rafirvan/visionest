@@ -117,8 +117,9 @@ export default function PostCard({ postID, setmodal }: cardType) {
             alt="Loading"
             placeholder="blur"
             blurDataURL={Loadingimage.src}
-            height={300}
-            width={300}
+            // height={300}
+            // width={300}
+            fill
             style={{ borderColor: "brown", }}
         />
         : <Skeleton className="w-full h-full" />
@@ -147,9 +148,9 @@ export default function PostCard({ postID, setmodal }: cardType) {
             <CardContent className="h-full pb-10">
                 <div className="flex flex-col h-full justify-between gap-2">
                     <div>
-                        <div className="bg-vision">
-                            <div id="cardimage" className=" place-content-center w-full max-h-[180px] aspect-square overflow-hidden relative rounded-md">{cardimage}</div>
-                        </div>
+                        
+                            <div id="cardimage" className=" place-content-center w-[292px] max-h-[180px] aspect-square overflow-hidden relative rounded-md">{cardimage}</div>
+                        
                         <div id="cardtitle" className={`text-white bg-${borderColor} col-span-5 row-span-2 overflow-ellipsis overflow-hidden font-bold text-md w-[295px] h-[75px] line-clamp-3 px-2`}>{cardtitle}</div>
                         <div className="flex gap-3 ">
                             <div id="cardauthors" className="pl-2 pt-1 col-span-3 row-span-2 overflow-ellipsis text-gray-700 h-[50px] basis-4/5 overflow-hidden line-clamp-2">{cardauthors}</div>
