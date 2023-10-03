@@ -155,7 +155,7 @@ function PostForm() {
 
 
     return (
-        <ScrollArea className="h-full w-full">
+        <ScrollArea className="h-full w-full pl-2">
             <form onSubmit={handleSubmit} className="w-[90%] h-full flex flex-col justify-center">
 
                 <div id="titleinput">
@@ -238,7 +238,7 @@ function PostForm() {
                         <AImodal setDescriptionValue={setDescriptionValue} />
 
                     </label>
-                    <div className="border rounded-xl border-slate-300 h-fit">
+                    <div className="border rounded-xl border-slate-300 h-fit relative left-3">
                         <TextEditor
                             formData={descriptionValue}
                             setFormData={(input: string) => { setDescriptionValue(input) }} />

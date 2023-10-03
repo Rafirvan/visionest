@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import React,{useEffect,useState} from "react"
+import React from "react"
 import Image from "next/image";
 import nestimg from "../../public/nest3.png"
 import { Button } from '~/components/ui/button';
@@ -13,18 +13,6 @@ import s2bg from "../../public/s2mosaic.jpg"
 
 
 export default function Home() {
-
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const userAgent =
-      typeof window.navigator === 'undefined' ? '' : navigator.userAgent;
-    const mobile = Boolean(
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        userAgent
-      )
-    );
-    setIsMobile(mobile);
-  }, []);
 
   return (
     <>
@@ -44,7 +32,7 @@ export default function Home() {
         </div>
 
         <div className='basis-3/5 animate-spin duration-100000 opacity-30 absolute z-0'>
-          <Image src={nestimg} style={{ objectFit: "contain", }} alt='NEST' />
+          <Image src={nestimg} placeholder="empty" style={{ objectFit: "contain", }} alt='NEST' />
         </div>
       </section>
 
@@ -53,7 +41,7 @@ export default function Home() {
         className="bg-center py-10 bg-cover relative z-30 w-full text-justify flex flex-col justify-between  sm:py-8 place-content-center justify-items-center"
         style={{ backgroundImage: `url(${s2bg.src})`, }}>
         <div id='postslider' className='scale-75 sm:scale-100 basis-3/5  from-blue-400  to-blue-500 rounded-lg py-8 px-[32px] w-[364px] lg:w-[696px] xl:w-[1028px] overflow-x-hidden mx-auto'>
-          {!isMobile && <PostCarousel />}
+          <PostCarousel />
         </div>
         <div id='submitintro' className=' basis-2/5 justify-center '>
           <p id="text" className='font-bold text-5xl md:mb-2 text-center flex-1'>Beri Inspirasi Bagi Dunia</p>
@@ -83,7 +71,7 @@ Saatnya memulai perjalanan baru dalam inovasi dan kreativitas dengan bantuan tek
         </div>
 
         <div className='opacity-60 absolute z-0 '>
-          <Image src={visionimg} alt='VISION' style={{ objectFit: "contain", }} />
+          <Image src={visionimg} alt='VISION' placeholder="empty" style={{ objectFit: "contain", }} />
         </div>
 
       </section>

@@ -100,7 +100,7 @@ export default function Vision() {
 
           {(!isLoaded || !isSignedIn) ?
             <p className="place-self-center font-bold text-2xl md:text-4xl text-center">Login Untuk Mengakses Fitur</p>
-            : <ScrollArea id="newform" className="h-full w-full">
+            : <ScrollArea id="newform" className="h-full w-full pl-2">
               <form onSubmit={handleSubmit} className="w-[90%] h-full flex flex-col justify-center">
 
                 <div id="majorselect">

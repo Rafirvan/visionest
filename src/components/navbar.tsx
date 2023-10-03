@@ -52,8 +52,10 @@ export default function Navbar() {
                         <DialogTrigger>
                             <div className="p-3 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 bg-red-500 text-slate-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90">Sign Up / Log In</div>
                         </DialogTrigger>
-                        <DialogContent className="min-h-[200px]">
-                            <SignIn signUpUrl="/sign-up" redirectUrl={router.asPath} />
+                        <DialogContent className="scale-90 sm:scale-100" >
+                            <div className="scale-75 sm:scale-100">
+                                <SignIn signUpUrl="/sign-up" redirectUrl={router.asPath} />
+                            </div>
                         </DialogContent>
                     </Dialog>
 
