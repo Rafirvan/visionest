@@ -39,7 +39,7 @@ export default function PostCard({ postID, setmodal }: cardType) {
     const [favCount, setFavCount] = useState<number | undefined>()
     const [borderColor, setBorderColor] = useState<string>("vision")
     const router = useRouter()
-    const { isSignedIn } = useUser()
+    const { user, isSignedIn } = useUser()
 
 
 
@@ -48,7 +48,7 @@ export default function PostCard({ postID, setmodal }: cardType) {
         getpostfromid.mutate(postID)
     }, [postID])
 
-    useEffect(() => { if (isSignedIn) refreshCheck.mutate() }, [isSignedIn])
+    useEffect(() => { if (user) refreshCheck.mutate() }, [user])
 
     const getpostfromid = trpc.db.callpostfromid.useMutation({
         onSuccess: (res) => {
@@ -143,7 +143,7 @@ export default function PostCard({ postID, setmodal }: cardType) {
 
 
     return (
-        <Card className="w-[300px] h-[350px]  scale-x-90 xs:scale-x-100 snap-end border-4 text-left border-vision cursor-pointer hover:border-yellow-600" onClick={handleClick} >
+        <Card className="w-[300px] h-[350px] scale-x-90 xs:scale-x-100 snap-end border-4 text-left border-vision cursor-pointer hover:border-yellow-600" onClick={handleClick} >
             <CardContent className="h-full pb-10">
                 <div className="flex flex-col h-full justify-between gap-2">
                     <div>

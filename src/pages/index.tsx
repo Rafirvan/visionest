@@ -4,7 +4,7 @@ import Image from "next/image";
 import nestimg from "../../public/nest3.png"
 import { Button } from '~/components/ui/button';
 import { ArrowUpRight } from 'lucide-react';
-import pixelbird from "../../public/pixelbird.png"
+import visionimg from "../../public/vision.png"
 import Link from 'next/link';
 import PostCarousel from '~/components/postCarousel';
 import s2bg from "../../public/s2mosaic.jpg"
@@ -58,10 +58,10 @@ export default function Home() {
 
 
 
-      <section id="Section3" className="full-bg-green min-h-full w-full flex flex-col-reverse justify-between place-items-center md:flex-row ">
+      <section id="Section3" className="bg-[100vw] px-2 text-center md:text-left full-bg-green w-full flex justify-center place-items-center min-h-[500px]">
 
-        <div id='Text' className='basis-2/5'>
-          <h2 className='font-bold text-4xl mb-2 text-left'>Ignite Your Imagination</h2>
+        <div id='Text' className="relative z-10 w-fit  md:basis-3/5 text-center">
+          <h2 className='font-bold text-4xl mb-2'>Ignite Your Imagination</h2>
           <p>{`Ingin mencari ide untuk penelitian anda yang selanjutnya? AI kami, "The Vision", akan membantu Anda! Hasilkan ide proyek unik yang disesuaikan dengan minat dan keahlian Anda.
 Saatnya memulai perjalanan baru dalam inovasi dan kreativitas dengan bantuan teknologi canggih`}</p>
 
@@ -70,8 +70,8 @@ Saatnya memulai perjalanan baru dalam inovasi dan kreativitas dengan bantuan tek
 
         </div>
 
-        <div className='basis-3/5 flex justify-items-end'>
-          <Image src={pixelbird} alt='VISION' className=' relative md:left-[100px] lg:left-[150px]' />
+        <div className='opacity-60 absolute z-0 '>
+          <Image src={visionimg} alt='VISION' style={{ objectFit: "contain", }} />
         </div>
 
       </section>

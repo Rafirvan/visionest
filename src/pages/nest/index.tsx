@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect, useReducer } from "react";
 import Link from "next/link"
-import { Globe2, Star, Bird, Upload, Eye } from "lucide-react"
+import { Globe2, Star, Bird, Upload, Glasses } from "lucide-react"
 
 import { ScrollArea } from "~/components/ui/scroll-area";
 import PostCard from "~/components/postCard";
@@ -13,6 +13,8 @@ import useDialogStore from "~/stores/store";
 import { useRouter } from "next/router";
 import BlogPost from "./[slug]";
 import Modal from "~/components/nestmodal";
+import { AnimatePresence} from 'framer-motion';
+
 
 
 type State = {
@@ -50,7 +52,9 @@ export default function Nest() {
     const { mutate: callfav, isLoading: favLoading } = trpc.db.callfavpostid.useMutation({
         onSuccess: (result) => { if (tab === "FAVORITE") dispatch({ type: 'SET_ACTIVE', payload: result }) }
     })
-    const { data: yourCards } = trpc.db.callyourpostid.useQuery()
+
+
+    const { data: yourCards, } = trpc.db.callyourpostid.useQuery()
 
     useEffect(() => {
         if (tab === "ALL") {
@@ -83,11 +87,13 @@ export default function Nest() {
     return (
         <section className="flex">
 
+            <AnimatePresence>
             {isDialog && (
                 <Modal onClose={handleClose}>
                     <BlogPost DialogId={modalId} />
                 </Modal>
             )}
+            </AnimatePresence>
 
 
             <nav id="sidebar" className=" w-[50px] md:w-[200px] min-h-[400px] pt-5 md:pt-0  overflow-hidden  h-[calc(100lvh-80px)] text-white  bg-black grid grid-cols-1 grid-rows-20 z-10 gap-[2px]" >
@@ -115,7 +121,7 @@ export default function Nest() {
                 </nav>
 
                 <nav id="submit" className="hover:underline row-start-17 h-full w-full flex justify-center md:justify-end md:pr-3 border-t-2 pt-2 border-black"><Link href="submit" className="flex gap-2"><span className="hidden md:flex">Upload Post</span><Upload /></Link></nav>
-                <nav id="vision" className="hover:underline row-start-18 h-full w-full flex justify-center md:justify-end md:pr-3"><Link href="vision" className="flex gap-2 pt-2"><span className="hidden md:flex">The Vision AI</span><Eye /></Link></nav>
+                <nav id="vision" className="hover:underline row-start-18 h-full w-full flex justify-center md:justify-end md:pr-3"><Link href="vision" className="flex gap-2 pt-2"><span className="hidden md:flex">The Vision AI</span><Glasses /></Link></nav>
             </nav>
 
             <nav id="postcontainer" className="min-h-[400px] md:px-4 h-[calc(100lvh-80px)] w-[calc(100vw-50px)] md:w-[calc(100vw-300px)]border border-black">
