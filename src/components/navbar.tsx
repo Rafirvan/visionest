@@ -35,7 +35,7 @@ export default function Navbar() {
 
     return (
 
-        <div id="Navbar" className="fixed h-[80px] w-[96%] md:w-[81%] flex full-bg-white justify-between place-items-center  z-50 gap-7 ">
+        <div id="Navbar" className="fixed h-[80px] w-[96%] translate-x-2 md:translate-x-0 md:w-[81%] flex full-bg-white justify-between place-items-center  z-50 gap-7 ">
 
             <Link href="/" scroll={false}>
                 <Image src={Logo} alt="VISIONEST" className=" h-[30px] w-[127px]  sm:h-[50px] sm:w-[212px] " />

@@ -62,9 +62,12 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
 
     useEffect(() => {
         if (postId) getpostfromid.mutate(postId)
-        refreshCheck.mutate()
+        
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [postId, DialogId]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => { if (isSignedIn) refreshCheck.mutate() }, [isSignedIn])
 
     const refreshCheck = trpc.db.checksave.useMutation({
         onSuccess: (result) => {

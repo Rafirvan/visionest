@@ -21,6 +21,9 @@ module.exports = withUt({
       },
     },
     extend: {
+      transitionDuration: {
+        '100000': '100s',
+      },
       screens: { "xs": "380px" },
       colors: { 'vision': '#7D5643' },
       gridTemplateRows: {

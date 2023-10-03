@@ -46,8 +46,9 @@ export default function PostCard({ postID, setmodal }: cardType) {
 
     useEffect(() => {
         getpostfromid.mutate(postID)
-        refreshCheck.mutate()
     }, [postID])
+
+    useEffect(() => { if (isSignedIn) refreshCheck.mutate() }, [isSignedIn])
 
     const getpostfromid = trpc.db.callpostfromid.useMutation({
         onSuccess: (res) => {
@@ -76,13 +77,15 @@ export default function PostCard({ postID, setmodal }: cardType) {
 
     const savepost = trpc.db.savepost.useMutation({
         onSuccess: () => {
-            refreshCheck.mutate()
+            if (isSignedIn)
+                refreshCheck.mutate()
         }
     })
 
     const unsavepost = trpc.db.unsavepost.useMutation({
         onSuccess: () => {
-            refreshCheck.mutate()
+            if (isSignedIn)
+                refreshCheck.mutate()
         }
     })
 

@@ -44,7 +44,7 @@ body {
 
 @media (max-width: 767px) {
   body {
-    padding: 0 2% 0 2% !important;
+    padding: 0 !important;
   }
 }
 

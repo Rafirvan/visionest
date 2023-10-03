@@ -39,7 +39,7 @@ export default function PostCarousel() {
         <div className="relative">
             <div>
                 <button
-                    className={`absolute top-1/2 left-[-30px] transform -translate-y-1/2 z-10 ${atStart && "invisible"} `}
+                    className={`scale-150 absolute top-1/2 left-[-30px] transform -translate-y-1/2 z-10 ${atStart && "invisible"} `}
                     onClick={() => scroll('left')}
                 >
                     <ArrowLeft
@@ -51,7 +51,7 @@ export default function PostCarousel() {
                         onPointerUp={() => setLeftColor("black")} />
                 </button>
                 <button
-                    className={`absolute top-1/2 right-[-30px]  transform -translate-y-1/2 z-10 ${atEnd && "invisible"}`}
+                    className={`scale-150 absolute top-1/2 right-[-30px]  transform -translate-y-1/2 z-10 ${atEnd && "invisible"}`}
                     onClick={() => scroll('right')}
                 >
                     <ArrowRight style={{ color: rightColor }}

@@ -256,7 +256,7 @@ export const DBRouter = createTRPCRouter({
                 creatorID: ctx.userId
             },
             orderBy: [
-                { status: "asc" },
+                { status: "desc" },
                 {
                     createdAt: 'desc'
                 },

@@ -1,12 +1,13 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from "react"
 import Image from "next/image";
-import nestimg from "../../public/nest.png"
+import nestimg from "../../public/nest3.png"
 import { Button } from '~/components/ui/button';
 import { ArrowUpRight } from 'lucide-react';
 import pixelbird from "../../public/pixelbird.png"
 import Link from 'next/link';
 import PostCarousel from '~/components/postCarousel';
+import s2bg from "../../public/s2mosaic.jpg"
 
 
 
@@ -18,9 +19,9 @@ export default function Home() {
 
 
       <section id="Section1"
-        className="min-h-[700px] w-full full-bg-white flex flex-col-reverse justify-between place-items-center bg-[100vw] md:flex-row ">
-        <div id='Text' className='basis-2/5'>
-          <h2 className='font-bold text-4xl mb-2 text-left'>Discover Innovations</h2>
+        className="min-h-[700px] w-full full-bg-white flex text-center justify-center place-items-center bg-[100vw]">
+        <div id='Text' className=' md:basis-3/5 z-10'>
+          <h1 className='font-bold text-6xl md:text-9xl mb-2 text-center'>Discover Innovations</h1>
           <p>{`"The Nest" adalah tempat di mana Anda dapat menyelam ke dalam koleksi tulisan yang telah dikurasi
               dari seluruh dunia. Jelajahi ide-ide beragam, solusi inovatif, dan pikiran cerdas di baliknya.
               Apakah Anda mencari inspirasi atau hanya sekedar penasaran? ada dunia inovasi yang menunggu Anda.`}</p>
@@ -30,21 +31,23 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className='basis-3/5'>
-          <Image src={nestimg} alt='NEST' className='scale-125 relative md:left-[100px] lg:left-[150px]' />
+        <div className='basis-3/5 animate-spin duration-100000 opacity-30 absolute z-0'>
+          <Image src={nestimg} style={{ objectFit: "contain", }} alt='NEST' />
         </div>
       </section>
 
 
-      <section id="Section2" className=" w-full full-bg-blue text-justify flex flex-col justify-between py-2 sm:py-8 place-content-center justify-items-center">
-        <div id='postslider' className='scale-75 sm:scale-100 basis-3/5 bg-gradient-to-b from-blue-400  to-blue-500 rounded-lg py-8 px-[32px] w-[364px] lg:w-[696px] xl:w-[1028px] overflow-x-hidden mx-auto'>
+      <section id="Section2"
+        className="bg-center py-10 bg-cover relative z-30 w-full text-justify flex flex-col justify-between  sm:py-8 place-content-center justify-items-center"
+        style={{ backgroundImage: `url(${s2bg.src})`, }}>
+        <div id='postslider' className='scale-75 sm:scale-100 basis-3/5  from-blue-400  to-blue-500 rounded-lg py-8 px-[32px] w-[364px] lg:w-[696px] xl:w-[1028px] overflow-x-hidden mx-auto'>
           <PostCarousel />
         </div>
-        <div id='submitintro' className=' basis-2/5 justify-center gap-10'>
-          <p id="text" className='font-bold text-5xl mb-2 text-center flex-1'>Beri Inspirasi Bagi Dunia</p>
+        <div id='submitintro' className=' basis-2/5 justify-center '>
+          <p id="text" className='font-bold text-5xl md:mb-2 text-center flex-1'>Beri Inspirasi Bagi Dunia</p>
           <p className='text-center'>
             <Link href="submit" scroll={false}>
-              <Button variant='ghost' className='my-3 flex-1 text-green-700 text-4xl h-fit'>Mulai Upload Karya Anda<ArrowUpRight /></Button>
+              <Button variant="outline" className=' flex-1 text-green-700 text-2xl h-fit'>Upload Post<ArrowUpRight /></Button>
             </Link>
 
           </p>
@@ -55,7 +58,7 @@ export default function Home() {
 
 
 
-      <section id="Section3" className="min-h-full w-full full-bg-green flex flex-col-reverse justify-between place-items-center md:flex-row ">
+      <section id="Section3" className="full-bg-green min-h-full w-full flex flex-col-reverse justify-between place-items-center md:flex-row ">
 
         <div id='Text' className='basis-2/5'>
           <h2 className='font-bold text-4xl mb-2 text-left'>Ignite Your Imagination</h2>
