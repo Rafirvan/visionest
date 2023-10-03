@@ -9,11 +9,10 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 import PostCard from "~/components/postCard";
 import { trpc } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
-import useDialogStore from "~/stores/store";
 import BlogPost from "./[slug]";
 import Modal from "~/components/nestmodal";
 import { AnimatePresence} from 'framer-motion';
-
+import { useRouter } from "next/router";
 
 
 type State = {
@@ -28,12 +27,13 @@ type Action =
 
 export default function Nest() {
     const { isSignedIn } = useUser()
+    const router = useRouter()
     const [tab, setTab] = useState<'ALL' | 'FAVORITE' | 'YOUR'>('ALL');
-    const { isDialog, toggleDialog } = useDialogStore();
     const [modalId, setModalId] = useState<string>();
 
     const handleClose = () => {
-        toggleDialog();
+        setModalId("")
+        void router.push(`/nest`, undefined, { scroll: false, shallow: true });
     };
 
     const [cards, dispatch] = useReducer((state: State, action: Action) => {
@@ -70,7 +70,7 @@ export default function Nest() {
     }, [allFetched])
 
     const CardsArea = cards.active?.map((content) => (
-        <div onClick={toggleDialog} className=" place-self-center" key={content}><PostCard postID={content} setmodal={setModalId} /></div>
+        <div className=" place-self-center" key={content}><PostCard postID={content} setmodal={setModalId} /></div>
     ))
 
 
@@ -85,7 +85,7 @@ export default function Nest() {
         <section className="flex">
 
             <AnimatePresence>
-            {isDialog && (
+            {modalId && (
                 <Modal onClose={handleClose}>
                     <BlogPost DialogId={modalId} />
                 </Modal>
