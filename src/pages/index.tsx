@@ -41,7 +41,7 @@ export default function Home() {
         className="bg-center py-10 bg-cover relative z-30 w-full text-justify flex flex-col justify-between  sm:py-8 place-content-center justify-items-center"
         style={{ backgroundImage: `url(${s2bg.src})`, }}>
         <div id='postslider' className='scale-75 sm:scale-100 basis-3/5  from-blue-400  to-blue-500 rounded-lg py-8 px-[32px] w-[364px] lg:w-[696px] xl:w-[1028px] overflow-x-hidden mx-auto'>
-          <PostCarousel />
+          {/* <PostCarousel /> */}
         </div>
         <div id='submitintro' className=' basis-2/5 justify-center '>
           <p id="text" className='font-bold text-5xl md:mb-2 text-center flex-1'>Beri Inspirasi Bagi Dunia</p>

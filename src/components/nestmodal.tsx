@@ -25,7 +25,6 @@ const Modal: React.FC<ModalProps> = ({ children, onClose }) => {
                 animate={{ y: "0", opacity: 1 }}  // Animated state: Positioned at its natural position with opacity 1
                 exit={{ y: "100vh", opacity: 0 }}  // Exit state: Positioned back at the bottom with opacity 0
                 transition={{ duration: 0.2 }}  // Optional: Control the animation duration and easing
-                className="bg-white rounded-lg p-8"
             >
                 <div
                     ref={modalRef}
