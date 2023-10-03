@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import React from "react"
+import React, {useEffect, useState} from "react"
 import Image from "next/image";
 import nestimg from "../../public/nest3.png"
 import { Button } from '~/components/ui/button';
@@ -14,6 +14,22 @@ import {motion} from "framer-motion"
 
 
 export default function Home() {
+const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const userAgent =
+      typeof navigator === 'undefined' ? '' : navigator.userAgent;
+    const mobile = Boolean(
+      userAgent.match(
+        /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i
+      )
+    );
+    setIsMobile(mobile);
+  }, []);
+  const animationProps = isMobile ? {} : {
+    animate: { rotate: [0, 360] },
+    transition: { duration: 100, repeat: Infinity, ease: "linear" }
+  };
 
   return (
     <>
@@ -32,11 +48,11 @@ export default function Home() {
           </Link>
         </div>
 
-        {/* <motion.div className=' opacity-30 absolute z-0'
-          animate={{ rotate: [0, 360] }}
-          transition={{ duration: 150, repeat: Infinity, ease: "linear" }}>
+        <motion.div className=' opacity-30 absolute z-0'
+          {...animationProps}
+        >
           <Image src={nestimg} placeholder="empty" alt='NEST' />
-        </motion.div> */}
+        </motion.div>
       </section>
 
 
