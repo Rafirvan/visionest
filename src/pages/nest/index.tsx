@@ -36,7 +36,6 @@ export default function Nest() {
 
     const handleClose = async () => {
         toggleDialog();
-        await router.push('/nest', undefined, { shallow: true });
     };
 
     const [cards, dispatch] = useReducer((state: State, action: Action) => {
