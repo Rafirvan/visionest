@@ -99,9 +99,9 @@ export default function PostCard({ postID, setmodal }: cardType) {
     const handleClick = () => {
         const navigate = async () => {
 
-            if (!postData?.id) return
+            if (!postData?.id) return;
 
-            if (!setmodal) {
+            else if (!setmodal) {
                 await router.push(`nest/${postData.id}`, undefined, { scroll: false });
             }
             else {
