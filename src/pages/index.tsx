@@ -8,6 +8,7 @@ import visionimg from "../../public/vision.png"
 import Link from 'next/link';
 import PostCarousel from '~/components/postCarousel';
 import s2bg from "../../public/s2mosaic.jpg"
+import {motion} from "framer-motion"
 
 
 
@@ -31,9 +32,11 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className='basis-3/5  opacity-30 absolute z-0 animate-spin duration-100000 origin-center'>
+        <motion.div className='basis-3/5  opacity-30 absolute z-0'
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 100, repeat: Infinity, ease: "linear" }}>
           <Image src={nestimg} placeholder="empty" style={{ objectFit: "contain", }} alt='NEST' />
-        </div>
+        </motion.div>
       </section>
 
 
