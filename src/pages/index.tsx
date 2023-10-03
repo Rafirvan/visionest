@@ -20,7 +20,7 @@ export default function Home() {
 
 
       <section id="Section1"
-        className="min-h-[700px] w-full full-bg-white flex text-center justify-center place-items-center relative">
+        className="min-h-[700px] w-full flex text-center justify-center place-items-center relative">
         <div id='Text' className=' md:basis-3/5 z-10'>
           <h1 className='font-bold text-6xl md:text-9xl mb-2 text-center'>Discover Innovations</h1>
           <p>{`"The Nest" adalah tempat di mana Anda dapat menyelam ke dalam koleksi tulisan yang telah dikurasi
@@ -35,7 +35,7 @@ export default function Home() {
         <motion.div className=' opacity-30 absolute z-0'
           animate={{ rotate: [0, 360] }}
           transition={{ duration: 150, repeat: Infinity, ease: "linear" }}>
-          <Image src={nestimg} placeholder="empty" style={{ objectFit: "contain", }} alt='NEST' />
+          <Image src={nestimg} placeholder="empty" alt='NEST' />
         </motion.div>
       </section>
 
