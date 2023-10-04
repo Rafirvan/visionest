@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable react/no-unescaped-entities */
 import React, {useEffect, useState} from "react"
 import Image from "next/image";
@@ -10,12 +11,17 @@ import PostCarousel from '~/components/postCarousel';
 import s2bg from "../../public/s2mosaic.jpg"
 import { motion } from "framer-motion"
 import { RightInLeftOut } from "~/components/transitions/pageVariants";
+import Cookies from 'js-cookie';
+
 
 
 
 
 export default function Home() {
-const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const previousRoute: string | undefined = Cookies.get('previousRoute'); 
+  const previousRouteMatcher = (previousRoute?.includes("/nest")||previousRoute?.includes("/edit")||previousRoute?.includes("/vision")||previousRoute?.includes("/submit")||previousRoute?.includes("/admin")||previousRoute?.includes("/sign-up"))
+
 
   useEffect(() => {
     const userAgent =
@@ -33,15 +39,17 @@ const [isMobile, setIsMobile] = useState(false);
   };
 
   return (
-    <motion.div initial="initial"
+    <motion.div
+      initial={previousRouteMatcher?"initial":{x:0}}
       animate="enter"
       exit="exit"
+      
       variants={RightInLeftOut}>
       <section id="Section1"
         className="min-h-[700px] w-full flex text-center justify-center place-items-center relative">
         <div id='Text' className=' md:basis-3/5 z-10'>
           <h1 className='font-bold text-6xl md:text-9xl mb-2 text-center'>Discover Innovations</h1>
-          <p>{`"The Nest" adalah tempat di mana Anda dapat menyelam ke dalam koleksi tulisan yang telah dikurasi
+          <p>{`"The Nest" adalah tempat di mana Anda dapat melihat koleksi blogpost yang telah dikurasi
               dari seluruh dunia. Jelajahi ide-ide beragam, solusi inovatif, dan pikiran cerdas di baliknya.
               Apakah Anda mencari inspirasi atau hanya sekedar penasaran? ada dunia inovasi yang menunggu Anda.`}</p>
           <Link href="nest" scroll={false}><Button variant="destructive" className='my-3 scale-x-200'>{`"The Nest"`}

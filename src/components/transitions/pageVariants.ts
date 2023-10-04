@@ -4,6 +4,11 @@ const RightInLeftOut = {
     exit: { x: '-150vw', transition: { ease: 'easeInOut' } }
 };
 
+const noAnimation = {
+    initial: { x: '0' },
+    enter: { x: 0, transition: { type: 'stiff', stiffness: 80 } },
+    exit: { x: '0', transition: { ease: 'easeInOut' } }
+};
 
 const LeftInRightOut = {
     initial: { x: '100vw' },
@@ -19,4 +24,4 @@ const UpInDownOut = {
 
 
 
-export { RightInLeftOut, LeftInRightOut, UpInDownOut }
+export { RightInLeftOut, LeftInRightOut, UpInDownOut, noAnimation }
