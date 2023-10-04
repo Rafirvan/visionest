@@ -6,11 +6,12 @@ import { trpc } from "~/utils/api";
 
 export default function PostCarousel() {
     const carouselRef = useRef<HTMLDivElement>(null);
-    const { data: CardContents, isLoading } = trpc.db.callpostid.useQuery({ many: 5 })
+    const { data: CardContents, isLoading } = trpc.db.callpostid.useQuery({ limit: 5 })
     const [rightColor, setRightColor] = useState('black');
     const [leftColor, setLeftColor] = useState('black');
     const [atStart, setAtStart] = useState(true)
     const [atEnd, setAtEnd] = useState(false)
+
 
 
 
@@ -67,7 +68,7 @@ export default function PostCarousel() {
                 <div
                     className="flex w-[1628px] h-[350px] gap-[32px]"
                 >
-                    {isLoading ? <div>LOADING...</div> : CardContents?.map((id, index) => (
+                    {isLoading ? <div>LOADING...</div> : CardContents?.id?.map((id, index) => (
                         <PostCard key={index} postID={id} />
                     ))}
                 </div>

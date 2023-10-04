@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useRef } from "react";
 import Link from "next/link"
 import { Globe2, Star, Bird, Upload, Glasses } from "lucide-react"
 
-import { ScrollArea } from "~/components/ui/scroll-area";
 import PostCard from "~/components/postCard";
 import { trpc } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
@@ -13,6 +12,8 @@ import BlogPost from "./[slug]";
 import Modal from "~/components/nestmodal";
 import { AnimatePresence} from 'framer-motion';
 import { useRouter } from "next/router";
+import { motion } from "framer-motion";
+import { LeftInRightOut } from "~/components/transitions/pageVariants";
 
 
 type State = {
@@ -30,6 +31,9 @@ export default function Nest() {
     const router = useRouter()
     const [tab, setTab] = useState<'ALL' | 'FAVORITE' | 'YOUR'>('ALL');
     const [modalId, setModalId] = useState<string>();
+    const scrollAreaRef = useRef<HTMLDivElement | null>(null)
+
+
 
     const handleClose = () => {
         setModalId("")
@@ -45,13 +49,27 @@ export default function Nest() {
         }
     }, { active: undefined });
 
-    const { data: allCards, isFetched: allFetched, isLoading: allLoading } = trpc.db.callpostid.useQuery({ many: 20 })
+    const { data: infiniteCards, isFetched: allFetched, isLoading: allLoading, fetchNextPage, isFetchingNextPage} = trpc.db.callpostid.useInfiniteQuery({limit:5},{getNextPageParam:(lastPage)=>lastPage.nextCursor})
     const { mutate: callfav, isLoading: favLoading } = trpc.db.callfavpostid.useMutation({
         onSuccess: (result) => { if (tab === "FAVORITE") dispatch({ type: 'SET_ACTIVE', payload: result }) }
     })
-
-
     const { data: yourCards, } = trpc.db.callyourpostid.useQuery()
+
+
+    const allCards = infiniteCards?.pages.map(e=>e.id).flat()
+        
+ 
+    useEffect(() => {
+        const scrollArea = scrollAreaRef.current;
+        if (scrollArea) {
+            scrollArea.addEventListener('scroll', handleScroll);
+        }
+        return () => {
+            if (scrollArea) {
+                scrollArea.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, []); 
 
     useEffect(() => {
         if (tab === "ALL") {
@@ -63,11 +81,31 @@ export default function Nest() {
         if (tab === "YOUR") {
             dispatch({ type: 'SET_ACTIVE', payload: yourCards })
         }
+        if (scrollAreaRef.current) scrollAreaRef.current.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     }, [tab]);
 
     useEffect(() => {
         if (allFetched) dispatch({ type: 'SET_ACTIVE', payload: allCards });
     }, [allFetched])
+
+    useEffect(() => {
+        if (!isFetchingNextPage) dispatch({ type: 'SET_ACTIVE', payload: allCards });
+    }, [isFetchingNextPage])
+
+
+    const handleScroll = async () => {
+        
+      if (scrollAreaRef.current && tab=="ALL"){
+          const { scrollTop, clientHeight, scrollHeight } = scrollAreaRef.current;
+          if (scrollHeight - scrollTop <= clientHeight+2 && !isFetchingNextPage) {
+            await fetchNextPage()
+        }
+      }
+    };
+
 
     const CardsArea = cards.active?.map((content) => (
         <div className=" place-self-center" key={content}><PostCard postID={content} setmodal={setModalId} /></div>
@@ -80,8 +118,19 @@ export default function Nest() {
         };
     };
 
+    const cardCount = tab=="ALL"? infiniteCards?.pages[0]?.count : !cards.active ? "0" : cards.active.length
+
+
+
+    
+
 
     return (
+        <motion.div
+            initial="initial"
+            animate="enter"
+            exit="exit"
+            variants={LeftInRightOut}>
         <section className="flex">
 
             <AnimatePresence>
@@ -126,17 +175,18 @@ export default function Nest() {
                     <p className="text-xl place-self-center font-bold pl-3">{tab} POSTS</p>
                     {(!allLoading && !favLoading) &&
                         <div id="found" className={`place-items-center gap-5 flex text-slate-500`} >
-                            {!cards.active ? "0" : cards.active.length}  Result(s) Found
+                            { cardCount } Result(s) Found
                         </div>
                     }
                 </header>
-                <ScrollArea className="h-[calc(100vh-150px)] w-full">
-                    <div className="w-full grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-5 pb-10">
+                <div className="h-[calc(100vh-150px)] w-full overflow-auto" ref={scrollAreaRef}>
+                    <div className="w-full grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-5 pb-10" >
                         {(!allFetched || favLoading) ? <div className="pt-10 pl-10">LOADING...</div> : CardsArea}
-
                     </div>
+
+                        {(tab=="ALL" && isFetchingNextPage )&& <div className="text-center relative bottom-9">Loading More...</div>}
                     <hr className="text-center outline-dashed outline-2 outline-slate-600 relative bottom-3"></hr>
-                </ScrollArea>
+                </div>
 
             </nav>
 
@@ -144,9 +194,9 @@ export default function Nest() {
             <div className="bg-yellow-600"></div>
 
 
-        </section>
+            </section>
+            </motion.div>
     )
 
 }
 
-//HELLO there

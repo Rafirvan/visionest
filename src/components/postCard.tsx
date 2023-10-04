@@ -118,9 +118,9 @@ export default function PostCard({ postID, setmodal }: cardType) {
             alt="Loading"
             placeholder="blur"
             blurDataURL={Loadingimage.src}
-            // height={300}
-            // width={300}
-            fill
+            height={300}
+            width={300}
+            
             style={{ borderColor: "brown", }}
         />
         : <Skeleton className="w-full h-full" />

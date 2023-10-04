@@ -8,7 +8,8 @@ import visionimg from "../../public/vision.png"
 import Link from 'next/link';
 import PostCarousel from '~/components/postCarousel';
 import s2bg from "../../public/s2mosaic.jpg"
-import {motion} from "framer-motion"
+import { motion } from "framer-motion"
+import { RightInLeftOut } from "~/components/transitions/pageVariants";
 
 
 
@@ -32,9 +33,10 @@ const [isMobile, setIsMobile] = useState(false);
   };
 
   return (
-    <>
-
-
+    <motion.div initial="initial"
+      animate="enter"
+      exit="exit"
+      variants={RightInLeftOut}>
       <section id="Section1"
         className="min-h-[700px] w-full flex text-center justify-center place-items-center relative">
         <div id='Text' className=' md:basis-3/5 z-10'>
@@ -95,7 +97,7 @@ Saatnya memulai perjalanan baru dalam inovasi dan kreativitas dengan bantuan tek
 
       </section>
 
-    </>
+    </motion.div>
 
   );
 }

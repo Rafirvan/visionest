@@ -214,24 +214,33 @@ export const DBRouter = createTRPCRouter({
 
     //for nest and carousel
     callpostid: publicProcedure.input(z.object({
-        many: z.number(),
-        cursor: z.number().nullish()
+        limit: z.number(),
+        cursor: z.string().nullish()
     })).query(async ({ input }) => {
-        const { many } = input
+        const { limit, cursor } = input
+        const newLimit = limit+1
         const postids = await prisma.post.findMany({
             where: {
                 status: "ACCEPTED"
             },
+            cursor: cursor ? { id: cursor } : undefined,
             orderBy: {
                 createdAt: 'desc'
             },
-            take: many,
+            take: newLimit,
             select: {
                 id: true
             }
         })
+        const totalDataCount = await prisma.post.count({ where: { status: "ACCEPTED" } });
 
-        return postids.map((e) => e.id)
+        let newCursor = undefined
+        if (postids.length > limit) {
+            const nextItem = postids.pop();
+            newCursor = nextItem!.id;
+        }
+
+        return { id:postids.map((e) => e.id), nextCursor:newCursor, count:totalDataCount }
     }
     ),
 
