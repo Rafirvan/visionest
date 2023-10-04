@@ -1,7 +1,7 @@
 const RightInLeftOut = {
-    initial: { x: '-100vw' },
+    initial: { x: '-150vw' },
     enter: { x: 0, transition: { type: 'stiff', stiffness: 80 } },
-    exit: { x: '-100vw', transition: { ease: 'easeInOut' } }
+    exit: { x: '-150vw', transition: { ease: 'easeInOut' } }
 };
 
 
@@ -11,6 +11,12 @@ const LeftInRightOut = {
     exit: { x: '100vw', transition: { ease: 'easeInOut' } }
 };
 
+const UpInDownOut = {
+    initial: { y: '100vh' },
+    enter: { y: 0, transition: { type: 'stiff', stiffness: 80 } },
+    exit: { y: '100vh', transition: { ease: 'easeInOut' } }
+};
 
 
-export { RightInLeftOut, LeftInRightOut }
+
+export { RightInLeftOut, LeftInRightOut, UpInDownOut }

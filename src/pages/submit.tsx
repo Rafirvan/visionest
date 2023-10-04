@@ -10,8 +10,6 @@ import Loadingimage from "../../public/loadingimage.gif"
 import AImodal from "~/components/aigen";
 import TextEditor from "~/components/texteditor";
 import { UploadButton } from "~/utils/uploadthing";
-import { motion } from "framer-motion";
-import { LeftInRightOut } from "~/components/transitions/pageVariants";
 
 
 
@@ -25,11 +23,7 @@ export default function Submit() {
     if (!isLoaded) return <div></div>
 
     return (
-        <motion.div
-            initial="initial"
-            animate="enter"
-            exit="exit"
-            variants={LeftInRightOut}>
+        
             <section id="Section1" className="h-[100vh] w-full flex flex-col justify-between place-items-center bg-[100vw] lg:flex-row gap-x-7 overflow-y-hidden">
                 <div id='Text' className='basis-2/5 h-full w-full flex flex-col place-content-center bg-blue-600 text-white text-center px-4'>
                     <h1 className='font-bold text-7xl mb-2'>Submit a <div>P<span><Image src={Onestwhite} alt="o" className="inline w-[40px] aspect-square" /></span>st</div></h1>
@@ -43,7 +37,7 @@ export default function Submit() {
                         : <p className="place-self-center font-bold text-2xl md:text-4xl text-center">Login Untuk Mengakses Fitur</p>}
                 </div>
             </section>
-            </motion.div>
+            
     )
 }
 
