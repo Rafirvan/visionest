@@ -12,6 +12,8 @@ import BlogPost from "./[slug]";
 import Modal from "~/components/nestmodal";
 import { AnimatePresence} from 'framer-motion';
 import { useRouter } from "next/router";
+import { motion } from "framer-motion";
+import { RightOut } from "~/components/transitions/pageVariants";
 
 
 type State = {
@@ -124,8 +126,11 @@ export default function Nest() {
 
 
     return (
-        
-        <section className="flex">
+        <motion.section
+            animate="enter"
+            exit="exit"
+            variants={RightOut}
+            className="flex">
 
             <AnimatePresence>
             {modalId && (
@@ -188,7 +193,7 @@ export default function Nest() {
             <div className="bg-yellow-600"></div>
 
 
-            </section>
+            </motion.section>
             
     )
 

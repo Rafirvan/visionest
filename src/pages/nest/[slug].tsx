@@ -9,7 +9,8 @@ import Link from 'next/link';
 import ShareButton from '~/components/shareButton';
 import { Star } from 'lucide-react';
 import Spinner from '~/components/ui/spinner';
-
+import { motion } from 'framer-motion';
+import { DownOut } from '~/components/transitions/pageVariants';
 
 
 
@@ -195,7 +196,11 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
 
     if (DialogId) return <div className='h-[80vh] min-h-[700px] pb-[2vh]'>{mainContent()}</div>
 
-    return <section className='overflow-y-hidden h-[100vh] min-h-[500px]'>{mainContent()}</section>
+    return <motion.section
+        animate="enter"
+        exit="exit"
+        variants={DownOut}
+        className='overflow-y-hidden h-[100vh] min-h-[500px]'>{mainContent()}</motion.section>
 
 
 

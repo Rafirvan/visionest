@@ -10,8 +10,7 @@ import Link from 'next/link';
 import PostCarousel from '~/components/postCarousel';
 import s2bg from "../../public/s2mosaic.jpg"
 import { motion } from "framer-motion"
-import { RightInLeftOut } from "~/components/transitions/pageVariants";
-import Cookies from 'js-cookie';
+import { LeftOut } from "~/components/transitions/pageVariants";
 
 
 
@@ -19,8 +18,6 @@ import Cookies from 'js-cookie';
 
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
-  const previousRoute: string | undefined = Cookies.get('previousRoute'); 
-  const previousRouteMatcher = (previousRoute?.includes("/nest")||previousRoute?.includes("/edit")||previousRoute?.includes("/vision")||previousRoute?.includes("/submit")||previousRoute?.includes("/admin")||previousRoute?.includes("/sign-up"))
 
 
   useEffect(() => {
@@ -40,11 +37,9 @@ export default function Home() {
 
   return (
     <motion.div
-      initial={previousRouteMatcher?"initial":{x:0}}
       animate="enter"
       exit="exit"
-      
-      variants={RightInLeftOut}>
+      variants={LeftOut}>
       <section id="Section1"
         className="min-h-[700px] w-full flex text-center justify-center place-items-center relative">
         <div id='Text' className=' md:basis-3/5 z-10'>

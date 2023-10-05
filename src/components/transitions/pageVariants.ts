@@ -1,27 +1,20 @@
-const RightInLeftOut = {
-    initial: { x: '-150vw' },
+const LeftOut = {
     enter: { x: 0, transition: { type: 'stiff', stiffness: 80 } },
-    exit: { x: '-150vw', transition: { ease: 'easeInOut' } }
+    exit: { x: '-120vw', transition: { ease: 'easeInOut', duration:0.5 } },
+    
 };
 
-const noAnimation = {
-    initial: { x: '0' },
+
+const RightOut = {
     enter: { x: 0, transition: { type: 'stiff', stiffness: 80 } },
-    exit: { x: '0', transition: { ease: 'easeInOut' } }
+    exit: { x: '120vw', transition: { ease: 'easeInOut', duration: 0.5 } }
 };
 
-const LeftInRightOut = {
-    initial: { x: '100vw' },
-    enter: { x: 0, transition: { type: 'stiff', stiffness: 80 } },
-    exit: { x: '100vw', transition: { ease: 'easeInOut' } }
-};
-
-const UpInDownOut = {
-    initial: { y: '100vh' },
+const DownOut = {
     enter: { y: 0, transition: { type: 'stiff', stiffness: 80 } },
     exit: { y: '100vh', transition: { ease: 'easeInOut' } }
 };
 
 
 
-export { RightInLeftOut, LeftInRightOut, UpInDownOut, noAnimation }
+export { LeftOut, RightOut, DownOut }
