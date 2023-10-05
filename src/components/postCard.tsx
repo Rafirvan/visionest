@@ -11,6 +11,13 @@ import ShareButton from "./shareButton";
 import { useRouter } from "next/router";
 import { useUser } from "@clerk/nextjs";
 import Spinner from "./ui/spinner";
+import { Bird } from "lucide-react";
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "~/components/ui/hover-card"
+import { motion } from "framer-motion";
 
 interface posttype {
     id: string;
@@ -34,6 +41,7 @@ interface cardType {
 export default function PostCard({ postID, setmodal }: cardType) {
     const [loaded, setLoaded] = useState(false)
     const [saveLoad, setSaveLoad] = useState(false)
+    const [idMatch, setIdMatch] = useState(false)
     const [postData, setPostData] = useState<posttype | null | undefined>();
     const [saved, setSaved] = useState<boolean | undefined>(false)
     const [favCount, setFavCount] = useState<number | undefined>()
@@ -55,6 +63,7 @@ export default function PostCard({ postID, setmodal }: cardType) {
             const result = res.postwithid
             setPostData(result)
             setLoaded(true)
+            if (result?.creatorID == user?.id) setIdMatch(true)
             if (result?.status == "PENDING") setBorderColor("yellow-600")
             else if (result?.status == "REJECTED") setBorderColor("red-500")
             else setBorderColor("vision")
@@ -121,7 +130,7 @@ export default function PostCard({ postID, setmodal }: cardType) {
             height={300}
             width={300}
             
-            style={{ borderColor: "brown", }}
+            style={{ borderColor: "brown" }}
         />
         : <Skeleton className="w-full h-full" />
 
@@ -144,9 +153,23 @@ export default function PostCard({ postID, setmodal }: cardType) {
 
 
     return (
-        
+        <motion.div >
         <Card className="origin-left w-[300px] h-[350px] scale-x-90 xs:scale-x-100 snap-end border-4 text-left border-vision cursor-pointer hover:border-yellow-600" onClick={handleClick} >
-            <CardContent className="h-full pb-10">
+            <CardContent className="h-full pb-10 relative">
+
+                
+                {/* birdicon if creator */}
+                {idMatch &&
+                <HoverCard>
+                        <HoverCardTrigger asChild><div id="bird" className="absolute top-[-4px] left-[-4px] bg-vision w-10 h-10 z-10 rounded-lg flex place-items-center justify-center"><Bird /></div></HoverCardTrigger>
+                    <HoverCardContent className="absolute z-20">
+                        Anda Pembuat Post Ini
+                    </HoverCardContent>
+                </HoverCard>
+                }
+
+                
+
                 <div className="flex flex-col h-full justify-between gap-2">
                     <div>
                         
@@ -155,7 +178,7 @@ export default function PostCard({ postID, setmodal }: cardType) {
                         <div id="cardtitle" className={`text-white bg-${borderColor} col-span-5 row-span-2 overflow-ellipsis overflow-hidden font-bold text-md w-[295px] h-[75px] line-clamp-3 px-2`}>{cardtitle}</div>
                         <div className="flex gap-3 ">
                             <div id="cardauthors" className="pl-2 pt-1 col-span-3 row-span-2 overflow-ellipsis text-gray-700 h-[50px] basis-4/5 overflow-hidden line-clamp-2">{cardauthors}</div>
-                            <div id="cardyear" className="w-full h-full basis-1/5 place-self-center flex place-items-center">{cardyear}</div>
+                            <div id="cardyear" className="w-full h-full basis-1/5 place-self-center flex justify-center">{cardyear}</div>
                         </div>
                     </div>
                     <div id="cardfooter" className="px-2 flex justify-between place-items-center border-t-2 border-black h-[25px] relative bottom-1">
@@ -166,7 +189,8 @@ export default function PostCard({ postID, setmodal }: cardType) {
                     </div>
                 </div>
             </CardContent>
-        </Card>
+            </Card>
+        </motion.div>
     )
 }
 

@@ -133,7 +133,7 @@ export default function Nest() {
             className="flex">
 
             <AnimatePresence>
-            {modalId && (
+                {modalId && (
                 <Modal onClose={handleClose}>
                     <BlogPost DialogId={modalId} />
                 </Modal>

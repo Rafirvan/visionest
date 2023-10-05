@@ -41,12 +41,6 @@ export default function Searchbar() {
 
     //set tags on or off
     useEffect(() => {
-        if (input == "" && (!selectedTags || selectedTags.length == 0)) {
-            setFilteredPosts(undefined); setTimeout(() => {
-                setFilteredPosts([])
-            }, 1);
-            return
-        }
         const filterbytag = callposts?.filter(post => selectedTags.every(entry => post.posttag.map(pt => pt.tag.name).includes(entry)))
         const filterbytext = filterbytag?.filter(post =>
             (post.title + post.authors + post.university).toLowerCase().replace(/\s+/g, '').includes(input.toLowerCase().replace(/\s+/g, ''))
@@ -126,7 +120,7 @@ export default function Searchbar() {
                     {isLoading ? <div>Loading...</div> : filteredPosts?.map(post => (
                         <div key={post.id}
                             onClick={async () => {
-                                await router.push(`/nest/${post.id}`);
+                                await router.push(`/nest/${post.id}`, undefined, {scroll:false});
                                 if (document.activeElement) {
                                     (document.activeElement as HTMLElement).blur();
                                 }
@@ -143,7 +137,6 @@ export default function Searchbar() {
                                     blurDataURL={Loadingimage.src}
                                     height={55}
                                     width={55}
-
                                 />
                             </div>
                         </div>

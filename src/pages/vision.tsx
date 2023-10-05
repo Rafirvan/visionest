@@ -9,6 +9,7 @@ import { trpc } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 import { RightOut } from "~/components/transitions/pageVariants";
+import { TypeAnimation } from "react-type-animation";
 
 
 
@@ -30,6 +31,7 @@ export default function Vision() {
   const [typeValue, setTypeValue] = useState<string>("Practical")
   const [timeValue, setTimeValue] = useState<string>("")
   const [constraintValue, setConstraintValue] = useState<string>("")
+  const [descriptionDelay,setDescriptionDelay] = useState(true)
 
   //clerk
   const { isLoaded, isSignedIn } = useUser();
@@ -61,6 +63,7 @@ export default function Vision() {
   const handleSubmit = useCallback((e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setAILoading(true)
+    setDescriptionDelay(true)
     setTitle("")
     setDescription("")
     if (!showResult) { setShowResult(true); }
@@ -86,7 +89,19 @@ export default function Vision() {
     }
   }, [showResult, triggerScroll]);
 
+  useEffect(() => {
+    if (description) {
+      const timer = setTimeout(() => {
+        setDescriptionDelay(false);
+      }, 1000);  
 
+      return () => clearTimeout(timer); 
+    }
+  }, [description]);
+
+
+  const showTitle = <TypeAnimation sequence={[title]} speed={90}></TypeAnimation>
+  const showDescription = <TypeAnimation sequence={[description]} speed={90}></TypeAnimation>
 
 
   return (
@@ -223,8 +238,8 @@ export default function Vision() {
         {/* Answer Area/section2 */}
       </section>
       {showResult && <section id="Section2" className="py-10 min-h-[100vh] w-full full-bg-darkgreen flex flex-col justify-center text-center">
-        <p className="text-[4vw] text-white mb-8">{title == "" ? "Loading..." : title}</p>
-        <p className="text-[3vw] text-gray-400">{description}</p>
+        <p className="text-[4vw] text-white mb-8">{title == "" ? "Loading..." : showTitle}</p>
+        <p className="text-[3vw] text-gray-400">{description && !descriptionDelay && showDescription}</p>
       </section>}
 
     </motion.div>
