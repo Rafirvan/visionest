@@ -53,17 +53,14 @@ export const AIRouter = createTRPCRouter({
 
   content: privateProcedure.input(z.object({
     text: z.string(),
-    language: z.string().optional()
   })).mutation(async ({ input }) => {
-    const prompt =
-      `di sini, Anda adalah seorang pembuat konten yang mengkhususkan diri dalam menghasilkan konten teks bergaya blog 
+    const prompt =`di sini, Anda adalah seorang pembuat konten yang mengkhususkan diri dalam menghasilkan konten teks bergaya blog 
       dari abstrak makalah ilmiah, konten HARUS mengandung 
       minimal 150 kata dan maksimal 250 kata
       dengan daftar berikut:
 
       abstrak makalah ilmiah = ${input.text}
       
-
       harap kembalikan dengan format yang tepat:
 
       [Your Input Here]
@@ -83,6 +80,7 @@ export const AIRouter = createTRPCRouter({
       max_tokens: 3000,
       temperature: 1.1
     });
+
     return contentCompletion.choices[0]?.message.content
   }),
 });
