@@ -57,8 +57,8 @@ export default function Vision() {
           if (matchArray[1]) setDescription(matchArray[1]);
           console.log("match")
         }
+        else { setRetries(prev => prev - 1); handleSubmit() }
       }
-      else { setRetries(prev => prev - 1); handleSubmit() }
       setAILoading(false)
     }
   });
