@@ -77,8 +77,6 @@ export const AIRouter = createTRPCRouter({
           
           `
 
-
-
     const contentCompletion = await openai.chat.completions.create({
       messages: [{ role: 'user', content: prompt }],
       model: "gpt-3.5-turbo",
