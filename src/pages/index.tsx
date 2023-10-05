@@ -123,7 +123,7 @@ export default function Home() {
             className="flex flex-col"
             >
             
-            <TypeAnimation
+            {isInView&&<TypeAnimation
               sequence={[`Ingin mencari ide untuk penelitian anda yang selanjutnya? AI kami, 
               "The Vision", akan membantu Anda! Hasilkan ide proyek unik yang disesuaikan 
               dengan minat dan keahlian Anda.
@@ -131,7 +131,7 @@ export default function Home() {
               className="font-mono inline-block"
               wrapper="p"
               speed={80}
-            ></TypeAnimation>
+            ></TypeAnimation>}
           
 
             
