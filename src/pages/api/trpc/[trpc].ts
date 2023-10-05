@@ -5,8 +5,9 @@ import { appRouter } from "~/server/api/trpcroot";
 import { createTRPCContext } from "~/server/api/trpc";
 
 export const config = {
-  runtime: 'edge',
+  maxDuration: 60,
 };
+
 
 // export API handler
 export default createNextApiHandler({
