@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useCallback, useEffect, useState } from "react"
 import Onestwhite from "../../public/Onestwhite.png"
@@ -19,11 +20,14 @@ export default function Vision() {
   //Section 2
   const [triggerScroll, setTriggerScroll] = useState(false);
   const [showResult, setShowResult] = useState(false)
+  const [descriptionDelay, setDescriptionDelay] = useState(true)
+
 
   //AI
   const [AILoading, setAILoading] = useState(false)
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
+  const [retries, setRetries] = useState(2)
 
   //form
   const [majorValue, setMajorValue] = useState<string>('');
@@ -32,7 +36,6 @@ export default function Vision() {
   const [typeValue, setTypeValue] = useState<string>("Practical")
   const [timeValue, setTimeValue] = useState<string>("")
   const [constraintValue, setConstraintValue] = useState<string>("")
-  const [descriptionDelay,setDescriptionDelay] = useState(true)
 
   //clerk
   const { isLoaded, isSignedIn } = useUser();
@@ -55,14 +58,15 @@ export default function Vision() {
           console.log("match")
         }
       }
-      else handleSubmit()
+      else { setRetries(prev => prev - 1); handleSubmit() }
       setAILoading(false)
     }
   });
 
 
   const handleSubmit = useCallback((e?: React.FormEvent) => {
-    if (e) e.preventDefault();
+    if (e) { e.preventDefault(); setRetries(2)};
+    if (!retries) { setTitle("Nilai tidak ditemukan, mohon coba lagi"); return }
     setAILoading(true)
     setDescriptionDelay(true)
     setTitle("")
