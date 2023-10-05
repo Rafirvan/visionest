@@ -240,8 +240,8 @@ export default function Vision() {
       </section>
       {showResult && <section id="Section2" className="relative py-10 min-h-[100vh] w-full  flex flex-col justify-center text-center">
         <VisionBG/>
-        <p className="text-[4vw] text-white mb-8">{title == "" ? "Loading..." : showTitle}</p>
-        <p className="text-[3vw] text-gray-400">{description && !descriptionDelay && showDescription}</p>
+        <p className="text-3xl md:text-5xl lg:text-7xl text-white mb-8">{title == "" ? "Loading..." : showTitle}</p>
+        <p className=" text-2xl md:text-4xl lg:text-5xl text-gray-400 ">{description && !descriptionDelay && showDescription}</p>
       </section>}
 
     </motion.div>
