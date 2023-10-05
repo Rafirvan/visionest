@@ -10,6 +10,7 @@ import { useUser } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 import { RightOut } from "~/components/transitions/pageVariants";
 import { TypeAnimation } from "react-type-animation";
+import VisionBG from "~/components/backgrounds/vision";
 
 
 
@@ -237,7 +238,8 @@ export default function Vision() {
 
         {/* Answer Area/section2 */}
       </section>
-      {showResult && <section id="Section2" className="py-10 min-h-[100vh] w-full full-bg-darkgreen flex flex-col justify-center text-center">
+      {showResult && <section id="Section2" className="relative py-10 min-h-[100vh] w-full  flex flex-col justify-center text-center">
+        <VisionBG/>
         <p className="text-[4vw] text-white mb-8">{title == "" ? "Loading..." : showTitle}</p>
         <p className="text-[3vw] text-gray-400">{description && !descriptionDelay && showDescription}</p>
       </section>}
