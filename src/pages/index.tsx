@@ -97,6 +97,7 @@ Saatnya memulai perjalanan baru dalam inovasi dan kreativitas dengan bantuan tek
         <div className='opacity-60 absolute z-0 '>
           <Image src={visionimg} alt='VISION' placeholder="empty" style={{ objectFit: "contain", }} />
         </div>
+      
 
       </section>
 

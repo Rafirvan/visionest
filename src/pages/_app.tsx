@@ -7,6 +7,7 @@ import Layout from "~/components/layout";
 import { useRouter } from "next/router";
 import { ClerkProvider } from "@clerk/nextjs";
 import { AnimatePresence } from "framer-motion";
+import "~/styles/stars.scss"
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const router = useRouter()

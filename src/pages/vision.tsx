@@ -7,7 +7,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "~
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { trpc } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
-
+import { motion } from "framer-motion";
+import { RightOut } from "~/components/transitions/pageVariants";
 
 
 
@@ -89,7 +90,10 @@ export default function Vision() {
 
 
   return (
-    <React.Fragment>
+    <motion.div
+      animate="enter"
+      exit="exit"
+      variants={RightOut}>
       <section id="Section1" className="px-4 h-[100vh] w-full flex flex-col justify-between place-items-center bg-[100vw] md:flex-row gap-7 overflow-y-hidden ">
         <div id='Text' className='basis-2/5 h-full w-full flex flex-col place-content-center bg-green-700 text-white text-center '>
           <h1 className='font-bold text-7xl mb-2'>The <div>Visi<span><Image src={Onestwhite} alt="o" className="inline w-[40px] aspect-square" /></span>n</div></h1>
@@ -223,7 +227,7 @@ export default function Vision() {
         <p className="text-[3vw] text-gray-400">{description}</p>
       </section>}
 
-    </React.Fragment>
+    </motion.div>
   )
 }
 

@@ -59,7 +59,7 @@ section:first-of-type {
 
 .full-bg-green {
   background-color: var(--vgreen);
-  box-shadow: -50vw 0 0 var(--vgreen), 50vw 0 0 var(--vgreen);
+  box-shadow: -25vw 0 0 var(--vgreen), 25vw 0 0 var(--vgreen);
 }
 
 .full-bg-darkgreen {

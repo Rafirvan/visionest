@@ -11,6 +11,8 @@ import Loadingimage from "../../../public/loadingimage.gif"
 import TextEditor from "~/components/texteditor";
 import { UploadButton } from "~/utils/uploadthing";
 import AImodal from "~/components/aigen";
+import { motion } from "framer-motion";
+import { RightOut } from "~/components/transitions/pageVariants";
 
 
 
@@ -27,7 +29,9 @@ export default function Edit() {
 
 
     return (
-        <React.Fragment>
+        <motion.div animate="enter"
+            exit="exit"
+            variants={RightOut}>
             <section id="Section1" className="h-[100vh] w-full flex flex-col justify-between place-items-center bg-[100vw] lg:flex-row gap-x-7 overflow-y-hidden">
                 <div id='Text' className='basis-2/5 h-full w-full flex flex-col place-content-center bg-vision text-white text-center px-4'>
                     <h1 className='font-bold text-7xl mb-2'>Edit your <div>P<span><Image src={Onestwhite} alt="o" className="inline w-[40px] aspect-square" /></span>st</div></h1>
@@ -40,7 +44,7 @@ export default function Edit() {
                         : <p className="place-self-center font-bold text-2xl md:text-4xl text-center">Login Untuk Mengakses Fitur</p>}
                 </div>
             </section>
-        </React.Fragment>
+        </motion.div>
     )
 }
 
