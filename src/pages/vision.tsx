@@ -47,9 +47,14 @@ export default function Vision() {
       if (data) {
         console.log(data)
         const matches = data.match(/=(.+)/g);
-        let matchArray;
+        const matches2 = data.match(/:(.+)/g);
+        let matchArray, matchArray2;
         if (matches) {
           matchArray = matches.map(match => match.slice(1).trim());  // slice(1) removes the '=' from the start of each match
+        }
+
+        if (matches2) {
+          matchArray2 = matches2.map(match => match.slice(1).trim());  // slice(1) removes the '=' from the start of each match
         }
 
         if (matchArray) {
@@ -57,6 +62,12 @@ export default function Vision() {
           if (matchArray[1]) setDescription(matchArray[1]);
           console.log("match")
         }
+        else if (matchArray2) {
+          if (matchArray2[0]) setTitle(matchArray2[0]);
+          if (matchArray2[1]) setDescription(matchArray2[1]);
+          console.log("match")
+        }
+
         else { setRetries(prev => prev - 1); handleSubmit() }
       }
       setAILoading(false)

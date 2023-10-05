@@ -79,7 +79,7 @@ export default function Home() {
           className="opacity-30"
           {...animationProps}
         >
-          <Image src={nestimg} placeholder="empty" alt='NEST' priority />
+          <Image src={nestimg} placeholder="empty" alt='NEST' priority  />
           </motion.div>
           </motion.div>
       </section>
