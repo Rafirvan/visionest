@@ -173,21 +173,23 @@ export default function PostCard({ postID, setmodal }: cardType) {
         <>{mainContent}</>
     )
     
-    if (!setmodal) return (
-        <Link href={(postData&&loaded) ? `nest/${postData.id}` : "/"} scroll={false}  >
-            {mainContent}
-        </Link>
-    )
-    else return <Link  href={`nest/${postData.id}`} passHref>
-        <div
-            onClick={(e) => {
-                e.preventDefault(); // Prevent the default navigation
-                setmodal(postData?.id);
-            }}
+    return (
+        <Link
+            href={(postData && loaded) ? `nest/${postData.id}` : "/"}
+            scroll={false}
         >
-            {mainContent}
-        </div>
-    </Link>
+            <div
+                onClick={(e) => {
+                    if (setmodal) {
+                        e.preventDefault(); // Prevent the default navigation
+                        setmodal(postData?.id);
+                    }
+                }}
+            >
+                {mainContent}
+            </div>
+        </Link>
+    );
 }
 
 
