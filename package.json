@@ -15,7 +15,7 @@
   "dependencies": {
     "@barba/core": "^2.9.7",
     "@barba/prefetch": "^2.1.10",
-    "@clerk/nextjs": "^4.23.3",
+    "@clerk/nextjs": "^4.25.2",
     "@cloudinary/react": "^1.11.2",
     "@cloudinary/url-gen": "^1.11.2",
     "@prisma/client": "^5.1.1",
