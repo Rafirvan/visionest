@@ -24,6 +24,7 @@ interface posttype {
 
 
 export default function Page() {
+    const [loading, setLoading] = useState(true);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [rejectionMessage, setRejectionMessage] = useState("")
     const { user, isLoaded } = useUser()
@@ -32,6 +33,7 @@ export default function Page() {
     const [postCall, setPostCall] = useState<posttype[]>()
     const Call = trpc.db.callpostforadmin.useMutation({
         onSuccess: (result) => {
+            setLoading(false)
             setPostCall(result)
         }
     })
@@ -74,6 +76,8 @@ export default function Page() {
             <div className="text-2xl  font-bold text-orange-400 ">ADMIN PAGE</div>
             <hr className="mb-5 bg-amber-800 h-2 rounded-md"></hr>
             <p className="text-xl text-slate-400">Pending Posts</p>
+
+            {loading&& <div>Loading...</div>}
             <Table>
                 <TableHeader>
                     <TableRow>
