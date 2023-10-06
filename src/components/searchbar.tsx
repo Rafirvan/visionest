@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 
 
 
+
 interface post {
     posttag: {
         tag: { name: string }
@@ -129,14 +130,14 @@ export default function Searchbar() {
                             <p className="overflow-hidden overflow-ellipsis line-clamp-2 p-1 w-[90%]">
                                 {post.title}&mdash;{post.authors}&mdash;{post.university}
                             </p>
-                            <div id="image" className="w-[10%] flex place-items-center pr-2">
+                            <div id="image" className="w-[100px] flex place-items-center pr-2">
                                 <Image
                                     src={post.imageURL}
                                     alt=""
                                     placeholder="blur"
                                     blurDataURL={Loadingimage.src}
-                                    height={55}
-                                    width={55}
+                                    height={200}
+                                    width={200}
                                 />
                             </div>
                         </div>

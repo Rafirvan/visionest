@@ -1,5 +1,7 @@
 import React, { useRef, type ReactNode, type MouseEvent } from 'react';
 import { motion } from 'framer-motion';
+import useIsMobile from '~/hooks/useIsMobile';
+
 
 interface ModalProps {
     children: ReactNode;
@@ -7,6 +9,8 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ children, onClose }) => {
+    const isMobile = useIsMobile()
+
     const modalRef = useRef<HTMLDivElement>(null);
 
     const handleClickOutside = (e: MouseEvent<HTMLDivElement>) => {
@@ -21,14 +25,14 @@ const Modal: React.FC<ModalProps> = ({ children, onClose }) => {
             onClick={handleClickOutside}
         >
             <motion.div
-                initial={{ y: "100vh", opacity: 0 }}  // Initial state: Positioned at the bottom with opacity 0
-                animate={{ y: "0", opacity: 1 }}  // Animated state: Positioned at its natural position with opacity 1
-                exit={{ y: "100vh", opacity: 0 }}  // Exit state: Positioned back at the bottom with opacity 0
-                transition={{ duration: 0.2 }}  // Optional: Control the animation duration and easing
+                initial={{ y: "100vh", opacity: 0 }}  
+                animate={{ y: "0", opacity: 1 }}  
+                exit={{ y: "100vh", opacity: 0 }}  
+                transition={{ duration: 0.2 }}  
             >
                 <div
                     ref={modalRef}
-                    className="bg-white p-6 rounded-lg shadow-lg relative "
+                    className={`bg-white p-6 ${isMobile && "pb-0"} rounded-lg shadow-lg relative`}
                 >
                     {children}
                     <button
