@@ -126,7 +126,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
 
         return (
 
-            <ScrollArea className='max-w-4xl mx-auto p-4 shadow-md rounded-md mb-10 border-2 border-black overflow-hidden min-h-[500px] h-[98%]'>
+            <ScrollArea className='max-w-4xl mx-auto px-2 shadow-md rounded-md mb-10 border-2 border-black overflow-hidden min-h-[500px] h-[98%]'>
                 {favArea}
                 <div className='grid'>
 
@@ -157,7 +157,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
                     </div>
 
                     <div id='descriptionArea'>
-                        <h1 id="titleArea" className="text-2xl font-bold mb-2">{postData.title} <ShareButton link={router.asPath.replace("?", "/")} /> </h1>
+                        <h1 id="titleArea" className="text-2xl font-bold mb-2">{postData.title} <ShareButton link={`https://visionest.xyz/nest/${postData.id}`}/> </h1>
                         <p id="authorArea" className="text-gray-600 mb-1">
                             By <span className="break-words">{postData.authors}</span> • {postData.year}
                         </p>
@@ -182,7 +182,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
                         {!(pending || rejected) &&
                             <div
                                 id='tagsArea'
-                                className='text-slate-600 pt-2'>
+                                className='text-slate-600 pt-2 mb-10'>
                                 Kategori : {postData.posttag.map(e => e.tag.name).join(", ")}
                             </div>}
 
@@ -194,7 +194,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
     }
 
 
-    if (DialogId) return <div className='h-[80vh] min-h-[700px] pb-[2vh]'>{mainContent()}</div>
+    if (DialogId) return <div className='h-[80vh] min-h-[700px] '>{mainContent()}</div>
 
     return <motion.section
         animate="enter"
