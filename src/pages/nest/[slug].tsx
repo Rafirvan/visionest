@@ -131,7 +131,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
                 <div className='grid'>
 
                     {/* header only visible for post creator */}
-                    <div id='header'>
+                    <div id='header' className='pt-2'>
                         {((idmatch || adminmatch) && pending) && <div id="statusarea" className='pb-6 font-bold'>Post ini <span className='text-yellow-500'>Pending</span> </div>}
                         {((idmatch || adminmatch) && rejected) &&
                             <>

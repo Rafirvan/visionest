@@ -8,7 +8,6 @@ import Image from "next/image";
 import { Star } from "lucide-react";
 import Loadingimage from "../../public/loadingimage.gif"
 import ShareButton from "./shareButton";
-import { useRouter } from "next/router";
 import { useUser } from "@clerk/nextjs";
 import Spinner from "./ui/spinner";
 import { Bird } from "lucide-react";
@@ -17,7 +16,7 @@ import {
     HoverCardContent,
     HoverCardTrigger,
 } from "~/components/ui/hover-card"
-import { motion } from "framer-motion";
+import Link from "next/link";
 
 interface posttype {
     id: string;
@@ -46,7 +45,6 @@ export default function PostCard({ postID, setmodal }: cardType) {
     const [saved, setSaved] = useState<boolean | undefined>(false)
     const [favCount, setFavCount] = useState<number | undefined>()
     const [borderColor, setBorderColor] = useState<string>("vision")
-    const router = useRouter()
     const { user, isSignedIn } = useUser()
 
 
@@ -105,23 +103,6 @@ export default function PostCard({ postID, setmodal }: cardType) {
         else unsavepost.mutate(postID)
     }, [savepost, unsavepost, setSaveLoad])
 
-    const handleClick = () => {
-        const navigate = async () => {
-
-            if(!loaded) return
-            if (!postData?.id) { console.log("hello"); return }
-
-            else if (!setmodal) {
-                await router.push(`nest/${postData.id}`, undefined, { scroll: false });
-            }
-            else {
-                setmodal(postData?.id)
-                void router.push(`/nest?${postData?.id}`, undefined, { scroll: false, shallow: true });
-            }
-        };
-        void navigate();
-    };
-
     const cardimage = loaded ?
         <Image src={postData?.imageURL ? postData?.imageURL : "https://utfs.io/f/a18934b5-b279-40cf-a84e-4813b44a72ac_placeholder.png"}
             alt="Loading"
@@ -149,50 +130,66 @@ export default function PostCard({ postID, setmodal }: cardType) {
                 saved ? <Star onClick={e => toggleSave(e, false)} fill="yellow" /> :
                     <Star onClick={e => toggleSave(e, true)} />;
 
+    const mainContent =
+        <Card className="origin-left w-[300px] h-[350px] scale-x-90 xs:scale-x-100 snap-end border-4 text-left border-vision cursor-pointer hover:border-yellow-600" >
+        <CardContent className="h-full pb-10 relative">
 
 
-
-    return (
-        <motion.div >
-        <Card className="origin-left w-[300px] h-[350px] scale-x-90 xs:scale-x-100 snap-end border-4 text-left border-vision cursor-pointer hover:border-yellow-600" onClick={handleClick} >
-            <CardContent className="h-full pb-10 relative">
-
-                
-                {/* birdicon if creator */}
-                {idMatch &&
+            {/* birdicon if creator */}
+            {idMatch &&
                 <HoverCard>
-                        <HoverCardTrigger asChild><div id="bird" className="absolute top-[-4px] left-[-4px] bg-vision w-10 h-10 z-10 rounded-lg flex place-items-center justify-center"><Bird /></div></HoverCardTrigger>
+                    <HoverCardTrigger asChild><div id="bird" className="absolute top-[-4px] left-[-4px] bg-vision w-10 h-10 z-10 rounded-lg flex place-items-center justify-center"><Bird /></div></HoverCardTrigger>
                     <HoverCardContent className="absolute z-20">
                         Anda Pembuat Post Ini
                     </HoverCardContent>
                 </HoverCard>
-                }
+            }
 
-                
 
-                <div className="flex flex-col h-full justify-between gap-2">
-                    <div>
-                        
-                            <div id="cardimage" className=" place-content-center w-[294px] h-[180px] aspect-square overflow-hidden rounded-md relative">{cardimage}</div>
-                        
-                        <div id="cardtitle" className={`text-white bg-${borderColor} col-span-5 row-span-2 overflow-ellipsis overflow-hidden font-bold text-md w-[295px] h-[75px] line-clamp-3 px-2`}>{cardtitle}</div>
-                        <div className="flex gap-3 ">
-                            <div id="cardauthors" className="pl-2 pt-1 col-span-3 row-span-2 overflow-ellipsis text-gray-700 h-[50px] basis-4/5 overflow-hidden line-clamp-2">{cardauthors}</div>
-                            <div id="cardyear" className="w-full h-full basis-1/5 place-self-center flex justify-center">{cardyear}</div>
-                        </div>
-                    </div>
-                    <div id="cardfooter" className="px-2 flex justify-between place-items-center border-t-2 border-black h-[25px] relative bottom-1">
-                        <div id="univ" className="text-sm align-self-start overflow-hidden overflow-ellipsis line-clamp-1 w-[200px] relative top-1 h-full">{carduni}</div>
-                        <div id="share" className=" scale-95 mr-5 relative top-1">{cardshare}</div>
-                        {postData?.status == "ACCEPTED" && <div id="cardfavcount" className="relative top-1 pr-1 w-3">{favCount}</div>}
-                        <div id="cardfav" className="col-start-5 row-start-10 text-green-700 relative top-1 hover:text-green-400 cursor-pointer">{cardfav}</div>
+
+            <div className="flex flex-col h-full justify-between gap-2">
+                <div>
+
+                    <div id="cardimage" className=" place-content-center w-[294px] h-[180px] aspect-square overflow-hidden rounded-md relative">{cardimage}</div>
+
+                    <div id="cardtitle" className={`text-white bg-${borderColor} col-span-5 row-span-2 overflow-ellipsis overflow-hidden font-bold text-md w-[295px] h-[75px] line-clamp-3 px-2`}>{cardtitle}</div>
+                    <div className="flex gap-3 ">
+                        <div id="cardauthors" className="pl-2 pt-1 col-span-3 row-span-2 overflow-ellipsis text-gray-700 h-[50px] basis-4/5 overflow-hidden line-clamp-2">{cardauthors}</div>
+                        <div id="cardyear" className="w-full h-full basis-1/5 place-self-center flex justify-center">{cardyear}</div>
                     </div>
                 </div>
-            </CardContent>
-            </Card>
-        </motion.div>
+                <div id="cardfooter" className="px-2 flex justify-between place-items-center border-t-2 border-black h-[25px] relative bottom-1">
+                    <div id="univ" className="text-sm align-self-start overflow-hidden overflow-ellipsis line-clamp-1 w-[200px] relative top-1 h-full">{carduni}</div>
+                    <div id="share" className=" scale-95 mr-5 relative top-1">{cardshare}</div>
+                    {postData?.status == "ACCEPTED" && <div id="cardfavcount" className="relative top-1 pr-1 w-3">{favCount}</div>}
+                    <div id="cardfav" className="col-start-5 row-start-10 text-green-700 relative top-1 hover:text-green-400 cursor-pointer">{cardfav}</div>
+                </div>
+            </div>
+        </CardContent>
+    </Card>
+
+    
+    if (!loaded || !postData) return (
+        <>{mainContent}</>
     )
+    
+    if (!setmodal) return (
+        <Link href={(postData&&loaded) ? `nest/${postData.id}` : "/"} scroll={false}  >
+            {mainContent}
+        </Link>
+    )
+    else return <Link  href={`nest/${postData.id}`} passHref>
+        <div
+            onClick={(e) => {
+                e.preventDefault(); // Prevent the default navigation
+                setmodal(postData?.id);
+            }}
+        >
+            {mainContent}
+        </div>
+    </Link>
 }
+
 
 
 //TODO: setup sharebutton link after launch with domain name, fix favorites
