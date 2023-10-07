@@ -155,7 +155,7 @@ function PostForm() {
 
 
     if (initload) return <div></div>
-    if (user?.id != creatorId) return <section>UNAUTHORIZED</section>
+    if (user?.id != creatorId) return <section>Anda mengakses halaman edit post dengan ID yang salah</section>
 
 
     return (
