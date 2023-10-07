@@ -111,8 +111,17 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
                     <div className='absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-fit px-1 flex place-items-center justify-center z-10 bg-white'><Star className='cursor-pointer' onClick={e => toggleSave(e, true)} />{favCount}</div>;
 
     const mainContent = () => {
+
+        if (isLandscape && !isMobile) {
+            return (
+                <div className='pt-8 w-[calc(100vw-48px)] font-bold relative rounded-xl min-h-[500px] max-w-4xl flex justify-center place-items-start border-4 border-yellow-500 '>
+                    Mohon ubah orientasi device anda
+                </div>
+            );
+        }
+
         if (!userLoaded || !loaded) {
-            return <section className='w-[calc(100vw-48px)] h-[98%] font-bold relative rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-2 border-black'><div className='flex scale-[400%] justify-center items-center'><Spinner /></div></section>;
+            return <section className='w-[calc(100vw-48px)] h-[98%] font-bold relative rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-2 border-black'><div className='flex scale-[400%] justify-center items-center '><Spinner /></div></section>;
         }
 
         // rejected or pending, only visible by admin or post creator
@@ -124,13 +133,6 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
             );
         }
 
-        if (isLandscape && isMobile ) {
-            return (
-                <section className='w-[calc(100vw-48px)] font-bold relative top-[100px] rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-4 border-yellow-500 '>
-                    Mohon ubah orientasi device anda
-                </section>
-            );
-        }
 
         // wrong id
         if (!postData) return <section className='w-[calc(100vw-48px)] font-bold relative top-[100px] rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-4 border-yellow-500'>post dengan ID ini tidak ditemukan, postID : {postId}</section>;
@@ -205,7 +207,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
     }
 
 
-    if (DialogId) return <div className='h-[85vh]'>{ mainContent()}</div>
+    if (DialogId) return <div className={`h-[80vh] min-h-[700px]`}>{ mainContent()}</div>
 
     return <motion.section
         animate="enter"
