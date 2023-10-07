@@ -7,11 +7,12 @@ import { trpc } from '~/utils/api';
 import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import ShareButton from '~/components/shareButton';
-import { Star } from 'lucide-react';
+import {  Star } from 'lucide-react';
 import Spinner from '~/components/ui/spinner';
 import { motion } from 'framer-motion';
 import { DownOut } from '~/components/transitions/pageVariants';
-
+import useIsLandscape from '~/hooks/useIsLandscape';
+import useIsMobile from '~/hooks/useIsMobile';
 
 
 
@@ -35,6 +36,8 @@ interface posttype {
 }
 
 export default function BlogPost({ DialogId }: { DialogId?: string }) {
+    const isMobile = useIsMobile()
+    const isLandscape = useIsLandscape()
     const router = useRouter()
     const postId = DialogId ? DialogId : router.query.slug?.toString()
     const [postData, setPostData] = useState<posttype | null | undefined>();
@@ -121,6 +124,14 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
             );
         }
 
+        if (isLandscape && isMobile ) {
+            return (
+                <section className='w-[calc(100vw-48px)] font-bold relative top-[100px] rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-4 border-yellow-500 '>
+                    Mohon ubah orientasi device anda
+                </section>
+            );
+        }
+
         // wrong id
         if (!postData) return <section className='w-[calc(100vw-48px)] font-bold relative top-[100px] rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-4 border-yellow-500'>post dengan ID ini tidak ditemukan, postID : {postId}</section>;
 
@@ -128,7 +139,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
 
             <ScrollArea className='max-w-4xl mx-auto px-2 shadow-md rounded-md mb-10 border-2 border-black overflow-hidden min-h-[500px] h-[98%]'>
                 {favArea}
-                <div className='grid'>
+                {<div className='grid'>
 
                     {/* header only visible for post creator */}
                     <div id='header' className='pt-2'>
@@ -187,14 +198,14 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
                             </div>}
 
                     </div>
-                </div>
+                </div>}
             </ScrollArea>
 
         );
     }
 
 
-    if (DialogId) return <div className='h-[80vh] min-h-[700px] '>{mainContent()}</div>
+    if (DialogId) return <div className='h-[80vh] min-h-[800px]'>{ mainContent()}</div>
 
     return <motion.section
         animate="enter"

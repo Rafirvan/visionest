@@ -178,13 +178,13 @@ export default function Nest() {
                         </div>
                     }
                 </header>
-                <div className="h-[calc(100vh-150px)] w-full overflow-auto" ref={scrollAreaRef}>
+                <div className="h-[calc(100vh-150px)] w-full overflow-auto  min-h-[400px]" ref={scrollAreaRef}>
                     <div className="w-full grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-5 pb-10" >
                         {(!allFetched || favLoading) ? <div className="pt-10 pl-10">LOADING...</div> : CardsArea}
                     </div>
 
                         {(tab=="ALL" && isFetchingNextPage )&& <div className="text-center relative bottom-9">Loading More...</div>}
-                    <hr className="text-center outline-dashed outline-2 outline-slate-600 relative bottom-3"></hr>
+                    <hr className="text-center outline-dashed outline-2 outline-slate-600 relative bottom-3 mb-32"></hr>
                 </div>
 
             </nav>
