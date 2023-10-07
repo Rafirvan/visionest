@@ -21,7 +21,7 @@ const Modal: React.FC<ModalProps> = ({ children, onClose }) => {
 
     return (
         <section
-            className="fixed inset-[-100px] bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 "
+            className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 "
             onClick={handleClickOutside}
         >
             <motion.div
