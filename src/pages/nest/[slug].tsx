@@ -112,7 +112,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
 
     const mainContent = () => {
 
-        if (isLandscape && !isMobile) {
+        if (isLandscape && isMobile) {
             return (
                 <div className='pt-8 w-[calc(100vw-48px)] font-bold relative rounded-xl min-h-[500px] max-w-4xl flex justify-center place-items-start border-4 border-yellow-500 '>
                     Mohon ubah orientasi device anda
