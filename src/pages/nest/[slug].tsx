@@ -205,7 +205,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
     }
 
 
-    if (DialogId) return <div className='h-[80vh] min-h-[800px]'>{ mainContent()}</div>
+    if (DialogId) return <div className='h-[85vh]'>{ mainContent()}</div>
 
     return <motion.section
         animate="enter"
