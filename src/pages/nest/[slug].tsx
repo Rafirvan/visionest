@@ -45,7 +45,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
     const [saveLoad, setSaveLoad] = useState(false)
     const [loaded, setLoaded] = useState(false)
     const [favCount, setFavCount] = useState<number | undefined>()
-    const { user, isLoaded: userLoaded, isSignedIn } = useUser()
+    const { user, isLoaded: userLoaded } = useUser()
     const getpostfromid = trpc.db.callpostfromid.useMutation({
         onSuccess: (result) => {
             setPostData(result.postwithid)
@@ -73,8 +73,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [postId, DialogId]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect(() => { if (isSignedIn) refreshCheck.mutate() }, [isSignedIn])
+   
 
     const refreshCheck = trpc.db.checksave.useMutation({
         onSuccess: (result) => {
@@ -105,11 +104,17 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
         else if (postId) unsavepost.mutate(postId)
     }, [postId, savepost, unsavepost])
 
+    const handleNonUser = (e: React.MouseEvent) => {
+        e.preventDefault()
+        e.stopPropagation()
+        alert("Hanya tersedia bagi pengguna yang telah login")
+    }
+
     const favArea =
-        (!isSignedIn || postData?.status != "ACCEPTED") ? <div></div> :
+        (postData?.status != "ACCEPTED") ? <div></div> :
             (saveLoad) ? <div className='absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-fit px-1 flex place-items-center justify-center z-10 bg-white'><Spinner />{favCount}</div> :
                 saved ? <div className='absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-fit px-1 flex place-items-center justify-center z-10 bg-white'><Star className='cursor-pointer' onClick={e => toggleSave(e, false)} fill="yellow" />{favCount}</div> :
-                    <div className='absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-fit px-1 flex place-items-center justify-center z-10 bg-white'><Star className='cursor-pointer' onClick={e => toggleSave(e, true)} />{favCount}</div>;
+                    <div className='absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-fit px-1 flex place-items-center justify-center z-10 bg-white'><Star className='cursor-pointer' onClick={e => { if (user) toggleSave(e, true); else (handleNonUser(e)) }} />{favCount}</div>;
 
     const mainContent = () => {
 
@@ -133,6 +138,8 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
                 </section>
             );
         }
+
+        
 
 
         // wrong id
