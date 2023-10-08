@@ -61,7 +61,7 @@ export default function Home() {
             className="font-mono">{`"The Nest" adalah tempat di mana Anda dapat melihat koleksi blogpost yang telah dikurasi
               dari seluruh dunia. Jelajahi ide-ide beragam, solusi inovatif, dan pikiran cerdas di baliknya.
               Apakah Anda mencari inspirasi atau hanya sekedar penasaran? ada dunia inovasi yang menunggu Anda.`}</p>
-          <Link href="nest" scroll={false}><Button variant="destructive" className='my-3 scale-x-200'>{`"The Nest"`}
+          <Link href="nest" scroll={false}><Button variant="destructive" className='my-3 scale-150'>{`"The Nest"`}
             <ArrowUpRight />
           </Button>
             </Link>
@@ -72,15 +72,15 @@ export default function Home() {
           initial="hidden"
           animate="visible"
           variants={textAnimationVariants}
-          className=' opacity-30 absolute z-0'
+          className={`absolute z-0 ${isMobile? "scale-500": "scale-200"}`}
           transition={{ duration: 0.8, delay: 0.8 }}>
           <motion.div 
           className="opacity-30"
           {...animationProps}
         >
-          <Image src={nestimg} placeholder="empty" alt='NEST' quality={10} />
+          <Image src={nestimg} placeholder="empty" alt='NEST' quality={100} />
           </motion.div>
-          </motion.div>
+        </motion.div>
       </section>
 
 
@@ -91,7 +91,7 @@ export default function Home() {
           <PostCarousel />
         </div>
         <div id='submitintro' className=' basis-2/5 justify-center '>
-          <p id="text" className='font-bold text-5xl md:mb-2 text-center flex-1'>Beri Inspirasi Bagi Dunia</p>
+          <p id="text" className='font-bold text-4xl sm:text-5xl md:mb-2 text-center flex-1'>Beri Inspirasi Bagi Dunia</p>
           <p className='text-center'>
             <Link href="submit" scroll={false}>
               <Button variant="outline" className=' flex-1 text-green-700 text-2xl h-fit outline-none border-none'>Upload Post<ArrowUpRight /></Button>
@@ -121,7 +121,7 @@ export default function Home() {
             transition={{ duration: 0.5, }}
             className="flex flex-col"
             >
-            
+             
             {isInView&&<TypeAnimation
               sequence={[`Ingin mencari ide untuk penelitian anda yang selanjutnya? AI kami, 
               "The Vision", akan membantu Anda! Hasilkan ide proyek unik yang disesuaikan 
