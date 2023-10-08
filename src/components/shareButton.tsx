@@ -36,7 +36,7 @@ export default function ShareButton({ link }: { link: string }) {
         e.preventDefault();
         setTimer(setTimeout(() => {
             setOpen(true);
-        }, 200)); // 200ms delay
+        }, 500)); // 200ms delay
     };
 
     const handleTouchMove = () => {

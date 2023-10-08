@@ -119,7 +119,7 @@ export default function PostCard({ postID, setmodal }: cardType) {
 
 
     const cardtitle = loaded ? postData?.title : <div></div>
-    const cardauthors = loaded ? postData?.authors : <Skeleton className="w-full h-[85%] mt-2" />
+    const cardauthors = loaded ? postData?.authors : <Skeleton className="w-full h-[85%] mt-1" />
     const cardyear = loaded ? postData?.year : <Skeleton className="w-full h-full" />
     const carduni = loaded ? postData?.university : <Skeleton className="w-full h-full" />
 
