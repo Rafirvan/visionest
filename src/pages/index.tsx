@@ -3,6 +3,7 @@
 import React, {useRef} from "react"
 import Image from "next/image";
 import nestimg from "../../public/nest3.png"
+import nestimglowres from "../../public/nest3lowres.png"
 import { Button } from '~/components/ui/button';
 import { ArrowUpRight } from 'lucide-react';
 import visionimg from "../../public/vision.png"
@@ -78,7 +79,7 @@ export default function Home() {
           className="opacity-30"
           {...animationProps}
         >
-          <Image src={nestimg} placeholder="empty" alt='NEST' quality={50} priority />
+          <Image src={nestimg}  placeholder="blur" blurDataURL={nestimglowres.src} alt='NEST' quality={100} priority />
           </motion.div>
         </motion.div>
       </section>
