@@ -32,7 +32,7 @@ export default function ShareButton({ link }: { link: string }) {
     return (
 
         <DropdownMenu >
-            <DropdownMenuTrigger onTouchStart={e => e.preventDefault()}
+            <DropdownMenuTrigger onTouchStart={e => { e.preventDefault();  e.stopPropagation()}}
             ><Share2 className="relative top-1 hover:text-green-700" /></DropdownMenuTrigger>
             <DropdownMenuContent onCloseAutoFocus={e=>e.preventDefault()}>
                 <DropdownMenuLabel >Share This Post</DropdownMenuLabel>
