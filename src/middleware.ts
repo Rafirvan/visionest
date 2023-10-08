@@ -21,21 +21,6 @@ import { NextResponse, type NextRequest } from 'next/server';
 // }
 
 export default authMiddleware({
-    beforeAuth: (req: NextRequest) => {
-    const referer = req.headers.get('Referer');
-
-    const response = NextResponse.next();
-
-    if (referer) {
-        response.cookies.set('previousRoute', referer, {
-            path: '/',
-            maxAge: 60 * 60,
-            sameSite: 'strict',
-        });
-    }
-
-    return response;
-    },
     publicRoutes: ["/(.*)"]
 });
 
