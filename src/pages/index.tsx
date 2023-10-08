@@ -2,7 +2,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, {useRef} from "react"
 import Image from "next/image";
-import nestimg from "../../public/nest3.png"
+// import nestimg from "../../public/nest3.png"
 import nestimglowres from "../../public/nest3lowres.png"
 import { Button } from '~/components/ui/button';
 import { ArrowUpRight } from 'lucide-react';
@@ -45,7 +45,7 @@ export default function Home() {
       exit="exit"
       variants={LeftOut}>
       <section id="Section1"
-        className="min-h-[700px] w-[90%] left-[5%] flex text-center justify-center place-items-center relative">
+        className="min-h-[700px] w-[90%] left-[5%] flex text-center justify-center place-items-center relative overflow-hidden">
         <div id='Text' className='md:basis-3/5 z-10 max-w-[710px]'>
           <motion.h1
             initial="hidden"
@@ -73,13 +73,13 @@ export default function Home() {
           initial="hidden"
           animate="visible"
           variants={textAnimationVariants}
-          className={`absolute z-0 ${isMobile? "scale-300": "scale-175"}`}
+          className={`absolute z-0 ${!isMobile && "scale-175"}`}
           transition={{ duration: 0.8, delay: 0.8 }}>
           <motion.div 
           className="opacity-30"
           {...animationProps}
         >
-          <Image src={nestimg}  placeholder="blur" blurDataURL={nestimglowres.src} alt='NEST' quality={100} priority />
+          <Image src={nestimglowres}  placeholder="empty"  alt='NEST' priority />
           </motion.div>
         </motion.div>
       </section>
