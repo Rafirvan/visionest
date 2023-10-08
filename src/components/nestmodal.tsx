@@ -32,7 +32,7 @@ const Modal: React.FC<ModalProps> = ({ children, onClose }) => {
             >
                 <div
                     ref={modalRef}
-                    className={`bg-white ${isMobile ? "p-0 pt-6 top-10":"p-6" } rounded-lg shadow-lg relative`}
+                    className={`bg-white p-0 pt-10 md:p-6  ${isMobile && "top-10" } rounded-lg shadow-lg relative`}
                 >
                     {children}
                     <button
