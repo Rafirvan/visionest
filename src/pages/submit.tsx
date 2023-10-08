@@ -29,7 +29,7 @@ export default function Submit() {
             animate="enter"
             exit="exit"
             variants={RightOut}
-            id="Section1" className="h-[100vh] w-full flex flex-col justify-between place-items-center bg-[100vw] lg:flex-row gap-x-7 overflow-y-hidden">
+            id="Section1" className="h-[100vh] w-full flex flex-col justify-between place-items-center bg-[100vw] lg:flex-row gap-7 overflow-y-hidden">
                 <div id='Text' className='basis-2/5 h-full w-full flex flex-col place-content-center bg-blue-600 text-white text-center px-4'>
                     <h1 className='font-bold text-7xl mb-2'>Submit a <div>P<span><Image src={Onestwhite} alt="o" className="inline w-[40px] aspect-square" /></span>st</div></h1>
                     <p>Masukkan Penjelasan Mengenai Karya Ilmiah Anda</p>

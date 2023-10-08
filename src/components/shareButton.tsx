@@ -79,3 +79,5 @@ export default function ShareButton({ link }: { link: string }) {
 
     )
 }
+
+//todo:fix touch detection on mobile, current solution does not work!
