@@ -48,7 +48,7 @@ module.exports = withUt({
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       scale: {
-        '200': '2',
+        '175': '1.75',
         '300': '3',
       }
     },

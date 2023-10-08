@@ -73,7 +73,7 @@ export default function Home() {
           initial="hidden"
           animate="visible"
           variants={textAnimationVariants}
-          className={`absolute z-0 ${isMobile? "scale-300": "scale-200"}`}
+          className={`absolute z-0 ${isMobile? "scale-300": "scale-175"}`}
           transition={{ duration: 0.8, delay: 0.8 }}>
           <motion.div 
           className="opacity-30"

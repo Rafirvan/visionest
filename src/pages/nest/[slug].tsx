@@ -114,14 +114,14 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
 
         if (isLandscape && isMobile) {
             return (
-                <div className='pt-32 w-[calc(100vw-48px)] font-bold relative rounded-xl min-h-[500px] max-w-4xl flex justify-center place-items-start border-4 border-yellow-500 '>
+                <div className='pt-32 h-10 w-10 font-bold relative rounded-xl max-w-4xl flex justify-center place-items-start border-4 border-yellow-500 '>
                     Mohon ubah orientasi device anda
                 </div>
             );
         }
 
         if (!userLoaded || !loaded) {
-            return <section className='w-[calc(100vw-48px)] h-[98%] font-bold relative rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-2 border-black'><div className='flex scale-[400%] justify-center items-center '><Spinner /></div></section>;
+            return <section className='w-[calc(100vw)] h-full font-bold relative rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-2 border-black'><div className='flex scale-[400%] justify-center items-center '><Spinner /></div></section>;
         }
 
         // rejected or pending, only visible by admin or post creator
@@ -139,7 +139,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
 
         return (
 
-            <ScrollArea className='max-w-4xl mx-auto px-2 shadow-md rounded-md mb-10 border-2 border-black overflow-hidden min-h-[500px] h-[98%]'>
+            <ScrollArea className='max-w-4xl mx-auto px-2 shadow-md rounded-xl border-2 border-black overflow-hidden min-h-[500px] h-full'>
                 {favArea}
                 {<div className='grid'>
 
@@ -154,7 +154,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
                                 <p>Alasan = {postData.rejection}</p>
                             </>
                         }
-                        {idmatch && <div>Anda pembuat post ini!<Link href={`/edit/${postId}`}><p className='font-bold text-blue-600 underline pb-4'>Edit post ini</p></Link></div>}
+                        {idmatch && <p className='pb-7'>Anda pembuat post ini! <Link className='w-min h-min font-bold text-blue-600 underline pb-4 ' href={`/edit/${postId}`}>Edit post ini</Link></p>}
                     </div>
 
                     <hr />
