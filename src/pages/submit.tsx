@@ -171,7 +171,7 @@ function PostForm() {
 
                 <div id="paperlinkinput">
                     <label htmlFor="paperlink" className="block text-sm font-medium mb-2">
-                        Link menuju bukti publikasi <span className="text-slate-500">{`Misal link menuju perpustakaan digital / webiste publikasi. Selalu mulai dengan "https://"`}</span>
+                        Link menuju bukti publikasi <span className="text-slate-500">{`Misal link menuju perpustakaan digital / website publikasi. Selalu mulai dengan "https://"`}</span>
                     </label>
                     <input
                         id="paperlink"
