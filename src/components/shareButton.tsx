@@ -35,12 +35,12 @@ export default function ShareButton({ link }: { link: string }) {
         <DropdownMenu >
             <DropdownMenuTrigger 
             ><Share2 className="relative top-1 hover:text-green-700" /></DropdownMenuTrigger>
-            <DropdownMenuContent hideWhenDetached>
+            <DropdownMenuContent>
                 <DropdownMenuLabel >Share This Post</DropdownMenuLabel>
-                <DropdownMenuItem >
+                <DropdownMenuItem onClick={e=>e.stopPropagation()} >
                     <FacebookShareButton url={link}><FacebookIcon className="hover:scale-110" /></FacebookShareButton>
-                    <TwitterShareButton url={link}><TwitterIcon className="hover:scale-110" /></TwitterShareButton>
-                    <LineShareButton url={link}><LineIcon className="hover:scale-110" /></LineShareButton>
+                    <TwitterShareButton  url={link}><TwitterIcon className="hover:scale-110" /></TwitterShareButton>
+                    <LineShareButton     url={link}><LineIcon className="hover:scale-110" /></LineShareButton>
                     <WhatsappShareButton url={link}><WhatsappIcon className="hover:scale-110" /></WhatsappShareButton>
                 </DropdownMenuItem>
             </DropdownMenuContent>
