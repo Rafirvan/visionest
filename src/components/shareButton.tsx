@@ -6,7 +6,6 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "./ui/dropdown-menu"
-import { useState } from "react";
 
 
 
@@ -35,7 +34,7 @@ export default function ShareButton({ link }: { link: string }) {
         <DropdownMenu >
             <DropdownMenuTrigger 
             ><Share2 className="relative top-1 hover:text-green-700" /></DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent onCloseAutoFocus={e=>e.preventDefault()}>
                 <DropdownMenuLabel >Share This Post</DropdownMenuLabel>
                 <DropdownMenuItem onClick={e=>e.stopPropagation()} >
                     <FacebookShareButton url={link}><FacebookIcon className="hover:scale-110" /></FacebookShareButton>
