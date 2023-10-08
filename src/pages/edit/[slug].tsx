@@ -159,7 +159,7 @@ function PostForm() {
 
 
     return (
-        <ScrollArea className="h-full w-full pl-2">
+        <ScrollArea className="h-full w-full pl-2 pb-10">
             <form onSubmit={handleSubmit} className="w-[90%] h-full flex flex-col justify-center">
 
                 <div id="titleinput">
