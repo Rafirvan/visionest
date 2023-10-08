@@ -29,27 +29,42 @@ import {
 export default function ShareButton({ link }: { link: string }) {
 
     const [open, setOpen] = useState(false);
-    const [timer, setTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
+    
+    const [startTouchPosition, setStartTouchPosition] = useState<{ x: number, y: number } | null>(null);
 
+    const handleTouchStart = (e: React.TouchEvent<HTMLElement>) => {
 
-    const handleTouchStart = (e:React.TouchEvent) => {
-        e.preventDefault();
-        setTimer(setTimeout(() => {
-            setOpen(true);
-        }, 500)); // 200ms delay
-    };
-
-    const handleTouchMove = () => {
-        if (timer !== null) {
-            clearTimeout(timer);
+        if (e.touches && e.touches.length > 0) {
+            const touch = e.touches[0];
+            if (touch) setStartTouchPosition({ x: touch.clientX, y: touch.clientY });
         }
     };
+
+    const handleTouchEnd = (e: React.TouchEvent<HTMLElement>) => {
+        if (!startTouchPosition) return;
+
+        if (e.changedTouches && e.changedTouches.length > 0) {
+            const touch = e.changedTouches[0];
+            let deltaX, deltaY, distance
+            if (touch)  deltaX = touch.clientX - startTouchPosition.x;
+            if(touch) deltaY = touch.clientY - startTouchPosition.y;
+            if(deltaX&& deltaY) distance= Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+            // If the touch moved less than 10 pixels, treat it as a tap.
+            if (distance && distance < 10) {
+                setOpen(prevOpen => !prevOpen);
+            }
+
+            setStartTouchPosition(null);
+        }
+    };
+
 
 
     return (
 
         <DropdownMenu open={open} onOpenChange={setOpen} >
-            <DropdownMenuTrigger onTouchStart={e => { handleTouchStart(e)}} onTouchMove={handleTouchMove}
+            <DropdownMenuTrigger onTouchStart={e => { handleTouchStart(e)}} onTouchEnd={e=>handleTouchEnd(e)}
             ><Share2 className="relative top-1 hover:text-green-700" /></DropdownMenuTrigger>
             <DropdownMenuContent onCloseAutoFocus={e=>e.preventDefault()}>
                 <DropdownMenuLabel >Share This Post</DropdownMenuLabel>
