@@ -19,13 +19,13 @@ import React, { useState, useEffect } from "react";
 export default function Navbar() {
     const { isLoaded, isSignedIn, user } = useUser();
     const router = useRouter();
-    const [open, setOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
 
     useEffect(() => {
         const handleRouteChange = () => {
             // Close the dialog if the route changes
-            setOpen(false);
+            setIsOpen(false);
         };
         router.events.on('routeChangeStart', handleRouteChange);
         return () => {
@@ -48,7 +48,7 @@ export default function Navbar() {
 
             
             {!isSignedIn ?
-                <Dialog open={open} onOpenChange={setOpen} >
+                <Dialog open={isOpen} onOpenChange={setIsOpen} >
                     <DialogTrigger>
                         <div className={` ${!isLoaded && "invisible"} p-3 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 bg-red-500 text-slate-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90`}>Sign Up / Log In</div>
                     </DialogTrigger>
