@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { Card, CardContent } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { trpc } from "~/utils/api";
 import Image from "next/image";
 import { Star } from "lucide-react";
@@ -45,13 +45,14 @@ export default function PostCard({ postID, setmodal }: cardType) {
     const [saved, setSaved] = useState<boolean | undefined>(false)
     const [favCount, setFavCount] = useState<number | undefined>()
     const [borderColor, setBorderColor] = useState<string>("vision")
-    const { user, isSignedIn } = useUser()
+    const { user } = useUser()
 
 
 
 
     useEffect(() => {
         getpostfromid.mutate(postID)
+        getFavCount.mutate(postID)
     }, [postID])
 
     useEffect(() => { if (user) refreshCheck.mutate() }, [user])
@@ -84,14 +85,12 @@ export default function PostCard({ postID, setmodal }: cardType) {
 
     const savepost = trpc.db.savepost.useMutation({
         onSuccess: () => {
-            if (isSignedIn)
                 refreshCheck.mutate()
         }
     })
 
     const unsavepost = trpc.db.unsavepost.useMutation({
         onSuccess: () => {
-            if (isSignedIn)
                 refreshCheck.mutate()
         }
     })
@@ -103,6 +102,12 @@ export default function PostCard({ postID, setmodal }: cardType) {
         if (save) savepost.mutate(postID)
         else unsavepost.mutate(postID)
     }, [savepost, unsavepost, setSaveLoad])
+
+    const handleNonUser=(e: React.MouseEvent) => {
+        e.preventDefault()
+        e.stopPropagation()
+        alert("Hanya tersedia bagi pengguna yang telah login")
+    }
 
     const cardimage = loaded ?
         <Image src={postData?.imageURL ? postData?.imageURL : "https://utfs.io/f/a18934b5-b279-40cf-a84e-4813b44a72ac_placeholder.png"}
@@ -126,10 +131,10 @@ export default function PostCard({ postID, setmodal }: cardType) {
     //CHANGE
     const cardshare = loaded && <ShareButton link={postData ? `https://visionest.xyz/nest/${postData.id}` : ""} />
     const cardfav =
-        !isSignedIn || postData?.status != "ACCEPTED" ? <div></div> :
+         postData?.status != "ACCEPTED" ? <div></div> :
             (!loaded || saveLoad) ? <Spinner /> :
-                saved ? <Star onClick={e => toggleSave(e, false)} fill="yellow" /> :
-                    <Star onClick={e => toggleSave(e, true)} />;
+                saved ? <Star onClick={e => { if (user) toggleSave(e, false) }} fill="yellow" /> :
+                    <Star onClick={e => { if (user) toggleSave(e, true); else (handleNonUser(e)) }} />;
 
     const mainContent =
         <Card className="origin-left w-[300px] h-[350px] scale-x-90 xs:scale-x-100 snap-end border-4 text-left border-vision cursor-pointer hover:border-yellow-600" >
@@ -162,7 +167,7 @@ export default function PostCard({ postID, setmodal }: cardType) {
                 <div id="cardfooter" className="px-2 flex justify-between place-items-center border-t-2 border-black h-[25px] relative bottom-1">
                     <div id="univ" className="text-sm align-self-start overflow-hidden overflow-ellipsis line-clamp-1 w-[200px] relative top-1 h-full">{carduni}</div>
                     <div id="share" className=" scale-95 mr-5 relative top-1">{cardshare}</div>
-                        {(favCount != undefined) ? postData?.status == "ACCEPTED" && 
+                        {(favCount != undefined || !user) ? postData?.status == "ACCEPTED" && 
                         <><div id="cardfavcount" className="relative top-1 pr-1 w-3">{favCount}</div>
                             <div id="cardfav" className=" text-green-700 relative top-1 hover:text-green-400 cursor-pointer">{cardfav}</div></> : <Skeleton className="w-9 h-full relative top-[15%] "></Skeleton>}
                 </div>
