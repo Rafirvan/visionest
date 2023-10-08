@@ -97,6 +97,7 @@ export default function PostCard({ postID, setmodal }: cardType) {
     })
 
     const toggleSave = useCallback((e: React.MouseEvent, save?: boolean) => {
+        e.preventDefault()
         e.stopPropagation()
         setSaveLoad(true)
         if (save) savepost.mutate(postID)
