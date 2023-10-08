@@ -100,7 +100,7 @@ export default function Nest() {
         
       if (scrollAreaRef.current && tab=="ALL"){
           const { scrollTop, clientHeight, scrollHeight } = scrollAreaRef.current;
-          if (scrollHeight - scrollTop <= clientHeight+2 && !isFetchingNextPage) {
+          if (scrollHeight - scrollTop <= clientHeight+50 && !isFetchingNextPage) {
             await fetchNextPage()
         }
       }

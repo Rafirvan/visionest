@@ -140,7 +140,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
         return (
 
             <ScrollArea className='max-w-4xl mx-auto px-2 shadow-md rounded-xl border-2 border-black overflow-hidden min-h-[500px] h-full'>
-                {favArea}
+                {favCount!=undefined && favArea}
                 {<div className='grid'>
 
                     {/* header only visible for post creator */}
