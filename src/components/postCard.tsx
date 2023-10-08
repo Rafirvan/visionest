@@ -164,9 +164,10 @@ export default function PostCard({ postID, setmodal }: cardType) {
                         <div id="cardyear" className="w-full h-full basis-1/5 place-self-center flex justify-center">{cardyear}</div>
                     </div>
                 </div>
-                <div id="cardfooter" className="px-2 flex justify-between place-items-center border-t-2 border-black h-[25px] relative bottom-1">
+                    <div id="cardfooter" className="px-2 flex justify-between place-items-center border-t-2 border-black h-[25px] relative bottom-1">
+                        <div id="share" className=" scale-95 mr-5 relative top-1">{cardshare}</div>
                     <div id="univ" className="text-sm align-self-start overflow-hidden overflow-ellipsis line-clamp-1 w-[200px] relative top-1 h-full">{carduni}</div>
-                    <div id="share" className=" scale-95 mr-5 relative top-1">{cardshare}</div>
+                    
                         {(favCount != undefined || !user) ? postData?.status == "ACCEPTED" && 
                         <><div id="cardfavcount" className="relative top-1 pr-1 w-3">{favCount}</div>
                             <div id="cardfav" className=" text-green-700 relative top-1 hover:text-green-400 cursor-pointer">{cardfav}</div></> : <Skeleton className="w-9 h-full relative top-[15%] "></Skeleton>}
