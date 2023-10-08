@@ -16,9 +16,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     <>
       
       <Head>
-        <meta
-          http-equiv="Content-Security-Policy"
-          content="default-src 'self'; img-src https://*; child-src 'none'; connect-src vitals.vercel-insights.com https://pagespeed.web.dev/" />
+        
         <link rel="icon" href="/Onest.png" />
         <title>Visionest</title>
       </Head>
