@@ -6,6 +6,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "./ui/dropdown-menu"
+import React, { useState } from "react";
 
 
 
@@ -27,12 +28,28 @@ import {
 
 export default function ShareButton({ link }: { link: string }) {
 
+    const [open, setOpen] = useState(false);
+    const [timer, setTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
+
+
+    const handleTouchStart = (e:React.TouchEvent) => {
+        e.preventDefault();
+        setTimer(setTimeout(() => {
+            setOpen(true);
+        }, 200)); // 200ms delay
+    };
+
+    const handleTouchMove = () => {
+        if (timer !== null) {
+            clearTimeout(timer);
+        }
+    };
 
 
     return (
 
-        <DropdownMenu >
-            <DropdownMenuTrigger onTouchStart={e => { e.preventDefault();  e.stopPropagation()}}
+        <DropdownMenu open={open} onOpenChange={setOpen} >
+            <DropdownMenuTrigger onTouchStart={e => { handleTouchStart(e)}} onTouchMove={handleTouchMove}
             ><Share2 className="relative top-1 hover:text-green-700" /></DropdownMenuTrigger>
             <DropdownMenuContent onCloseAutoFocus={e=>e.preventDefault()}>
                 <DropdownMenuLabel >Share This Post</DropdownMenuLabel>
