@@ -61,7 +61,7 @@ export default function Home() {
             className="font-mono">{`"The Nest" adalah tempat di mana Anda dapat melihat koleksi blogpost yang telah dikurasi
               dari seluruh dunia. Jelajahi ide-ide beragam, solusi inovatif, dan pikiran cerdas di baliknya.
               Apakah Anda mencari inspirasi atau hanya sekedar penasaran? ada dunia inovasi yang menunggu Anda.`}</p>
-          <Link href="nest" scroll={false}><Button variant="destructive" className='my-3 scale-150'>{`"The Nest"`}
+          <Link href="nest" scroll={false}><Button variant="destructive" className='my-3 scale-110'>{`"The Nest"`}
             <ArrowUpRight />
           </Button>
             </Link>
@@ -72,7 +72,7 @@ export default function Home() {
           initial="hidden"
           animate="visible"
           variants={textAnimationVariants}
-          className={`absolute z-0 ${isMobile? "scale-500": "scale-200"}`}
+          className={`absolute z-0 ${isMobile? "scale-300": "scale-200"}`}
           transition={{ duration: 0.8, delay: 0.8 }}>
           <motion.div 
           className="opacity-30"
