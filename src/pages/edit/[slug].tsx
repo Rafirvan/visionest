@@ -167,6 +167,7 @@ function PostForm() {
                         Judul
                     </label>
                     <input
+                        disabled
                         id="title"
                         type="text"
                         value={titleValue}
