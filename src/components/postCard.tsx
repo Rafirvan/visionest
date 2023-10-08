@@ -133,7 +133,7 @@ export default function PostCard({ postID, setmodal }: cardType) {
     const cardfav =
          postData?.status != "ACCEPTED" ? <div></div> :
             (!loaded || saveLoad) ? <Spinner /> :
-                saved ? <Star onClick={e => { if (user) toggleSave(e, false) }} fill="yellow" /> :
+                saved ? <Star onClick={e => toggleSave(e, false)} fill="yellow" /> :
                     <Star onClick={e => { if (user) toggleSave(e, true); else (handleNonUser(e)) }} />;
 
     const mainContent =

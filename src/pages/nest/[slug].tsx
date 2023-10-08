@@ -65,8 +65,11 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
 
 
     useEffect(() => {
-        if (postId) getpostfromid.mutate(postId)
-        
+        if (postId)
+        {
+            getpostfromid.mutate(postId)
+            getFavCount.mutate(postId)
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [postId, DialogId]);
 
@@ -75,8 +78,6 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
 
     const refreshCheck = trpc.db.checksave.useMutation({
         onSuccess: (result) => {
-
-
             if (postId) {
                 setSaved(result?.includes(postId));
                 getFavCount.mutate(postId)
