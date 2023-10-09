@@ -24,6 +24,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 
         <Layout>
           <AnimatePresence mode="wait">
+            
             <Component {...pageProps} key={router.route} />
           </AnimatePresence>
         </Layout>

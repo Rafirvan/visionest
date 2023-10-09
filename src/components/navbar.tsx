@@ -13,6 +13,7 @@ import {
 } from "~/components/ui/dialog"
 import Searchbar from "./searchbar";
 import React, { useState, useEffect } from "react";
+import useIsMobile from "~/hooks/useIsMobile";
 
 
 
@@ -21,6 +22,7 @@ export default function Navbar() {
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
 
+    const isMobile = useIsMobile()
 
     useEffect(() => {
         const handleRouteChange = () => {
@@ -52,8 +54,8 @@ export default function Navbar() {
                     <DialogTrigger>
                         <div id="signin" className={` ${!isLoaded && "invisible"} p-3 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 bg-red-500 text-slate-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90`}>Sign Up / Log In</div>
                     </DialogTrigger>
-                    <DialogContent id="dialog" className="scale-90 sm:scale-100" >
-                        <div className="scale-90 mx-auto sm:scale-100">
+                    <DialogContent id="dialog" className="scale-90 sm:scale-100 flex place-items-center" >
+                        <div className={`scale-90 relative ${ isMobile? "right-[10%]":"right-[3%]" } sm:right-0 sm:scale-100 border-black`}>
                             <SignIn signUpUrl="/sign-up" redirectUrl={router.asPath} />
                         </div>
                     </DialogContent>
