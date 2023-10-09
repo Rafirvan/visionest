@@ -54,3 +54,10 @@ model posttag {
 
   @@id([postId, tagId])
 }
+
+model visionscore{
+  id     String    @id @default(cuid())
+  input  String 
+  output String
+  score  Int  
+}
