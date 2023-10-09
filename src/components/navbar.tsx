@@ -53,13 +53,13 @@ export default function Navbar() {
                         <div id="signin" className={` ${!isLoaded && "invisible"} p-3 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 bg-red-500 text-slate-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90`}>Sign Up / Log In</div>
                     </DialogTrigger>
                     <DialogContent id="dialog" className="scale-90 sm:scale-100" >
-                        <div className="">
+                        <div className="scale-90 mx-auto sm:scale-100">
                             <SignIn signUpUrl="/sign-up" redirectUrl={router.asPath} />
                         </div>
                     </DialogContent>
                 </Dialog>
 
-                : <div className="md:scale-150"><UserButton afterSignOutUrl="/" /></div>}
+                : <div className="md:scale-150"><UserButton afterSignOutUrl="/"/></div>}
 
         </div>
     )

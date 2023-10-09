@@ -16,7 +16,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     <>
       
       <Head>
-        
         <link rel="icon" href="/Onest.png" />
         <title>Visionest</title>
       </Head>
@@ -24,9 +23,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       <ClerkProvider {...pageProps}>
 
         <Layout>
-        <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait">
             <Component {...pageProps} key={router.route} />
-      </AnimatePresence>
+          </AnimatePresence>
         </Layout>
 
       </ClerkProvider>

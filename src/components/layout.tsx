@@ -14,7 +14,7 @@ export default function Layout({ children }: LayoutProps, ) {
         <>
             <Navbar />
             
-                {children}
+            {children}
         </>
     )
 }
