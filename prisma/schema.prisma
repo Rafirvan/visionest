@@ -57,7 +57,7 @@ model posttag {
 
 model visionscore{
   id     String    @id @default(cuid())
-  input  String 
-  output String
+  input  String    @db.VarChar(3000)
+  output String    @db.VarChar(3000)
   score  Int  
 }

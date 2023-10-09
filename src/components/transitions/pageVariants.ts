@@ -1,7 +1,6 @@
 const LeftOut = {
     enter: { x: 0, transition: { type: 'stiff', stiffness: 80 } },
-    exit: { x: '-120vw', transition: { ease: 'easeInOut', duration:0.5 } },
-    
+    exit: { x: '-120vw', transition: { ease: 'easeInOut', duration:0.5 } }, 
 };
 
 

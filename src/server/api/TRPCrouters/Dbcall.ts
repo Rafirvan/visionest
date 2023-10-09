@@ -299,6 +299,18 @@ export const DBRouter = createTRPCRouter({
             }
         })
         return searched
+    }),
+
+    visionrate: publicProcedure.input(z.object({ input: z.string(), output: z.string(), rating: z.number() })).mutation(async ({ input }) => {
+            await prisma.visionscore.create({
+                data: {
+                    input: input.input,
+                    output: input.output,
+                    score: input.rating
+            },
+        })
+        
+               
     })
 
 

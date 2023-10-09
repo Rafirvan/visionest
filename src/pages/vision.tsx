@@ -9,6 +9,7 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 import { trpc } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
 import { motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { RightOut } from "~/components/transitions/pageVariants";
 import { TypeAnimation } from "react-type-animation";
 import VisionBG from "~/components/backgrounds/vision";
@@ -21,6 +22,8 @@ export default function Vision() {
   const [triggerScroll, setTriggerScroll] = useState(false);
   const [showResult, setShowResult] = useState(false)
   const [descriptionDelay, setDescriptionDelay] = useState(true)
+  const [showRatingDelay, setShowRatingDelay] = useState(true)
+  const [rated, setRated] = useState(false)
 
   //custom alert
 
@@ -75,12 +78,15 @@ export default function Vision() {
     }
   });
 
+  const AIrate = trpc.db.visionrate.useMutation();
 
   const handleSubmit = useCallback((e?: React.FormEvent) => {
     if (e) { e.preventDefault(); setRetries(2)};
     if (!retries) { setTitle("Nilai tidak ditemukan, mohon coba lagi"); return }
     setAILoading(true)
     setDescriptionDelay(true)
+    setShowRatingDelay(true)
+    setRated(false)
     setTitle("")
     setDescription("")
     if (!showResult) { setShowResult(true); }
@@ -100,6 +106,18 @@ export default function Vision() {
 
   }, [AIcall, constraintValue, fieldValue, majorValue, showResult, subjectValue, timeValue, typeValue]);
 
+
+  const giveRating = useCallback((rating:number) => {
+
+    const input = majorValue + ";" + typeValue + ";" + fieldValue + ";" + subjectValue + ";" + (timeValue ? timeValue : "empty") + ";" + (constraintValue ? constraintValue : "empty")
+    const output = title + ";" + description
+    AIrate.mutate({ input: input, output: output, rating: rating })
+    setTimeout(() => {
+      setShowRatingDelay(true);
+    }, 4000);
+  }, [AIrate, title, description]);
+
+
   useEffect(() => {
     if (showResult) {
       document.getElementById("Section2")?.scrollIntoView({ behavior: "smooth" });
@@ -110,9 +128,12 @@ export default function Vision() {
     if (description) {
       const timer = setTimeout(() => {
         setDescriptionDelay(false);
-      }, 1000);  
+      }, 1000); 
+      const timer2 = setTimeout(() => {
+        setShowRatingDelay(false);
+      }, 4000);  
 
-      return () => clearTimeout(timer); 
+      return () => { clearTimeout(timer); clearTimeout(timer2) }; 
     }
   }, [description]);
 
@@ -132,6 +153,8 @@ export default function Vision() {
           <p>Powered by OpenAI&trade;</p>
         </div>
 
+        
+        {/* forms */}
         <div className="basis-3/5 h-full w-full flex place-content-center">
 
           {(!isLoaded || !isSignedIn) ?
@@ -253,11 +276,44 @@ export default function Vision() {
         </div>
 
         {/* Answer Area/section2 */}
-      </section>
-      {showResult && <section id="Section2" className="relative py-10 min-h-[100vh] w-full  flex flex-col justify-center text-center">
+      </section> 
+      {showResult && <section id="Section2" className="relative py-12 min-h-[100vh] max-h-[1000vh] h-auto flex flex-col justify-center text-center">
         <VisionBG/>
-        <p className="text-3xl md:text-5xl lg:text-7xl text-white mb-8">{title == "" ? "Loading..." : showTitle}</p>
-        <p className=" text-2xl md:text-4xl lg:text-5xl text-gray-400 ">{description && !descriptionDelay && showDescription}</p>
+        <p className="text-xl md:text-5xl lg:text-7xl text-white mb-8">{title == "" ? "Loading..." : showTitle}</p>
+        <p className=" text-lg md:text-4xl lg:text-5xl text-gray-400 ">{description && !descriptionDelay && showDescription}</p>
+
+        {!showRatingDelay &&
+          
+          <AnimatePresence >
+            <motion.div
+              initial={{ y: 600 }}
+              animate={{ y: 0, opacity:1, transition: { ease: 'easeInOut', duration: 0.5 } }}
+              exit={{ opacity:0, transition: { ease: 'easeInOut', duration: 0.5 } }}
+              id="rate" key="rate" className="min-w-[300px] w-[40%] h-[120px] relative top-2 mx-auto overflow-hidden border border-gray-300 p-4 bg-transparent rounded-lg shadow-lg">
+            <header className="text-2xl text-white font-bold mb-4">Beri Nilai Jawaban Ini!</header>
+
+            <AnimatePresence mode="wait">
+            
+            {!rated ? <motion.ol   
+                animate={{ x: 0 }}
+                exit={{ x: -1000, transition: { ease: 'easeInOut', duration: 0.5 } }}
+              className="flex justify-center gap-1 list-none">
+              {[1,2,3,4,5].map((c) => (
+                <li className="decoration-none" key={c} onClick={() => { setRated(true); giveRating(c) }}>
+                  <div
+                    className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center hover:bg-blue-500 hover:text-white cursor-pointer"
+                  >
+                    {c}
+                  </div>
+                </li>
+              ))}
+            </motion.ol>: <p key="thanks" className="text-white text-xl">Terima Kasih</p> }
+
+            </AnimatePresence>
+
+            </motion.div>
+          </AnimatePresence>}
+
       </section>}
 
     </motion.div>
