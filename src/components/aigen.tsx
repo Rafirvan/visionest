@@ -1,5 +1,5 @@
 import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "./ui/dialog"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { trpc } from "~/utils/api";
 
@@ -8,17 +8,22 @@ import { trpc } from "~/utils/api";
 // }
 
 
-export default function AImodal({ setDescriptionValue }: { setDescriptionValue: React.Dispatch<React.SetStateAction<string>> }) {
+export default function AImodal({ setDescriptionValue, setShowRatingDelay, setAiLoadingHoist }: { setDescriptionValue: React.Dispatch<React.SetStateAction<string>>, setShowRatingDelay: React.Dispatch<React.SetStateAction<boolean>>, setAiLoadingHoist: React.Dispatch<React.SetStateAction<boolean>> }) {
     const [abstractValue, setAbstractValue] = useState('');
     const [aiLoading, setAiLoading] = useState(false);
 
 
+    useEffect(() => { if (aiLoading) setAiLoadingHoist(true); else setAiLoadingHoist(false) },[aiLoading])
+    
 
     const AIcall = trpc.completion.content.useMutation({
         onSuccess: (result) => {
             if (result) {
                 setDescriptionValue(result)
                 setAiLoading(false)
+                setTimeout(() => {
+                    setShowRatingDelay(false);
+                }, 5000);
             }
         }
     });
@@ -29,7 +34,7 @@ export default function AImodal({ setDescriptionValue }: { setDescriptionValue: 
             alert("Anda membutuhkan input minimal 300 karakter dan maksimal 3000 karakter")
 
         else {
-            setDescriptionValue("AI sedang menggenerasi output, harap tunggu sebentar...")
+            setDescriptionValue("AI sedang menggenerasi output, JANGAN HAPUS PESAN INI, harap tunggu beberapa menit...")
             setAiLoading(true)
             AIcall.mutate({ text: abstractValue })
         }
@@ -39,8 +44,8 @@ export default function AImodal({ setDescriptionValue }: { setDescriptionValue: 
     return (<span>
         {/* Ai button dialog */}
         <Dialog>
-            <DialogTrigger disabled={aiLoading} className="disabled:hidden">
-                <p className="text-blue-700 hover:underline pl-2">{`Coba generasi deskripsi menggunakan AI!`}</p>
+            <DialogTrigger disabled={aiLoading} className=" text-blue-700 disabled:text-white disabled:select-none disabled:cursor-default">
+                <p className=" hover:underline pl-2">{`Coba generasi deskripsi menggunakan AI!`}</p>
             </DialogTrigger>
             <DialogContent>
                 <DialogTitle>{`Insert your paper's abstract`}</DialogTitle>

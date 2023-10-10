@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback} from "react"
 import { Button } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { trpc } from "~/utils/api";
@@ -12,7 +12,7 @@ import TextEditor from "~/components/texteditor";
 import { UploadButton } from "~/utils/uploadthing";
 import { motion } from "framer-motion";
 import { RightOut } from "~/components/transitions/pageVariants";
-
+import Rating from "~/components/rating";
 
 
 
@@ -55,7 +55,26 @@ function PostForm() {
     const [paperLinkValue, setPaperLinkValue] = useState("");
     const [imageURLValue, setImageURLValue] = useState<string | undefined>("");
     const [buttonOn, setButtonOn] = useState(true);
+    const [showRatingDelay, setShowRatingDelay] = useState(true)
+    const [aiLoadingHoist, setAiLoadingHoist] = useState(false)
     const router = useRouter()
+
+    const AIrate = trpc.db.descriptionrate.useMutation();
+
+    const DBpush = trpc.db.submit.useMutation({
+        onSuccess: () => {
+            alert("Berhasil Upload, post anda sekarang PENDING")
+            setTitleValue("")
+            setAuthorValue("")
+            setCreationYearValue(2000)
+            setDescriptionValue('')
+            setImageURLValue('')
+            setUniversityValue("")
+            setPaperLinkValue("")
+            setButtonOn(true)
+        }
+    });
+
 
     const filledInput = Boolean(titleValue || authorValue || descriptionValue || paperLinkValue || universityValue || imageURLValue)
 
@@ -83,23 +102,7 @@ function PostForm() {
         };
     }, [authorValue, descriptionValue, filledInput, imageURLValue, paperLinkValue, router, titleValue, universityValue]);
 
-
-
-    //push to db API in server/api/routers/Dbcall
-    const DBpush = trpc.db.submit.useMutation({
-        onSuccess: () => {
-            alert("Berhasil Upload, post anda sekarang PENDING")
-            setTitleValue("")
-            setAuthorValue("")
-            setCreationYearValue(2000)
-            setDescriptionValue('')
-            setImageURLValue('')
-            setUniversityValue("")
-            setPaperLinkValue("")
-            setButtonOn(true)
-        }
-    });
-
+    
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         console.log("submit")
@@ -118,12 +121,23 @@ function PostForm() {
         DBpush.mutate(inputs)
     };
 
+    const giveRating = useCallback((rating: number) => {
+
+        const input = "WIP"
+        const output = descriptionValue
+        AIrate.mutate({ input: input, output: output, rating: rating })
+        setTimeout(() => {
+            setShowRatingDelay(true);
+        }, 4000);
+    }, [AIrate, descriptionValue]);
 
 
 
 
     return (
+        
         <ScrollArea className="pl-2 h-full w-full pb-10">
+            
             <form onSubmit={handleSubmit} className="w-[90%] h-full flex flex-col justify-center">
 
                 <div id="titleinput">
@@ -201,13 +215,16 @@ function PostForm() {
                 </div>
 
                 <div id="descriptioninput" >
+                    
+                    <Rating rate={giveRating} show={!showRatingDelay} />
+
                     <label htmlFor="description" className="block text-sm font-medium mb-2">
                         Deskripsi
-                        <AImodal setDescriptionValue={setDescriptionValue} />
+                        <AImodal setAiLoadingHoist={setAiLoadingHoist} setDescriptionValue={setDescriptionValue} setShowRatingDelay={setShowRatingDelay} />
                     </label>
                     <div className="border rounded-xl border-slate-300 h-fit relative left-3">
                         <TextEditor
-
+                            disabled={aiLoadingHoist}
                             formData={descriptionValue}
                             setFormData={(input: string) => { setDescriptionValue(input) }} />
                     </div>

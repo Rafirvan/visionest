@@ -311,6 +311,18 @@ export const DBRouter = createTRPCRouter({
         })
         
                
+    }),
+
+    descriptionrate: publicProcedure.input(z.object({ input: z.string(), output: z.string(), rating: z.number() })).mutation(async ({ input }) => {
+        await prisma.descriptionscore.create({
+            data: {
+                input: input.input,
+                output: input.output,
+                score: input.rating
+            },
+        })
+
+
     })
 
 

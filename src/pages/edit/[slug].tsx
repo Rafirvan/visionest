@@ -10,7 +10,6 @@ import Onestwhite from "../../../public/Onestwhite.png"
 import Loadingimage from "../../../public/loadingimage.gif"
 import TextEditor from "~/components/texteditor";
 import { UploadButton } from "~/utils/uploadthing";
-import AImodal from "~/components/aigen";
 import { motion } from "framer-motion";
 import { RightOut } from "~/components/transitions/pageVariants";
 
@@ -61,6 +60,8 @@ function PostForm() {
     const [initload, setInitLoad] = useState(true)
     const { user } = useUser()
     const router = useRouter()
+
+    
     const postId = router.query.slug?.toString()
     const getpostfromid = trpc.db.callpostfromid.useMutation({
         onSuccess: (res) => {
@@ -151,7 +152,8 @@ function PostForm() {
         }
     };
 
-    //alert if abstract too little/big
+
+
 
 
     if (initload) return <div></div>
@@ -240,8 +242,6 @@ function PostForm() {
                 <div id="descriptioninput" >
                     <label htmlFor="description" className="block text-sm font-medium mb-2">
                         Deskripsi
-                        <AImodal setDescriptionValue={setDescriptionValue} />
-
                     </label>
                     <div className="border rounded-xl border-slate-300 h-fit relative left-3">
                         <TextEditor

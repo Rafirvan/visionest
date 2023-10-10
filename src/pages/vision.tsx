@@ -9,10 +9,10 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 import { trpc } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
 import { motion } from "framer-motion";
-import { AnimatePresence } from "framer-motion";
 import { RightOut } from "~/components/transitions/pageVariants";
 import { TypeAnimation } from "react-type-animation";
 import VisionBG from "~/components/backgrounds/vision";
+import Rating from "~/components/rating";
 
 
 
@@ -23,7 +23,6 @@ export default function Vision() {
   const [showResult, setShowResult] = useState(false)
   const [descriptionDelay, setDescriptionDelay] = useState(true)
   const [showRatingDelay, setShowRatingDelay] = useState(true)
-  const [rated, setRated] = useState(false)
 
   //custom alert
 
@@ -86,7 +85,6 @@ export default function Vision() {
     setAILoading(true)
     setDescriptionDelay(true)
     setShowRatingDelay(true)
-    setRated(false)
     setTitle("")
     setDescription("")
     if (!showResult) { setShowResult(true); }
@@ -131,7 +129,7 @@ export default function Vision() {
       }, 1000); 
       const timer2 = setTimeout(() => {
         setShowRatingDelay(false);
-      }, 4000);  
+      }, 7000);  
 
       return () => { clearTimeout(timer); clearTimeout(timer2) }; 
     }
@@ -282,37 +280,7 @@ export default function Vision() {
         <p className="text-xl md:text-5xl lg:text-7xl text-white mb-8">{title == "" ? "Loading..." : showTitle}</p>
         <p className=" text-lg md:text-4xl lg:text-5xl text-gray-400 ">{description && !descriptionDelay && showDescription}</p>
 
-        {!showRatingDelay &&
-          
-          <AnimatePresence >
-            <motion.div
-              initial={{ y: 600 }}
-              animate={{ y: 0, opacity:1, transition: { ease: 'easeInOut', duration: 0.5 } }}
-              exit={{ opacity:0, transition: { ease: 'easeInOut', duration: 0.5 } }}
-              id="rate" key="rate" className="min-w-[300px] w-[40%] h-[120px] relative top-2 mx-auto overflow-hidden border border-gray-300 p-4 bg-transparent rounded-lg shadow-lg">
-            <header className="text-2xl text-white font-bold mb-4">Beri Nilai Jawaban Ini!</header>
-
-            <AnimatePresence mode="wait">
-            
-            {!rated ? <motion.ol   
-                animate={{ x: 0 }}
-                exit={{ x: -1000, transition: { ease: 'easeInOut', duration: 0.5 } }}
-              className="flex justify-center gap-1 list-none">
-              {[1,2,3,4,5].map((c) => (
-                <li className="decoration-none" key={c} onClick={() => { setRated(true); giveRating(c) }}>
-                  <div
-                    className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center hover:bg-blue-500 hover:text-white cursor-pointer"
-                  >
-                    {c}
-                  </div>
-                </li>
-              ))}
-            </motion.ol>: <p key="thanks" className="text-white text-xl">Terima Kasih</p> }
-
-            </AnimatePresence>
-
-            </motion.div>
-          </AnimatePresence>}
+          <Rating rate={giveRating} show={!showRatingDelay}  />
 
       </section>}
 
