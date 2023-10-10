@@ -245,6 +245,7 @@ function PostForm() {
                     </label>
                     <div className="border rounded-xl border-slate-300 h-fit relative left-3">
                         <TextEditor
+                            disabled={false}
                             formData={descriptionValue}
                             setFormData={(input: string) => { setDescriptionValue(input) }} />
                     </div>
