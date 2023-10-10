@@ -66,4 +66,5 @@ model descriptionscore{
   id     String    @id @default(cuid())
   input  String    @db.VarChar(3000)
   output String    @db.VarChar(3000)
+  score  Int  
 }
