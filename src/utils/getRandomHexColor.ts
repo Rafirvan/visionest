@@ -2,8 +2,7 @@
 
 
 export default function getRandomHexColor() {
-    const highHexChars = 'f';  // Higher half of the hex spectrum
-    const midHighHexChars = 'abcdef';  // Middle to higher half of the hex spectrum
+    const midHighHexChars = '01234567';  // Middle to higher half of the hex spectrum
 
     let color = '#';
 
@@ -15,8 +14,7 @@ export default function getRandomHexColor() {
 
         // Make the dominant color component high for vibrancy
         if (i === dominantColor * 2 || i === dominantColor * 2 + 1) {
-            randomIndex = Math.floor(Math.random() * highHexChars.length);
-            color += highHexChars[randomIndex];
+            color += "f";
         } else {
             randomIndex = Math.floor(Math.random() * midHighHexChars.length);
             color += midHighHexChars[randomIndex];
