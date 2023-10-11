@@ -5,7 +5,6 @@ import PostCard from "./postCard";
 import { trpc } from "~/utils/api";
 import { Card, CardContent } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
-import useIsMobile from "~/hooks/useIsMobile";
 
 export default function PostCarousel() {
     const carouselRef = useRef<HTMLDivElement>(null);
@@ -14,8 +13,8 @@ export default function PostCarousel() {
     const [leftColor, setLeftColor] = useState('black');
     const [atStart, setAtStart] = useState(true)
     const [atEnd, setAtEnd] = useState(false)
-    const isMobile = useIsMobile()
-    const loadingarray = (isMobile ? [1]:[1,2,3,4,5])
+
+
 
 
     // handle visibility of left/right arrows
@@ -68,19 +67,20 @@ export default function PostCarousel() {
             </div>
 
 
-            <div id="carousel" className="relative overflow-x-scroll snap-x snap-mandatory" ref={carouselRef} onScroll={handleScroll}>
+            <div id="carousel" className="relative overflow-x-auto snap-x snap-mandatory" ref={carouselRef} onScroll={handleScroll}>
                 <div
-                    className={`flex ${(isMobile&&isLoading)?"w-[400px]":"w-[1628px]"} h-[350px] gap-[32px]`}
+                    className="flex w-[1628px] h-[350px] gap-[32px]"
                 >
-                    {isLoading ? loadingarray.map(e => {
-                        return (<Card key={e} className="origin-left w-[300px] h-[350px] scale-x-90 xs:scale-x-100 snap-end border-4 text-left border-vision " >
-                            <CardContent className="h-full w-full p-2 relative">
-                                <Skeleton className="h-full w-full" delay={e*300}/>
-                            </CardContent>
-                        </Card>) }) : 
+                    {isLoading ? <div>Loading...</div>
+                    //     [1, 2, 3, 4, 5].map(e => {
+                    //     return (<Card key={e} className="origin-left w-[300px] h-[350px] scale-x-90 xs:scale-x-100 snap-end border-4 text-left border-vision " >
+                    //         <CardContent className="h-full w-full p-2 relative">
+                    //             <Skeleton className="h-full w-full" delay={e*300}/>
+                    //         </CardContent>
+                    //     </Card>)
+                    // })
                         
-                        
-                        
+                        :
 
 
                         CardContents?.id?.map((id, index) => (
