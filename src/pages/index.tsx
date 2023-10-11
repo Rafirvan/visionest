@@ -9,7 +9,7 @@ import { ArrowUpRight } from 'lucide-react';
 import visionimg from "../../public/vision.png"
 import Link from 'next/link';
 import PostCarousel from '~/components/postCarousel';
-import { motion, useInView } from "framer-motion"
+import { animate, motion, useInView } from "framer-motion"
 import { LeftOut } from "~/components/transitions/pageVariants";
 import useIsMobile from "~/hooks/useIsMobile";
 import { TypeAnimation } from 'react-type-animation';
@@ -69,10 +69,11 @@ export default function Home() {
           </motion.div>
         </div>
 
-        {/* <motion.div
+        <motion.div
           id="imageanimation"
           initial="hidden"
           animate="visible"
+          
           variants={textAnimationVariants}
           className={`absolute -z-10  ${!isMobile && "scale-175"}`}
           transition={{ duration: 0.8, delay: 0.8 }}>
@@ -80,9 +81,9 @@ export default function Home() {
           className="opacity-30"
           {...animationProps}
         >
-          <Image src={nestimglowres}  placeholder="empty" alt='NEST' priority quality={10} />
+            <Image src={nestimglowres} width={`${isMobile?400:2000}`}  height={2000}  placeholder="empty" alt='NEST' priority quality={10} />
           </motion.div>
-        </motion.div> */}
+        </motion.div>
       </section>
 
 
