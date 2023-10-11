@@ -67,7 +67,7 @@ export default function PostCarousel() {
             </div>
 
 
-            <div id="carousel" className="relative overflow-x-auto snap-x snap-mandatory" ref={carouselRef} onScroll={handleScroll}>
+            <div id="carousel" className="relative overflow-x-scroll snap-x snap-mandatory" ref={carouselRef} onScroll={handleScroll}>
                 <div
                     className="flex w-[1628px] h-[350px] gap-[32px]"
                 >

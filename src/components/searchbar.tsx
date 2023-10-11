@@ -50,6 +50,7 @@ export default function Searchbar() {
         if (filterbytext) setFilteredPosts(filterbytext)
     }, [input, selectedTags,callposts])
 
+    
     const handleTagToggle = (tag: string) => {
         if (selectedTags.includes(tag)) {
             setSelectedTags((prev) => prev.filter((t) => t !== tag));

@@ -46,7 +46,7 @@ export default function Home() {
       variants={LeftOut}>
       <section id="Section1"
         className="min-h-[700px] w-[90%] left-[5%] flex text-center justify-center place-items-center relative ">
-        <div id='Text' className='md:basis-3/5 z-10 max-w-[710px]'>
+        <div id='Text' className='md:basis-3/5 z-10 max-w-[710px] '>
           <motion.h1
             initial="hidden"
             animate="visible"
@@ -70,10 +70,11 @@ export default function Home() {
         </div>
 
         <motion.div
+          id="imageanimation"
           initial="hidden"
           animate="visible"
           variants={textAnimationVariants}
-          className={`absolute z-0 ${!isMobile && "scale-175"}`}
+          className={`absolute -z-10  ${!isMobile && "scale-175"}`}
           transition={{ duration: 0.8, delay: 0.8 }}>
           <motion.div 
           className="opacity-30"
