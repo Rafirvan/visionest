@@ -120,9 +120,9 @@ export default function Searchbar() {
                 className=" w-full border-4 rounded-xl bg-white absolute left-[6%]  lg:left-[20%]  max-w-[88%]  lg:max-w-[60%] top-[125px] lg:top-full"
             >
                 <p className=" underline decoration-slate-300">Rekomendasi</p>
-                <ScrollArea id="posts" className="h-[280px] ">
+                <ScrollArea id="posts" className="h-[280px] " >
                     
-                    {isLoading ? [1, 2, 3, 4, 5].map((e) => { return <div key={e} className=" px-4 py-1 rounded-md h-[55px] w-full "><Skeleton delay={200 * e} className="h-full w-full" /></div> }) :
+                    {isLoading ? [1, 2, 3, 4, 5].map((e) => { return <div key={e} className=" px-4 py-1 rounded-md h-[55px]  w-full "><Skeleton delay={200 * e} className="h-full w-full " /></div> }) :
                         
                         filteredPosts?.map(post => (
                         <div key={post.id}
@@ -134,8 +134,8 @@ export default function Searchbar() {
                                 }
                                 }}
                                 
-                                className="flex pl-4 hover:bg-gray-200 cursor-pointer rounded-md h-[55px] overflow-hidden">
-                                <p className="overflow-hidden overflow-ellipsis line-clamp-2 p-1 w-[90%] text-justify">
+                                className="flex  hover:bg-gray-200 cursor-pointer rounded-md h-[55px] md:h-[69px] overflow-hidden border-b text-xs md:text-sm">
+                                <p className="overflow-hidden overflow-ellipsis line-clamp-3 p-1 w-[90%] text-justify">
                                     <Highlighter
                                         highlightClassName="bg-orange-300"
                                         searchWords={[input.replace(" ","")]}

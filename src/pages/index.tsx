@@ -75,7 +75,7 @@ export default function Home() {
           animate="visible"
           
           variants={textAnimationVariants}
-          className={`absolute -z-10  ${!isMobile && "scale-175"}`}
+          className={`absolute -z-10  ${!isMobile && "scale-150"}`}
           transition={{ duration: 0.8, delay: 0.8 }}>
           <motion.div 
           className="opacity-30"
