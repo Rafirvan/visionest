@@ -5,6 +5,7 @@ import PostCard from "./postCard";
 import { trpc } from "~/utils/api";
 import { Card, CardContent } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
+import useIsMobile from "~/hooks/useIsMobile";
 
 export default function PostCarousel() {
     const carouselRef = useRef<HTMLDivElement>(null);
@@ -13,7 +14,7 @@ export default function PostCarousel() {
     const [leftColor, setLeftColor] = useState('black');
     const [atStart, setAtStart] = useState(true)
     const [atEnd, setAtEnd] = useState(false)
-
+    const isMobile = useIsMobile()
 
 
 
