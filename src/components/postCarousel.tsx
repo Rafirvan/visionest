@@ -71,16 +71,16 @@ export default function PostCarousel() {
                 <div
                     className="flex w-[1628px] h-[350px] gap-[32px]"
                 >
-                    {isLoading ? <div>Loading...</div>
-                    //     [1, 2, 3, 4, 5].map(e => {
-                    //     return (<Card key={e} className="origin-left w-[300px] h-[350px] scale-x-90 xs:scale-x-100 snap-end border-4 text-left border-vision " >
-                    //         <CardContent className="h-full w-full p-2 relative">
-                    //             <Skeleton className="h-full w-full" delay={e*300}/>
-                    //         </CardContent>
-                    //     </Card>)
-                    // })
+                    {isLoading ? 
+                    [1, 2, 3, 4, 5].map(e => {
+                        return (<Card key={e} className="origin-left w-[300px] h-[350px] scale-x-90 xs:scale-x-100 snap-end border-4 text-left border-vision " >
+                            <CardContent className="h-full w-full p-2 relative">
+                                <Skeleton className="h-full w-full" delay={e*300}/>
+                            </CardContent>
+                        </Card>)
+                    })
                         
-                        :
+                        : 
 
 
                         CardContents?.id?.map((id, index) => (
