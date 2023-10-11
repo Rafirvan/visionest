@@ -45,7 +45,7 @@ export default function Home() {
       exit="exit"
       variants={LeftOut}>
       <section id="Section1"
-        className="min-h-[700px] h-[100vh] w-[90%] left-[5%] flex text-center justify-center place-items-center relative ">
+        className="min-h-[700px] h-[85vh] w-[90%] left-[5%] flex text-center justify-center place-items-center relative ">
         <div id='Text' className='md:basis-3/5 z-10 max-w-[710px] '>
           <motion.h1
             initial="hidden"

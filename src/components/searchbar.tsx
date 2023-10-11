@@ -10,7 +10,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { Skeleton } from "./ui/skeleton";
 import getRandomHexColor from "~/utils/getRandomHexColor";
-
+import Highlighter from "react-highlight-words";
 
 
 
@@ -133,9 +133,17 @@ export default function Searchbar() {
                                     (document.activeElement as HTMLElement).blur();
                                 }
                             }}
-                            className="flex pl-4 hover:bg-gray-200 cursor-pointer rounded-md h-[55px] overflow-hidden">
-                            <p className="overflow-hidden overflow-ellipsis line-clamp-2 p-1 w-[90%]">
-                                {post.title}&mdash;{post.authors}&mdash;{post.university}
+                                className="flex pl-4 hover:bg-gray-200 cursor-pointer rounded-md h-[55px] overflow-hidden">
+                                
+
+                                <p className="overflow-hidden overflow-ellipsis line-clamp-2 p-1 w-[90%]">
+                                    <Highlighter
+                                        highlightClassName="YourHighlightClass"
+                                        searchWords={[input.replace(" ","")]}
+                                        autoEscape={true}
+                                        textToHighlight={`${post.title}&mdash;${post.authors}&mdash;${post.university}`}
+                                    />
+                                
                             </p>
                             <div id="image" className="w-[100px] flex place-items-center pr-2">
                                 <Image
@@ -150,6 +158,8 @@ export default function Searchbar() {
                         </div>
                     ))}
                 </ScrollArea>
+
+
                 <div id="tags" className="pl-4 border-t-2 border-black pb-5">
                     <p className="p-1 underline decoration-slate-300">Filter Berdasarkan Kategori</p>
                     <ScrollArea className="h-[200px]">
