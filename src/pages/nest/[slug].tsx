@@ -69,12 +69,13 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
         {
             getpostfromid.mutate(postId)
             getFavCount.mutate(postId)
-           if (user) refreshCheck.mutate()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [postId, DialogId]);
 
-   
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => { if (user) refreshCheck.mutate() }, [user])
+
 
     const refreshCheck = trpc.db.checksave.useMutation({
         onSuccess: (result) => {
