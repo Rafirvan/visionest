@@ -69,7 +69,7 @@ export default function Home() {
           </motion.div>
         </div>
 
-        <motion.div
+        {/* <motion.div
           id="imageanimation"
           initial="hidden"
           animate="visible"
@@ -82,7 +82,7 @@ export default function Home() {
         >
           <Image src={nestimglowres}  placeholder="empty" alt='NEST' priority quality={10} />
           </motion.div>
-        </motion.div>
+        </motion.div> */}
       </section>
 
 
