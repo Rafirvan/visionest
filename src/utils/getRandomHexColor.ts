@@ -2,7 +2,7 @@
 
 
 export default function getRandomHexColor() {
-    const highHexChars = 'cdef';  // Higher half of the hex spectrum
+    const highHexChars = 'f';  // Higher half of the hex spectrum
     const midHighHexChars = 'abcdef';  // Middle to higher half of the hex spectrum
 
     let color = '#';
