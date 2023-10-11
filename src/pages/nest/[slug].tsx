@@ -45,6 +45,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
     const [saveLoad, setSaveLoad] = useState(false)
     const [loaded, setLoaded] = useState(false)
     const [favCount, setFavCount] = useState<number | undefined>()
+    const [imageLoaded, setImageLoaded] = useState(false)
     const { user, isLoaded: userLoaded } = useUser()
     const getpostfromid = trpc.db.callpostfromid.useMutation({
         onSuccess: (result) => {
@@ -170,13 +171,14 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
                     <hr />
                     <h1 id="titleArea" className="text-2xl font-bold mb-2">{postData.title} <ShareButton link={`https://visionest.xyz/nest/${postData.id}`} /> </h1>
 
-                    <div id='imageArea' className="mb-2 overflow-hidden h-fit w-[100%] place-self-start relative md:place-self-center">
+                    <div id='imageArea' className={` ${imageLoaded?"opacity-1":"opacity-0"} mb-2 overflow-hidden h-fit w-[100%] place-self-start relative md:place-self-center`}>
                         <Image src={postData.imageURL ? postData.imageURL : "https://utfs.io/f/a18934b5-b279-40cf-a84e-4813b44a72ac_placeholder.png"}
                             alt={postData.title}
                             placeholder="empty"
                             style={{ backgroundColor: getRandomHexColor() }}
                             height={600}
                             width={1000}
+                            onLoad={() => setImageLoaded(true)}
                         />
 
                     </div>
