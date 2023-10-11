@@ -69,6 +69,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
         {
             getpostfromid.mutate(postId)
             getFavCount.mutate(postId)
+            refreshCheck.mutate()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [postId, DialogId]);
