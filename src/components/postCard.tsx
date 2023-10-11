@@ -6,7 +6,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { trpc } from "~/utils/api";
 import Image from "next/image";
 import { Star } from "lucide-react";
-import Loadingimage from "../../public/loadingimage.gif"
 import ShareButton from "./shareButton";
 import { useUser } from "@clerk/nextjs";
 import Spinner from "./ui/spinner";
@@ -17,6 +16,7 @@ import {
     HoverCardTrigger,
 } from "~/components/ui/hover-card"
 import Link from "next/link";
+import getRandomHexColor from "~/utils/getRandomHexColor";
 
 interface posttype {
     id: string;
@@ -112,12 +112,11 @@ export default function PostCard({ postID, setmodal }: cardType) {
     const cardimage = loaded ?
         <Image src={postData?.imageURL ? postData?.imageURL : "https://utfs.io/f/a18934b5-b279-40cf-a84e-4813b44a72ac_placeholder.png"}
             alt="Loading"
-            placeholder="blur"
-            blurDataURL={Loadingimage.src}
+            placeholder="empty"
             height={300}
             width={300}
             
-            style={{ borderColor: "brown" }}
+            style={{ borderColor: "brown", backgroundColor:getRandomHexColor()}}
         />
         : <Skeleton className="w-full h-full" />
 

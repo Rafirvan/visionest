@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image'
 import { ScrollArea } from '~/components/ui/scroll-area';
 import { useRouter } from 'next/router';
-import Loadingimage from "public/loadingimage.gif"
 import { trpc } from '~/utils/api';
 import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
@@ -13,6 +12,7 @@ import { motion } from 'framer-motion';
 import { DownOut } from '~/components/transitions/pageVariants';
 import useIsLandscape from '~/hooks/useIsLandscape';
 import useIsMobile from '~/hooks/useIsMobile';
+import getRandomHexColor from '~/utils/getRandomHexColor';
 
 
 
@@ -127,7 +127,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
         }
 
         if (!userLoaded || !loaded) {
-            return <section className='w-[calc(100vw)] h-full font-bold relative rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-2 border-black'><div className='flex scale-[400%] justify-center items-center '><Spinner /></div></section>;
+            return <section className='w-[calc(100vw)] md:w-[calc(84vw)] h-full font-bold relative rounded-xl min-h-[500px] max-w-4xl mx-auto flex justify-center place-items-center border-2 border-black'><div className='flex scale-[400%] justify-center items-center '><Spinner /></div></section>;
         }
 
         // rejected or pending, only visible by admin or post creator
@@ -166,19 +166,20 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
                     </div>
 
                     <hr />
+                    <h1 id="titleArea" className="text-2xl font-bold mb-2">{postData.title} <ShareButton link={`https://visionest.xyz/nest/${postData.id}`} /> </h1>
+
                     <div id='imageArea' className="mb-2 overflow-hidden h-fit w-[100%] place-self-start relative md:place-self-center">
                         <Image src={postData.imageURL ? postData.imageURL : "https://utfs.io/f/a18934b5-b279-40cf-a84e-4813b44a72ac_placeholder.png"}
                             alt={postData.title}
-                            placeholder="blur"
-                            blurDataURL={Loadingimage.src}
-                            height={300}
+                            placeholder="empty"
+                            style={{ backgroundColor: getRandomHexColor() }}
+                            height={600}
                             width={1000}
                         />
 
                     </div>
 
                     <div id='descriptionArea'>
-                        <h1 id="titleArea" className="text-2xl font-bold mb-2">{postData.title} <ShareButton link={`https://visionest.xyz/nest/${postData.id}`}/> </h1>
                         <p id="authorArea" className="text-gray-600 mb-1">
                             By <span className="break-words">{postData.authors}</span> • {postData.year}
                         </p>

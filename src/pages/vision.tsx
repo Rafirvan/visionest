@@ -45,6 +45,7 @@ export default function Vision() {
 
 
 
+
   const AIcall = trpc.completion.idea.useMutation({
     onSuccess: (data) => {
       if (data) {
@@ -139,6 +140,8 @@ export default function Vision() {
   const showTitle = <TypeAnimation sequence={[title]} speed={90}></TypeAnimation>
   const showDescription = <TypeAnimation sequence={[description]} speed={90}></TypeAnimation>
 
+  // returns blank div if clerk is not loaded
+  if (!isLoaded) return <div></div>
 
   return (
     <motion.div
@@ -147,7 +150,7 @@ export default function Vision() {
       variants={RightOut}>
       <section id="Section1" className="px-4 h-[100vh] w-full flex flex-col justify-between place-items-center bg-[100vw] md:flex-row gap-7 overflow-y-hidden ">
         <div id='Text' className='basis-2/5 h-full w-full flex flex-col place-content-center bg-green-700 text-white text-center '  >
-          <h1 className='font-bold text-7xl mb-2'>The <div>Visi<span><Image src={Onestwhite} alt="o" className="inline w-[40px] aspect-square" /></span>n</div></h1>
+          <h1 className='font-bold text-7xl mb-2'>The <div>Visi<span><Image src={Onestwhite} priority alt="o" className="inline w-[40px] aspect-square" /></span>n</div></h1>
           <p>Powered by OpenAI&trade;</p>
         </div>
 

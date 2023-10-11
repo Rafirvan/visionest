@@ -14,6 +14,8 @@ import { AnimatePresence} from 'framer-motion';
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import { RightOut } from "~/components/transitions/pageVariants";
+import { Card, CardContent } from "~/components/ui/card";
+import { Skeleton } from "~/components/ui/skeleton";
 
 
 type State = {
@@ -49,7 +51,7 @@ export default function Nest() {
         }
     }, { active: undefined });
 
-    const { data: infiniteCards, isFetched: allFetched, isLoading: allLoading, fetchNextPage, isFetchingNextPage} = trpc.db.callpostid.useInfiniteQuery({limit:5},{getNextPageParam:(lastPage)=>lastPage.nextCursor})
+    const { data: infiniteCards, isFetched: allFetched, isLoading: allLoading, fetchNextPage, isFetchingNextPage} = trpc.db.callpostid.useInfiniteQuery({limit:10},{getNextPageParam:(lastPage)=>lastPage.nextCursor})
     const { mutate: callfav, isLoading: favLoading } = trpc.db.callfavpostid.useMutation({
         onSuccess: (result) => { if (tab === "FAVORITE") dispatch({ type: 'SET_ACTIVE', payload: result }) }
     })
@@ -108,8 +110,16 @@ export default function Nest() {
 
 
     const CardsArea = cards.active?.map((content) => (
-        <div className=" place-self-center" key={content}><PostCard postID={content} setmodal={setModalId} /></div>
+        <div key={content}><PostCard postID={content} setmodal={setModalId} /></div>
     ))
+
+    const loadingArea = [1, 2, 3, 4, 5, 6].map(e => {
+        return (<Card key={e} className="origin-left w-[300px] h-[350px] scale-x-90 xs:scale-x-100 snap-end border-4 text-left border-vision " >
+            <CardContent className="h-full w-full p-2 relative">
+                <Skeleton className="h-full w-full" delay={e * 300} />
+            </CardContent>
+        </Card>)
+    })
 
 
     function TabStyle(currentTab: 'ALL' | 'FAVORITE' | 'YOUR') {
@@ -121,7 +131,7 @@ export default function Nest() {
     const cardCount = tab=="ALL"? infiniteCards?.pages[0]?.count : !cards.active ? "0" : cards.active.length
 
 
-
+    
     
 
 
@@ -179,8 +189,8 @@ export default function Nest() {
                     }
                 </header>
                 <div className="h-[calc(100vh-150px)] w-full overflow-auto  min-h-[400px]" ref={scrollAreaRef}>
-                    <div className="w-full grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-5 pb-10" >
-                        {(!allFetched || favLoading) ? <div className="pt-10 pl-10">LOADING...</div> : CardsArea}
+                    <div className="w-full grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-5 pb-10 place-items-center" >
+                        {(!allFetched || favLoading) ? loadingArea : CardsArea}
                     </div>
 
                         {(tab=="ALL" && isFetchingNextPage )&& <div className="text-center relative bottom-9">Loading More...</div>}

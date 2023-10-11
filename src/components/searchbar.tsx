@@ -7,8 +7,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { trpc } from "~/utils/api";
 import { ScrollArea } from "./ui/scroll-area";
 import Image from "next/image";
-import Loadingimage from "public/loadingimage.gif"
 import { useRouter } from "next/router";
+import { Skeleton } from "./ui/skeleton";
+import getRandomHexColor from "~/utils/getRandomHexColor";
 
 
 
@@ -47,7 +48,7 @@ export default function Searchbar() {
             (post.title + post.authors + post.university).toLowerCase().replace(/\s+/g, '').includes(input.toLowerCase().replace(/\s+/g, ''))
         )
         if (filterbytext) setFilteredPosts(filterbytext)
-    }, [input, selectedTags])
+    }, [input, selectedTags,callposts])
 
     const handleTagToggle = (tag: string) => {
         if (selectedTags.includes(tag)) {
@@ -56,6 +57,7 @@ export default function Searchbar() {
             setSelectedTags((prev) => [...prev, tag]);
         }
     };
+
 
 
     //close if click outside
@@ -118,11 +120,15 @@ export default function Searchbar() {
             >
                 <p className=" underline decoration-slate-300">Rekomendasi</p>
                 <ScrollArea id="posts" className="h-[280px]">
-                    {isLoading ? <div>Loading...</div> : filteredPosts?.map(post => (
+                    
+                    {!isLoading ? [1, 2, 3, 4, 5].map((e) => { return <div key={e} className=" px-4 py-1 rounded-md h-[55px] w-full "><Skeleton delay={200 * e} className="h-full w-full" /></div> }) :
+                        
+                        filteredPosts?.map(post => (
                         <div key={post.id}
                             onClick={async () => {
                                 await router.push(`/nest/${post.id}`, undefined, {scroll:false});
                                 if (document.activeElement) {
+                                    // unfocus the input
                                     (document.activeElement as HTMLElement).blur();
                                 }
                             }}
@@ -134,8 +140,8 @@ export default function Searchbar() {
                                 <Image
                                     src={post.imageURL}
                                     alt=""
-                                    placeholder="blur"
-                                    blurDataURL={Loadingimage.src}
+                                        placeholder="empty"
+                                        style={{backgroundColor:getRandomHexColor()}}
                                     height={200}
                                     width={200}
                                 />

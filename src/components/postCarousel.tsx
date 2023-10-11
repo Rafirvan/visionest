@@ -3,6 +3,8 @@ import { useRef, useState } from "react";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 import PostCard from "./postCard";
 import { trpc } from "~/utils/api";
+import { Card, CardContent } from "./ui/card";
+import { Skeleton } from "./ui/skeleton";
 
 export default function PostCarousel() {
     const carouselRef = useRef<HTMLDivElement>(null);
@@ -37,8 +39,9 @@ export default function PostCarousel() {
     };
 
     return (
-        <div className="relative">
-            <div>
+        <div id="carouselcontainer" className="relative">
+
+            <div id="carouselnavbtn">
                 <button
                     className={`scale-150 absolute top-1/2 left-[-30px] transform -translate-y-1/2 z-10 ${atStart && "invisible"} `}
                     onClick={() => scroll('left')}
@@ -68,9 +71,20 @@ export default function PostCarousel() {
                 <div
                     className="flex w-[1628px] h-[350px] gap-[32px]"
                 >
-                    {isLoading ? <div>LOADING...</div> : CardContents?.id?.map((id, index) => (
-                        <PostCard key={index} postID={id} />
-                    ))}
+                    {isLoading ? [1, 2, 3, 4, 5].map(e => {
+                        return (<Card key={e} className="origin-left w-[300px] h-[350px] scale-x-90 xs:scale-x-100 snap-end border-4 text-left border-vision " >
+                            <CardContent className="h-full w-full p-2 relative">
+                                <Skeleton className="h-full w-full" delay={e*300}/>
+                            </CardContent>
+                        </Card>) }) : 
+                        
+                        
+                        
+
+
+                        CardContents?.id?.map((id, index) => (
+                        <PostCard key={index} postID={id} />))
+                    }
                 </div>
 
             </div>
