@@ -7,11 +7,11 @@ import { type Editor as TinyMCEEditor } from 'tinymce';
 interface textEditorProps {
   formData: string;
   setFormData: (input: string) => void;
-  disabled:boolean
+  disabled?:boolean
 }
 
 
-function TextEditor({ formData, setFormData, disabled }: textEditorProps) {
+function TextEditor({ formData, setFormData, disabled=false }: textEditorProps) {
   const editorRef = useRef<TinyMCEEditor | null>(null);
 
   const handleEditorChange = (content: string) => {

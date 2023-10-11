@@ -1,11 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "./ui/dialog"
 import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { trpc } from "~/utils/api";
-
-// interface AImodalType {
-//     aiLoading:boolean
-// }
 
 
 export default function AImodal({ setDescriptionValue, setShowRatingDelay, setAiLoadingHoist }: { setDescriptionValue: React.Dispatch<React.SetStateAction<string>>, setShowRatingDelay: React.Dispatch<React.SetStateAction<boolean>>, setAiLoadingHoist: React.Dispatch<React.SetStateAction<boolean>> }) {
