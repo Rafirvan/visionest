@@ -120,7 +120,7 @@ export default function Searchbar() {
                 className=" w-full border-4 rounded-xl bg-white absolute left-[6%]  lg:left-[20%]  max-w-[88%]  lg:max-w-[60%] top-[125px] lg:top-full"
             >
                 <p className=" underline decoration-slate-300">Rekomendasi</p>
-                <ScrollArea id="posts" className="h-[280px]">
+                <ScrollArea id="posts" className="h-[280px] ">
                     
                     {isLoading ? [1, 2, 3, 4, 5].map((e) => { return <div key={e} className=" px-4 py-1 rounded-md h-[55px] w-full "><Skeleton delay={200 * e} className="h-full w-full" /></div> }) :
                         
@@ -138,10 +138,11 @@ export default function Searchbar() {
 
                                 <p className="overflow-hidden overflow-ellipsis line-clamp-2 p-1 w-[90%]">
                                     <Highlighter
-                                        highlightClassName="YourHighlightClass"
+                                        
+                                        highlightClassName="bg-orange-300"
                                         searchWords={[input.replace(" ","")]}
                                         autoEscape={true}
-                                        textToHighlight={`${post.title}&mdash;${post.authors}&mdash;${post.university}`}
+                                        textToHighlight={`${post.title} — ${post.authors} — ${post.university}`}
                                     />
                                 
                             </p>
