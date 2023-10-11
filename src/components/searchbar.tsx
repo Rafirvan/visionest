@@ -132,13 +132,11 @@ export default function Searchbar() {
                                     // unfocus the input
                                     (document.activeElement as HTMLElement).blur();
                                 }
-                            }}
-                                className="flex pl-4 hover:bg-gray-200 cursor-pointer rounded-md h-[55px] overflow-hidden">
+                                }}
                                 
-
-                                <p className="overflow-hidden overflow-ellipsis line-clamp-2 p-1 w-[90%]">
+                                className="flex pl-4 hover:bg-gray-200 cursor-pointer rounded-md h-[55px] overflow-hidden">
+                                <p className="overflow-hidden overflow-ellipsis line-clamp-2 p-1 w-[90%] text-justify">
                                     <Highlighter
-                                        
                                         highlightClassName="bg-orange-300"
                                         searchWords={[input.replace(" ","")]}
                                         autoEscape={true}
