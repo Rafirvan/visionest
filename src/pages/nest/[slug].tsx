@@ -166,9 +166,10 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
                             </>
                         }
                         {idmatch && <p className='pb-7'>Anda pembuat post ini! <Link className='w-min h-min font-bold text-blue-600 underline pb-4 ' href={`/edit/${postId}`}>Edit post ini</Link></p>}
+                        <hr />
                     </div>
 
-                    <hr />
+                    
                     <h1 id="titleArea" className="text-2xl font-bold mb-2">{postData.title} <ShareButton link={`https://visionest.xyz/nest/${postData.id}`} /> </h1>
 
                     <div id='imageArea' className={` ${imageLoaded?"opacity-1":"opacity-0"} mb-2 overflow-hidden h-fit w-[100%] place-self-start relative md:place-self-center`}>
