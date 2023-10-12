@@ -5,7 +5,7 @@ import { Search } from "lucide-react";
 import { Label } from "./ui/label";
 import React, { useState, useRef, useEffect } from "react";
 import { trpc } from "~/utils/api";
-import { ScrollArea } from "./ui/scroll-area";
+import { ScrollArea, ScrollAreaViewport } from "./ui/scroll-area";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Skeleton } from "./ui/skeleton";
@@ -121,7 +121,7 @@ export default function Searchbar() {
             >
                 <p className=" underline decoration-slate-300">Rekomendasi</p>
                 <ScrollArea id="posts" className="h-[280px]" >
-                    
+                    <ScrollAreaViewport className="overscroll-none snap-y snap-mandatory" >
                     {isLoading ? [1, 2, 3, 4, 5].map((e) => { return <div key={e} className=" px-4 py-1 rounded-md h-[55px]  w-full "><Skeleton delay={200 * e} className="h-full w-full " /></div> }) :
                         
                         filteredPosts?.map(post => (
@@ -155,13 +155,15 @@ export default function Searchbar() {
                                 />
                             </div>
                         </div>
-                    ))}
+                        ))}
+                    </ScrollAreaViewport>
                 </ScrollArea>
 
 
                 <div id="tags" className="pl-4 border-t-2 border-black pb-5">
                     <p className="p-1 underline decoration-slate-300">Filter Berdasarkan Kategori</p>
                     <ScrollArea className="h-[200px]">
+                        <ScrollAreaViewport className="overscroll-none " >
                         {allTags.map((tag) => (
                             <button
                                 key={tag}
@@ -172,6 +174,7 @@ export default function Searchbar() {
                                 {tag}
                             </button>
                         ))}
+                        </ScrollAreaViewport>
                     </ScrollArea>
                 </div>
             </div>
