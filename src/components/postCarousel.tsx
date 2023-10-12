@@ -9,8 +9,6 @@ import { Skeleton } from "./ui/skeleton";
 export default function PostCarousel() {
     const carouselRef = useRef<HTMLDivElement>(null);
     const { data: CardContents, isLoading } = trpc.db.callpostid.useQuery({ limit: 5 })
-    const [rightColor, setRightColor] = useState('black');
-    const [leftColor, setLeftColor] = useState('black');
     const [atStart, setAtStart] = useState(true)
     const [atEnd, setAtEnd] = useState(false)
 

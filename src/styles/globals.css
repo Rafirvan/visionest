@@ -136,8 +136,11 @@ input, textarea{
     -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
+
+/* tapping links wont cause blu3 highlight */
 * {
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;  
 }
+
 
 

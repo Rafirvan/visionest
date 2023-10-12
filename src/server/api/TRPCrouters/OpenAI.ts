@@ -44,7 +44,7 @@ export const AIRouter = createTRPCRouter({
 
     const ideaCompletion = await openai.chat.completions.create({
       messages: [{ role: 'user', content: prompt }],
-      model: "gpt-3.5-turbo",
+      model: "gpt-3.5-turbo-0613",
       max_tokens: 300,
     });
     return ideaCompletion.choices[0]?.message.content
@@ -72,13 +72,15 @@ export const AIRouter = createTRPCRouter({
           - Jangan mengembalikan judul, catatan, hitungan kata, atau pesan kesalahan
           -Selalu Kembalikan Output anda dalam bahasa Indonesia
           
-          `
+          ` 
+    
 
     const contentCompletion = await openai.chat.completions.create({
       messages: [{ role: 'user', content: prompt }],
-      model: "gpt-3.5-turbo",
+      model: "gpt-3.5-turbo-0613",
       max_tokens: 3000,
-      temperature: 1.1
+      temperature: 1.1,
+      // functions=[]
     });
 
     return contentCompletion.choices[0]?.message.content

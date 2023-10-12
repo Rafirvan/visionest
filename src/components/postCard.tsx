@@ -106,7 +106,7 @@ export default function PostCard({ postID, setmodal }: cardType) {
     const handleNonUser=(e: React.MouseEvent) => {
         e.preventDefault()
         e.stopPropagation()
-        alert("Hanya tersedia bagi pengguna yang telah login")
+        alert("Fitur favorit posting hanya tersedia bagi pengguna yang telah login")
     }
 
     const cardimage = loaded ?
@@ -143,7 +143,7 @@ export default function PostCard({ postID, setmodal }: cardType) {
             {/* birdicon if creator */}
             {idMatch &&
                 <HoverCard>
-                    <HoverCardTrigger asChild><div id="bird" className="absolute top-[-4px] left-[-4px] bg-vision w-10 h-10 z-10 rounded-lg flex place-items-center justify-center"><Bird /></div></HoverCardTrigger>
+                    <HoverCardTrigger asChild><div id="bird" className="absolute top-[-4px] left-[-4px] bg-vision w-10 h-10 z-10 rounded-md flex place-items-center justify-center"><Bird /></div></HoverCardTrigger>
                     <HoverCardContent className="absolute z-20">
                         Anda Pembuat Post Ini
                     </HoverCardContent>
@@ -155,7 +155,7 @@ export default function PostCard({ postID, setmodal }: cardType) {
             <div className="flex flex-col h-full justify-between gap-2">
                 <div>
 
-                    <div id="cardimage" className=" place-content-center w-[294px] h-[180px] aspect-square overflow-hidden rounded-md relative">{cardimage}</div>
+                    <div id="cardimage" className=" place-content-center w-[294px] h-[180px] aspect-square overflow-hidden  relative">{cardimage}</div>
 
                     <div id="cardtitle" className={`text-white bg-${borderColor} col-span-5 row-span-2 overflow-ellipsis overflow-hidden font-bold text-md w-[295px] h-[75px] line-clamp-3 px-2`}>{cardtitle}</div>
                     <div className="flex gap-3 ">
@@ -177,6 +177,7 @@ export default function PostCard({ postID, setmodal }: cardType) {
 
     
     if (!loaded || !postData) return (
+        // full card with skeletons
         <>{mainContent}</>
     )
     
@@ -188,7 +189,7 @@ export default function PostCard({ postID, setmodal }: cardType) {
             <div
                 onClick={(e) => {
                     if (setmodal) {
-                        e.preventDefault(); // Prevent the default navigation
+                        e.preventDefault(); // Prevent default navigation
                         setmodal(postData?.id);
                     }
                 }}
