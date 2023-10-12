@@ -171,7 +171,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
 
                     
                     <h1 id="titleArea" className="text-2xl font-bold mb-2">{postData.title} <ShareButton link={`https://visionest.xyz/nest/${postData.id}`} /> </h1>
-                    <div id='imagebackground' style={{ backgroundColor: getRandomHexColor() }}>
+                    <div id='imagebackground' className='h-[90%]' style={{ backgroundColor: getRandomHexColor() }}>
                     <div id='imageArea' className={` ${imageLoaded?"opacity-1":"opacity-0"} mb-2 overflow-hidden h-fit w-[100%] place-self-start relative md:place-self-center`}>
                         <Image src={postData.imageURL ? postData.imageURL : "https://utfs.io/f/a18934b5-b279-40cf-a84e-4813b44a72ac_placeholder.png"}
                             alt={postData.title}
@@ -184,7 +184,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
                     </div>
                     </div>
                         
-                    <div id='descriptionArea'>
+                    <div id='descriptionArea' className='pr-2'>
                         <p id="authorArea" className="text-gray-600 mb-1">
                             By <span className="break-words">{postData.authors}</span> • {postData.year}
                         </p>
