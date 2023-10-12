@@ -39,7 +39,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
     const isMobile = useIsMobile()
     const isLandscape = useIsLandscape()
     const router = useRouter()
-    const postId = DialogId ? DialogId : router.query.slug?.toString()
+    const postId = DialogId ? DialogId : router.query.id?.toString()
     const [postData, setPostData] = useState<posttype | null | undefined>();
     const [saved, setSaved] = useState<boolean | undefined>(false)
     const [saveLoad, setSaveLoad] = useState(false)

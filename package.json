@@ -70,6 +70,7 @@
     "zustand": "^4.4.2"
   },
   "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
     "@types/eslint": "^8.44.2",
     "@types/node": "^18.16.0",
     "@types/react": "^18.2.20",

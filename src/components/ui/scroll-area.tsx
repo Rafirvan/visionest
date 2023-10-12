@@ -7,7 +7,7 @@ const ScrollArea = React.forwardRef<
   React.ElementRef<typeof ScrollAreaPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root>
   >(({ className, children, ...props }, ref) => {
-  // check if user uses scrollAreaViewport
+  // check if user uses scrollAreaViewport...
   const hasViewportChild = React.Children.toArray(children).some(
     (child) => React.isValidElement(child) && child.type === ScrollAreaViewport
   );
@@ -39,7 +39,6 @@ const ScrollAreaViewport = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.ScrollAreaViewport>
   >(({ className, children, ...props }, ref) =>
   {
-    console.log(className)
     return(
   <ScrollAreaPrimitive.Viewport
     ref={ref}
@@ -76,4 +75,4 @@ const ScrollBar = React.forwardRef<
 ))
 ScrollBar.displayName = ScrollAreaPrimitive.ScrollAreaScrollbar.displayName
 
-export { ScrollArea,ScrollAreaViewport ,ScrollBar }
+export { ScrollArea, ScrollAreaViewport ,ScrollBar }

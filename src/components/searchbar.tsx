@@ -134,7 +134,7 @@ export default function Searchbar() {
                                 }
                                 }}
                                 
-                                className="flex snap-end  hover:bg-gray-200 cursor-pointer rounded-md h-[55px] md:h-[65px] overflow-hidden border-b text-xs md:text-sm">
+                                className="flex snap-start  hover:bg-gray-200 cursor-pointer rounded-md h-[55px] md:h-[65px] overflow-hidden border-b text-xs md:text-sm">
                                 <p className="overflow-hidden overflow-ellipsis line-clamp-3 p-1 w-[90%] text-justify">
                                     <Highlighter
                                         highlightClassName="bg-orange-300"

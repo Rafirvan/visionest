@@ -81,7 +81,7 @@ export default function Home() {
           className="opacity-30"
           {...animationProps}
         >
-            <Image src={nestimglowres} width={`${isMobile?400:2000}`}  height={2000}  placeholder="empty" alt='NEST' priority quality={10} />
+            <Image src={nestimglowres} width={`${isMobile?400:2000}`}  height={2000}  placeholder="empty" alt='NEST' priority quality={10} loading="eager"/>
           </motion.div>
         </motion.div>
       </section>

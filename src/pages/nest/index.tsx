@@ -8,7 +8,7 @@ import { Globe2, Star, Bird, Upload, Glasses } from "lucide-react"
 import PostCard from "~/components/postCard";
 import { trpc } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
-import BlogPost from "./[slug]";
+import BlogPost from "./[id]";
 import Modal from "~/components/nestmodal";
 import { AnimatePresence} from 'framer-motion';
 import { useRouter } from "next/router";
