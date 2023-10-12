@@ -46,23 +46,13 @@ export default function PostCarousel() {
                     className={`scale-150 absolute top-1/2 left-[-30px] transform -translate-y-1/2 z-10 ${atStart && "invisible"} `}
                     onClick={() => scroll('left')}
                 >
-                    <ArrowLeft
-                        style={{ color: leftColor }}
-                        onPointerEnter={() => setLeftColor("white")}
-                        onPointerDown={() => setLeftColor("white")}
-
-                        onPointerLeave={() => setLeftColor("black")}
-                        onPointerUp={() => setLeftColor("black")} />
+                    <ArrowLeft className="hover:text-blue-500"/>
                 </button>
                 <button
                     className={`scale-150 absolute top-1/2 right-[-30px]  transform -translate-y-1/2 z-10 ${atEnd && "invisible"}`}
                     onClick={() => scroll('right')}
                 >
-                    <ArrowRight style={{ color: rightColor }}
-                        onPointerEnter={() => setRightColor("white")}
-                        onPointerDown={() => setRightColor("white")}
-                        onPointerLeave={() => setRightColor("black")}
-                        onPointerUp={() => setRightColor("black")} />
+                    <ArrowRight className="hover:text-blue-500"/>
                 </button>
             </div>
 
