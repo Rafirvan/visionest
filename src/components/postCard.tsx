@@ -111,6 +111,8 @@ export default function PostCard({ postID, setmodal }: cardType) {
     }
 
     const cardimage = loaded ?
+        <div style={{backgroundColor:getRandomHexColor()}}>
+
         <Image src={postData?.imageURL ? postData?.imageURL : "https://utfs.io/f/a18934b5-b279-40cf-a84e-4813b44a72ac_placeholder.png"}
             alt="Loading"
             placeholder="empty"
@@ -118,8 +120,8 @@ export default function PostCard({ postID, setmodal }: cardType) {
             width={300}
             onLoad={()=>setImageLoaded(true)}
             className={`${imageLoaded? "opacity-100":"opacity-0"}`}
-            style={{ borderColor: "brown", backgroundColor:getRandomHexColor()}}
-        />
+            />
+        </div>
         : <Skeleton className="w-full h-full" />
 
 
