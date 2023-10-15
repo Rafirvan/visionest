@@ -44,6 +44,7 @@ export default function PostCard({ postID, setmodal }: cardType) {
     const [postData, setPostData] = useState<posttype | null | undefined>();
     const [saved, setSaved] = useState<boolean | undefined>(false)
     const [favCount, setFavCount] = useState<number | undefined>()
+    const [imageLoaded, setImageLoaded] = useState(false)
     const [borderColor, setBorderColor] = useState<string>("vision")
     const { user } = useUser()
 
@@ -115,7 +116,8 @@ export default function PostCard({ postID, setmodal }: cardType) {
             placeholder="empty"
             height={300}
             width={300}
-            
+            onLoad={()=>setImageLoaded(true)}
+            className={`${imageLoaded? "opacity-100":"opacity-0"}`}
             style={{ borderColor: "brown", backgroundColor:getRandomHexColor()}}
         />
         : <Skeleton className="w-full h-full" />
