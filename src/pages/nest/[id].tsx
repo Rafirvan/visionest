@@ -116,8 +116,8 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
     const favArea =
         (postData?.status != "ACCEPTED") ? <div></div> :
             (saveLoad) ? <div className='absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-fit px-1 flex place-items-center justify-center z-10 bg-white'><Spinner />{favCount}</div> :
-                saved ? <div className='absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-fit px-1 flex place-items-center justify-center z-10 bg-white'><Star className='cursor-pointer' onClick={e => toggleSave(e, false)} fill="yellow" />{favCount}</div> :
-                    <div className='absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-fit px-1 flex place-items-center justify-center z-10 bg-white'><Star className='cursor-pointer' onClick={e => { if (user) toggleSave(e, true); else (handleNonUser(e)) }} />{favCount}</div>;
+                saved ? <div className='absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-fit px-1 flex place-items-center justify-center z-10 bg-white opacity-30 hover:opacity-100'><Star className='cursor-pointer' onClick={e => toggleSave(e, false)} fill="yellow" />{favCount}</div> :
+                    <div className=' opacity-30 hover:opacity-100 absolute top-2 right-2 scale-150 border-2 border-black rounded-md h-10 w-fit px-1 flex place-items-center justify-center z-10 bg-white'><Star className='cursor-pointer' onClick={e => { if (user) toggleSave(e, true); else (handleNonUser(e)) }} />{favCount}</div>;
 
     const mainContent = () => {
 
@@ -166,7 +166,7 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
                             </>
                         }
                         {idmatch && <p className='pb-7'>Anda pembuat post ini! <Link className='w-min h-min font-bold text-blue-600 underline pb-4 ' href={`/edit/${postId}`}>Edit post ini</Link></p>}
-                        <hr />
+                        
                     </div>
 
                     
@@ -178,7 +178,8 @@ export default function BlogPost({ DialogId }: { DialogId?: string }) {
                             placeholder="empty"
                             height={600}
                             width={1000}
-                            onLoad={() => setImageLoaded(true)}
+                                onLoad={() => setImageLoaded(true)}
+                                priority
                             />
 
                     </div>

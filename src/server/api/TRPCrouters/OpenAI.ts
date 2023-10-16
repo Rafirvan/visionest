@@ -31,9 +31,11 @@ export const AIRouter = createTRPCRouter({
       apa yang tidak diinginkan mahasiswa untuk proyek mereka(opsional, abaikan jika kosong) = ${input.constraint}
 
       harap kembalikan daftar ini dengan format yang tepat:
-      Judul rekomendasi proyek = [your input here]
-      Deskripsi singkat dari judul proyek yang direkomendasikan = [your input here, maksimal 40 kata]
+      Judul rekomendasi proyek 1 = [your input here]
+      Judul rekomendasi proyek 2 = [your input here]
+      Judul rekomendasi proyek 3 = [your input here]
 
+      
       beberapa hal lain yang perlu dipertimbangkan:
     -jika ada bidang input yang tidak masuk akal, abaikan
     - jangan takut untuk merekomendasikan penggunaan teknologi / subjek yang berdekatan dengan yang mereka berikan
@@ -41,6 +43,9 @@ export const AIRouter = createTRPCRouter({
     - tolong jangan pernah menggunakan titik dua sebagai pengganti tanda sama dengan
     - Selalu jawab dengan bahasa Indonesia
     - Jika suatu input non-opsional tidak jelas, mohon hanya kembalikan output "Coba Lagi"`
+
+
+    // Deskripsi singkat dari judul proyek yang direkomendasikan = [your input here, maksimal 40 kata]
 
     const ideaCompletion = await openai.chat.completions.create({
       messages: [{ role: 'user', content: prompt }],
@@ -51,10 +56,24 @@ export const AIRouter = createTRPCRouter({
 
   }),
 
+  ideadescription: privateProcedure.input(z.string()).mutation(async ({ input }) => {
+    const prompt = ""
+
+    const ideaCompletion = await openai.chat.completions.create({
+      messages: [{ role: 'user', content: prompt }],
+      model: "gpt-3.5-turbo-0613",
+      max_tokens: 300,
+    });
+    return ideaCompletion.choices[0]?.message.content
+
+  }),
+
+
   content: privateProcedure.input(z.object({
     text: z.string(),
   })).mutation(async ({ input }) => {
-    const prompt =`di sini, Anda adalah seorang pembuat konten yang mengkhususkan diri dalam menghasilkan konten teks bergaya blog 
+    const prompt =`tarik napas beberapa saat sebelum mengerjakan tugas ini, 
+    di sini, Anda adalah seorang pembuat konten yang mengkhususkan diri dalam menghasilkan konten teks bergaya blog 
       dari abstrak makalah ilmiah, konten HARUS mengandung 
       minimal 150 kata dan maksimal 250 kata
       dengan daftar berikut:
@@ -86,3 +105,15 @@ export const AIRouter = createTRPCRouter({
     return contentCompletion.choices[0]?.message.content
   }),
 });
+
+
+const allTags = [
+  "Bahasa Indonesia", "Bahasa Inggris", "Agama", "Agrikultur", "Astronomi",
+  "Bangunan", "Biologi", "Desain Grafis", "Edukasi", "Ekonomi", "Energi",
+  "Fauna", "Filosofi", "Fisika", "Flora", "Geografi", "Geologi",
+  "Hukum", "Jurnalistik", "Kedokteran", "Kehutanan", "Kesenian", "Kesehatan",
+  "Kewarganegaraan", "Kimia", "Komputer", "Komunikasi", "Manajemen", "Maritim",
+  "Makanan", "Matematika", "Musik", "Olahraga", "Pariwisata", "Pemrograman",
+  "Politik", "Psikologi", "Sastra Indonesia", "Sastra Internasional", "Sejarah",
+  "Sosiologi", "Teknologi"
+];

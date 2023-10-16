@@ -8,11 +8,11 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "~
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { trpc } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { RightOut } from "~/components/transitions/pageVariants";
 import { TypeAnimation } from "react-type-animation";
 import VisionBG from "~/components/backgrounds/vision";
-import Rating from "~/components/rating";
+// import Rating from "~/components/rating";
 
 
 
@@ -21,14 +21,15 @@ export default function Vision() {
   //Section 2
   const [triggerScroll, setTriggerScroll] = useState(false);
   const [showResult, setShowResult] = useState(false)
-  const [descriptionDelay, setDescriptionDelay] = useState(true)
-  const [showRatingDelay, setShowRatingDelay] = useState(true)
+  const [selectedTitle, setSelectedTitle] = useState<number|undefined>()
+  // const [descriptionDelay, setDescriptionDelay] = useState(true)
+  // const [showRatingDelay, setShowRatingDelay] = useState(true)
 
   //custom alert
 
   //AI
   const [AILoading, setAILoading] = useState(false)
-  const [title, setTitle] = useState("")
+  const [titles, setTitles] = useState<string[]|undefined>()
   const [description, setDescription] = useState("")
   const [retries, setRetries] = useState(2)
 
@@ -52,23 +53,21 @@ export default function Vision() {
         console.log(data)
         const matches = data.match(/=(.+)/g);
         const matches2 = data.match(/:(.+)/g);
-        let matchArray, matchArray2;
-        if (matches) {
-          matchArray = matches.map(match => match.slice(1).trim());  // slice(1) removes the '=' from the start of each match
-        }
 
+        let matchArray, matchArray2;
+
+        if (matches) {
+          matchArray = matches.map(match => match.slice(1).trim()); 
+        }
         if (matches2) {
-          matchArray2 = matches2.map(match => match.slice(1).trim());  // slice(1) removes the '=' from the start of each match
+          matchArray2 = matches2.map(match => match.slice(1).trim());  
         }
 
         if (matchArray) {
-          if (matchArray[0]) setTitle(matchArray[0]);
-          if (matchArray[1]) setDescription(matchArray[1]);
-          console.log("match")
+          if (matchArray[0]&& matchArray[1]&& matchArray[2]) setTitles([matchArray[0], matchArray[1], matchArray[2]]);
         }
         else if (matchArray2) {
-          if (matchArray2[0]) setTitle(matchArray2[0]);
-          if (matchArray2[1]) setDescription(matchArray2[1]);
+          if (matchArray2[0] && matchArray2[1] && matchArray2[2]) setTitles([matchArray2[0], matchArray2[1], matchArray2[2]]);
           console.log("match")
         }
 
@@ -78,16 +77,15 @@ export default function Vision() {
     }
   });
 
-  const AIrate = trpc.db.visionrate.useMutation();
+  // const AIrate = trpc.db.visionrate.useMutation();
 
   const handleSubmit = useCallback((e?: React.FormEvent) => {
     if (e) { e.preventDefault(); setRetries(2)};
-    if (!retries) { setTitle("Nilai tidak ditemukan, mohon coba lagi"); return }
+    if (!retries) { setTitles(["Nilai tidak ditemukan, mohon coba lagi"]); return }
     setAILoading(true)
-    setDescriptionDelay(true)
-    setShowRatingDelay(true)
-    setTitle("")
-    setDescription("")
+    // setDescriptionDelay(true)
+    // setShowRatingDelay(true)
+    setTitles(undefined)
     if (!showResult) { setShowResult(true); }
     setTriggerScroll(prev => !prev);
     document.getElementById("Section2")?.scrollIntoView({ behavior: "smooth" })
@@ -106,15 +104,15 @@ export default function Vision() {
   }, [AIcall, constraintValue, fieldValue, majorValue, showResult, subjectValue, timeValue, typeValue]);
 
 
-  const giveRating = useCallback((rating:number) => {
+  // const giveRating = useCallback((rating:number) => {
 
-    const input = majorValue + ";" + typeValue + ";" + fieldValue + ";" + subjectValue + ";" + (timeValue ? timeValue : "empty") + ";" + (constraintValue ? constraintValue : "empty")
-    const output = title + ";" + description
-    AIrate.mutate({ input: input, output: output, rating: rating })
-    setTimeout(() => {
-      setShowRatingDelay(true);
-    }, 4000);
-  }, [AIrate, title, description]);
+  //   const input = majorValue + ";" + typeValue + ";" + fieldValue + ";" + subjectValue + ";" + (timeValue ? timeValue : "empty") + ";" + (constraintValue ? constraintValue : "empty")
+  //   const output = title + ";" + description
+  //   AIrate.mutate({ input: input, output: output, rating: rating })
+  //   setTimeout(() => {
+  //     setShowRatingDelay(true);
+  //   }, 4000);
+  // }, [AIrate, title, description]);
 
 
   useEffect(() => {
@@ -123,22 +121,27 @@ export default function Vision() {
     }
   }, [showResult, triggerScroll]);
 
-  useEffect(() => {
-    if (description) {
-      const timer = setTimeout(() => {
-        setDescriptionDelay(false);
-      }, 1000); 
-      const timer2 = setTimeout(() => {
-        setShowRatingDelay(false);
-      }, 7000);  
 
-      return () => { clearTimeout(timer); clearTimeout(timer2) }; 
-    }
-  }, [description]);
+  function handleGetDescription(title: string) {
+    console.log(title)
+  }
+
+  // useEffect(() => {
+  //   if (description) {
+  //     const timer = setTimeout(() => {
+  //       setDescriptionDelay(false);
+  //     }, 1000); 
+  //     const timer2 = setTimeout(() => {
+  //       setShowRatingDelay(false);
+  //     }, 7000);  
+
+  //     return () => { clearTimeout(timer); clearTimeout(timer2) }; 
+  //   }
+  // }, [description]);
 
 
-  const showTitle = <TypeAnimation sequence={[title]} speed={90}></TypeAnimation>
-  const showDescription = <TypeAnimation sequence={[description]} speed={90}></TypeAnimation>
+  // const showTitle = <TypeAnimation sequence={[titles]} speed={90}></TypeAnimation>
+  // const showDescription = <TypeAnimation sequence={[description]} speed={90}></TypeAnimation>
 
   // returns blank div if clerk is not loaded
   if (!isLoaded) return <div></div>
@@ -279,11 +282,56 @@ export default function Vision() {
         {/* Answer Area/section2 */}
       </section> 
       {showResult && <section id="Section2" className="relative py-12 min-h-[100vh] max-h-[1000vh] h-auto flex flex-col justify-center text-center">
-        <VisionBG/>
-        <p className="text-xl md:text-5xl lg:text-7xl text-white mb-8">{title == "" ? "Loading..." : showTitle}</p>
-        <p className=" text-lg md:text-4xl lg:text-5xl text-gray-400 ">{description && !descriptionDelay && showDescription}</p>
+        <VisionBG />
+        
+        
+        {titles ?
+          <> 
+            {/* title select */}
+            <AnimatePresence>
+              {titles.map((title, index) => {
+                if (selectedTitle === undefined) {
+                  return (
+                    <motion.p
+                      exit={{ opacity: 0, transition: { duration: 0.5 } }}
+                      layoutId={index.toString()}
+                      key={index}
+                      onClick={() => { handleGetDescription(title); setSelectedTitle(index) }}
+                      className="text-xl md:text-3xl lg:text-5xl text-white mb-8 cursor-pointer underline hover:text-slate-400">
+                      {title.replace(/"/g, "")}
+                    </motion.p>
+                  );
+                }
+              })  
+              }
+              {selectedTitle==undefined&&<p className="absolute left-2 bottom-7 text-lg  animate-pulse duration-1000   text-white">Mohon pilih salah satu judul yang paling disukai</p>}
 
-          <Rating rate={giveRating} show={!showRatingDelay}  />
+            </AnimatePresence>
+
+            {(selectedTitle != undefined) && (
+              <>
+                <motion.p
+                layoutId={selectedTitle.toString()}
+                className="absolute top-24 text-xl md:text-3xl lg:text-5xl text-white mb-8"
+              >
+                {titles[selectedTitle]?.replace(/"/g, "")}
+              </motion.p>
+              </> 
+            )}
+
+          </>
+          :
+          <p className="text-xl md:text-5xl lg:text-7xl text-white mb-8">Loading...</p>
+          }
+        
+
+
+
+
+
+        {/* <p className=" text-lg md:text-4xl lg:text-5xl text-gray-400 ">{description && !descriptionDelay && showDescription}</p> */}
+
+          {/* <Rating rate={giveRating} show={!showRatingDelay}  /> */}
 
       </section>}
 
