@@ -51,7 +51,7 @@ export default function Nest() {
         }
     }, { active: undefined });
 
-    const { data: infiniteCards, isFetched: allFetched, isLoading: allLoading, fetchNextPage, isFetchingNextPage} = trpc.db.callpostid.useInfiniteQuery({limit:10},{getNextPageParam:(lastPage)=>lastPage.nextCursor})
+    const { data: infiniteCards, isFetched: allFetched, isLoading: allLoading, fetchNextPage, isFetchingNextPage} = trpc.db.callpostid.useInfiniteQuery({limit:6},{getNextPageParam:(lastPage)=>lastPage.nextCursor})
     const { mutate: callfav, isLoading: favLoading } = trpc.db.callfavpostid.useMutation({
         onSuccess: (result) => { if (tab === "FAVORITE") dispatch({ type: 'SET_ACTIVE', payload: result }) }
     })
