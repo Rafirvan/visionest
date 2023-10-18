@@ -313,6 +313,41 @@ export const DBRouter = createTRPCRouter({
                
     }),
 
+    callsamplepostid: publicProcedure.input(z.string().array()).mutation(async ({input}) => {
+            const tagsWithPosts = await prisma.posttag.findMany({
+                where: {
+                    tag: {
+                        name: {
+                            in:input
+                        },
+                    },
+                },
+                take: 1,
+                select: {
+                    postId: true
+                },
+            });
+        
+        if (tagsWithPosts.length === 0) {
+            const totalPosts = await prisma.post.count();
+            const randomOffset = Math.floor(Math.random() * totalPosts);
+            const randomPost = await prisma.post.findFirst({
+                skip: randomOffset,
+                take: 1,
+                select:{id:true}
+            });
+            return [randomPost?.id]
+        } else {
+            const posts = tagsWithPosts.map(postTag => postTag.postId);
+            return posts;
+        }
+
+            
+        }
+    ),
+    
+    
+
     descriptionrate: publicProcedure.input(z.object({ input: z.string(), output: z.string(), rating: z.number() })).mutation(async ({ input }) => {
         await prisma.descriptionscore.create({
             data: {

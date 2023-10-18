@@ -35,9 +35,10 @@ interface posttype {
 interface cardType {
     postID: string,
     setmodal?: React.Dispatch<React.SetStateAction<string | undefined>>
+    newtab?:boolean
 }
 
-export default function PostCard({ postID, setmodal }: cardType) {
+export default function PostCard({ postID, setmodal, newtab=false }: cardType) {
     const [loaded, setLoaded] = useState(false)
     const [saveLoad, setSaveLoad] = useState(false)
     const [idMatch, setIdMatch] = useState(false)
@@ -52,6 +53,7 @@ export default function PostCard({ postID, setmodal }: cardType) {
 
 
     useEffect(() => {
+        if (!postID) return
         getpostfromid.mutate(postID)
         getFavCount.mutate(postID)
     }, [postID])
@@ -189,6 +191,8 @@ export default function PostCard({ postID, setmodal }: cardType) {
         <Link
             href={(postData && loaded) ? `nest/${postData.id}` : "/"}
             scroll={false}
+            rel={newtab ? "noreferrer noopener" : ""}
+            target={newtab? "_blank": ""}
         >
             <div
                 onClick={(e) => {

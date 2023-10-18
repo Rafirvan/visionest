@@ -4,16 +4,19 @@ import React, { useCallback, useEffect, useState } from "react"
 import Onestwhite from "../../public/Onestwhite.png"
 import Image from 'next/image';
 import { Button } from "~/components/ui/button";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "~/components/ui/accordion";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { trpc } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
 import { motion, AnimatePresence } from "framer-motion";
 import { RightOut } from "~/components/transitions/pageVariants";
-import { TypeAnimation } from "react-type-animation";
 import VisionBG from "~/components/backgrounds/vision";
-// import Rating from "~/components/rating";
+import PostCard from "~/components/postCard";
+import Rating from "~/components/rating";
 
+
+
+
+type TabType = 'steps' | 'abstract' | 'tools';
 
 
 
@@ -22,32 +25,29 @@ export default function Vision() {
   const [triggerScroll, setTriggerScroll] = useState(false);
   const [showResult, setShowResult] = useState(false)
   const [selectedTitle, setSelectedTitle] = useState<number|undefined>()
-  // const [descriptionDelay, setDescriptionDelay] = useState(true)
-  // const [showRatingDelay, setShowRatingDelay] = useState(true)
 
-  //custom alert
+  //section 3 
+  const [samplePostId, setSamplePostId] = useState<string | undefined>()
 
   //AI
   const [AILoading, setAILoading] = useState(false)
   const [titles, setTitles] = useState<string[]|undefined>()
-  const [description, setDescription] = useState("")
+  const [description, setDescription] = useState<Record<TabType, string|null|undefined>>();
+  const [activeDescription, setActiveDescription] = useState<TabType>('steps')
   const [retries, setRetries] = useState(2)
+  const [showRating,setShowRating] = useState(false)
 
   //form
   const [majorValue, setMajorValue] = useState<string>('');
   const [fieldValue, setFieldValue] = useState<string>('');
   const [subjectValue, setSubjectValue] = useState<string>('');
   const [typeValue, setTypeValue] = useState<string>("Practical")
-  const [timeValue, setTimeValue] = useState<string>("")
-  const [constraintValue, setConstraintValue] = useState<string>("")
 
   //clerk
   const { isLoaded, isSignedIn } = useUser();
 
-
-
-
-  const AIcall = trpc.completion.idea.useMutation({
+//backend calls
+  const AICallForTitles = trpc.completion.ideatitles.useMutation({
     onSuccess: (data) => {
       if (data) {
         console.log(data)
@@ -77,15 +77,31 @@ export default function Vision() {
     }
   });
 
-  // const AIrate = trpc.db.visionrate.useMutation();
+  const AICallForDescription = trpc.completion.ideasteps.useMutation({
+    onSuccess: (data) => {
+      if (data) {
+        if (data.tags) callSamplePost.mutate(data.tags.split(";"))
+        setDescription({ steps: data.steps, abstract: data.abstract, tools: data.tools })
+      }
+    }
+  });
+  
+  const callSamplePost = trpc.db.callsamplepostid.useMutation({
+      onSuccess:(data)=> setSamplePostId(data[0])
+  })
 
+  const AIrate = trpc.db.visionrate.useMutation();
+
+  //functions
   const handleSubmit = useCallback((e?: React.FormEvent) => {
     if (e) { e.preventDefault(); setRetries(2)};
     if (!retries) { setTitles(["Nilai tidak ditemukan, mohon coba lagi"]); return }
     setAILoading(true)
-    // setDescriptionDelay(true)
-    // setShowRatingDelay(true)
     setTitles(undefined)
+    setSelectedTitle(undefined)
+    setDescription(undefined)
+    setSamplePostId(undefined)
+    setShowRating(false)
     if (!showResult) { setShowResult(true); }
     setTriggerScroll(prev => !prev);
     document.getElementById("Section2")?.scrollIntoView({ behavior: "smooth" })
@@ -95,25 +111,30 @@ export default function Vision() {
       type: typeValue,
       subject: subjectValue,
       field: fieldValue,
-      time: timeValue,
-      constraint: constraintValue
     }
 
-    AIcall.mutate(inputs);
+    AICallForTitles.mutate(inputs);
 
-  }, [AIcall, constraintValue, fieldValue, majorValue, showResult, subjectValue, timeValue, typeValue]);
+  }, [AICallForTitles, fieldValue, majorValue, showResult, subjectValue, typeValue]);
 
 
-  // const giveRating = useCallback((rating:number) => {
+  const giveRating = useCallback((rating:number) => {
 
-  //   const input = majorValue + ";" + typeValue + ";" + fieldValue + ";" + subjectValue + ";" + (timeValue ? timeValue : "empty") + ";" + (constraintValue ? constraintValue : "empty")
-  //   const output = title + ";" + description
-  //   AIrate.mutate({ input: input, output: output, rating: rating })
-  //   setTimeout(() => {
-  //     setShowRatingDelay(true);
-  //   }, 4000);
-  // }, [AIrate, title, description]);
+    const input = majorValue + ";" + typeValue + ";" + fieldValue + ";" + subjectValue + ";" 
+    const output = selectedTitle + ";" + description?.steps + ";" + description?.abstract + ";" + description?.tools
+    AIrate.mutate({ input: input, output: output, rating: rating })
+    setTimeout(() => {
+      setShowRating(false);
+    }, 4000);
+  }, [AIrate, titles, description]);
 
+  useEffect(() => {
+    if (description) {
+      setTimeout(() => {
+        setShowRating(true);
+      }, 5000);
+    }
+  }, [description]);
 
   useEffect(() => {
     if (showResult) {
@@ -123,27 +144,14 @@ export default function Vision() {
 
 
   function handleGetDescription(title: string) {
-    console.log(title)
+    AICallForDescription.mutate(title)
   }
 
-  // useEffect(() => {
-  //   if (description) {
-  //     const timer = setTimeout(() => {
-  //       setDescriptionDelay(false);
-  //     }, 1000); 
-  //     const timer2 = setTimeout(() => {
-  //       setShowRatingDelay(false);
-  //     }, 7000);  
-
-  //     return () => { clearTimeout(timer); clearTimeout(timer2) }; 
-  //   }
-  // }, [description]);
 
 
-  // const showTitle = <TypeAnimation sequence={[titles]} speed={90}></TypeAnimation>
-  // const showDescription = <TypeAnimation sequence={[description]} speed={90}></TypeAnimation>
 
   // returns blank div if clerk is not loaded
+  
   if (!isLoaded) return <div></div>
 
   return (
@@ -237,34 +245,6 @@ export default function Vision() {
                   ></input>
                 </div>
 
-                <Accordion type="single" id="optionalinput" collapsible>
-                  <AccordionItem value="item-1">
-                    <AccordionTrigger className="text-red-700">Input Opsional</AccordionTrigger>
-                    <AccordionContent>
-                      <div id="timeinput">
-                        <label htmlFor="time" className="block text-sm font-medium mb-2">
-                          Berapa Lama Waktu Pengerjaan Projek
-                        </label>
-                        <input
-                          id="time"
-                          value={timeValue}
-                          onChange={(e) => setTimeValue(e.target.value)}
-                          className="ml-5 mb-3 flex w-full rounded-md border-2 border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50  dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
-                        ></input>
-                      </div> <div id="constraintinput">
-                        <label htmlFor="constraint" className="block text-sm font-medium mb-2">
-                          Apa yang anda tidak inginkan untuk projek ini?
-                        </label>
-                        <input
-                          id="constraint"
-                          value={constraintValue}
-                          onChange={(e) => setConstraintValue(e.target.value)}
-                          className="ml-5 mb-3 flex w-full rounded-md border-2 border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50  dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
-                        ></input>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
 
                 <Button
                   type="submit"
@@ -297,7 +277,8 @@ export default function Vision() {
                       layoutId={index.toString()}
                       key={index}
                       onClick={() => { handleGetDescription(title); setSelectedTitle(index) }}
-                      className="text-xl md:text-3xl lg:text-5xl text-white mb-8 cursor-pointer underline hover:text-slate-400">
+                      className="text-lg md:text-2xl lg:text-4xl text-white mb-8 cursor-pointer underline hover:text-slate-400">
+                      {/* text */}
                       {title.replace(/"/g, "")}
                     </motion.p>
                   );
@@ -305,17 +286,44 @@ export default function Vision() {
               })  
               }
               {selectedTitle==undefined&&<p className="absolute left-2 bottom-7 text-lg  animate-pulse duration-1000   text-white">Mohon pilih salah satu judul yang paling disukai</p>}
-
             </AnimatePresence>
 
             {(selectedTitle != undefined) && (
               <>
                 <motion.p
                 layoutId={selectedTitle.toString()}
-                className="absolute top-24 text-xl md:text-3xl lg:text-5xl text-white mb-8"
-              >
+                  className="absolute top-24 text-lg md:text-2xl lg:text-4xl text-white mb-8 text-center w-full"
+                >
                 {titles[selectedTitle]?.replace(/"/g, "")}
-              </motion.p>
+                </motion.p>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1, transition: { duration: 1 } }}
+                  className="absolute animate-rainbow border-2 top-48 w-[90%] left-[5%]"
+                >
+                  <nav className="h-8 w-full flex mb-3 pl-2">
+                    {navItems.map(item => (
+                      <div key={item.value} className={`h-full w-full ${(activeDescription!=item.value)&&"hover:border-b"} border-slate-900`}>
+                      <nav
+                        className="text-white cursor-pointer  text-sm sm:text-lg border-white"
+                        onClick={() => setActiveDescription(item.value as TabType)}
+                      >
+                        {item.label}
+                        </nav>
+                        {(activeDescription==item.value) &&
+                          <motion.div layoutId="underline" className="h-[1px] w-[80%] relative left-[10%] top-1 bg-blue-700 " ></motion.div>
+                        }
+                      </div>
+                    ))}
+                  </nav>
+                  <textarea
+                    rows={100}
+                  className="resize-none bg-transparent border-none w-full text-white cursor-text text-lg sm:text-xl md:text-2xl max-h-[480px] p-2 "
+                    value={description?.[activeDescription]??"Loading... mohon tunggu beberapa menit"}
+                  disabled
+                >
+                  </textarea>
+                </motion.div>
               </> 
             )}
 
@@ -323,21 +331,28 @@ export default function Vision() {
           :
           <p className="text-xl md:text-5xl lg:text-7xl text-white mb-8">Loading...</p>
           }
+
         
 
+          <Rating rate={giveRating} show={showRating}  />
 
+      </section>}
 
-
-
-        {/* <p className=" text-lg md:text-4xl lg:text-5xl text-gray-400 ">{description && !descriptionDelay && showDescription}</p> */}
-
-          {/* <Rating rate={giveRating} show={!showRatingDelay}  /> */}
-
+      {description && <section id="section3" className="min-h-[400px] w-full full-bg-black flex flex-col md:flex-row justify-center items-center gap-7 py-3">
+        <p className="text-white text-2xl">Post Rekomendasi Bagi Anda</p>
+        <PostCard postID={samplePostId? samplePostId : ""} newtab />
       </section>}
 
     </motion.div>
   )
 }
+
+
+const navItems = [
+  { label: "Langkah-Langkah", value: "steps" },
+  { label: "Contoh Abstrak", value: "abstract" },
+  { label: "Alat Bantu", value: "tools" }
+];
 
 
 const majors = [

@@ -46,6 +46,7 @@ module.exports = withUt({
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        'rainbow': 'rainbow 50s infinite',
       },
       scale: {
         '175': '1.75',

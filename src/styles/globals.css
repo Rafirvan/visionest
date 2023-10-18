@@ -102,6 +102,17 @@ input:not(:focus)::placeholder {
     z-index: 100000 !important;
 }
 
+@keyframes rainbow {
+  0% {border-color: red;}
+  14% {border-color: orange;}
+  28% {border-color: yellow;}
+  42% {border-color: green;}
+  57% {border-color: blue;}
+  71% {border-color: indigo;}
+  85% {border-color: violet;}
+  100% {border-color: red;}
+}
+
 input, textarea{
   border-width: 2px;
 }
