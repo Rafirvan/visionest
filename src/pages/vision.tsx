@@ -12,6 +12,7 @@ import { RightOut } from "~/components/transitions/pageVariants";
 import VisionBG from "~/components/backgrounds/vision";
 import PostCard from "~/components/postCard";
 import Rating from "~/components/rating";
+import { Clipboard } from "lucide-react";
 
 
 
@@ -148,6 +149,21 @@ export default function Vision() {
     AICallForDescription.mutate(title)
   }
 
+  function handleCopy() {
+    if (selectedTitle && description?.steps && description?.abstract && description?.tools)
+      navigator.clipboard.writeText((
+        [titles?.[selectedTitle],
+          description?.steps,
+          description?.abstract.replace(/\n\n/g, "\n"),
+          description?.tools.replace(/\n\n/g, "\n")
+        ].join("\n\n")
+      ))
+      .then(() => {
+        alert('Teks Berhasil Dicopy');
+      }).catch(err => {
+        console.error('Failed to copy text: ', err);
+      });
+  };
 
 
 
@@ -160,7 +176,7 @@ export default function Vision() {
       animate="enter"
       exit="exit"
       variants={RightOut}>
-      <section id="Section1" className="px-4 h-[100vh] w-full flex flex-col justify-between place-items-center bg-[100vw] md:flex-row gap-7 overflow-y-hidden ">
+      <section id="Section1" className="px-4 h-[100vh] min-h-[500px] w-full flex flex-col justify-between place-items-center bg-[100vw] md:flex-row gap-7 overflow-y-hidden ">
         <div id='Text' className='basis-2/5 h-full w-full flex flex-col place-content-center bg-green-700 text-white text-center '  >
           <h1 className='font-bold text-7xl mb-2'>The <div>Visi<span><Image src={Onestwhite} priority alt="o" className="inline w-[40px] aspect-square" /></span>n</div></h1>
           <p>Powered by OpenAI&trade;</p>
@@ -293,7 +309,7 @@ export default function Vision() {
               <>
                 <motion.p
                 layoutId={selectedTitle.toString()}
-                  className="absolute top-24 text-lg md:text-2xl lg:text-4xl text-white mb-8 text-center w-full"
+                  className="absolute top-24 text-lg md:text-2xl lg:text-4xl text-white mb-8 text-center w-full overflow-hidden overflow-ellipsis line-clamp-3"
                 >
                 {titles[selectedTitle]?.replace(/"/g, "")}
                 </motion.p>
@@ -302,7 +318,7 @@ export default function Vision() {
                   animate={{ opacity: 1, transition: { duration: 1 } }}
                   className="absolute animate-rainbow border-2 top-48 w-[90%] left-[5%]"
                 >
-                  <nav className="h-8 w-full flex mb-3 pl-2">
+                  <nav className="h-8 w-full flex mb-3 pl-2 pr-12">
                     {navItems.map(item => (
                       <div key={item.value} className={`h-full w-full ${(activeDescription!=item.value)&&"hover:border-b"} border-slate-900`}>
                       <nav
@@ -324,6 +340,10 @@ export default function Vision() {
                   disabled
                 >
                   </textarea>
+                  <nav
+                    onClick={handleCopy}
+                    className=" h-8 w-8 top-1 right-1 bg-slate-800 z-10 absolute flex items-center justify-center rounded-md cursor-pointer hover:outline hover:outline-1 outline-white">
+                    <Clipboard className="text-white" /></nav>
                 </motion.div>
               </> 
             )}
@@ -339,7 +359,7 @@ export default function Vision() {
 
       </section>}
 
-      {description && <section id="section3" className="min-h-[400px] w-full full-bg-black flex flex-col md:flex-row justify-center items-center gap-7 py-3">
+      {description && <section id="section3" className="min-h-[400px] w-full full-bg-black flex flex-col md:flex-row justify-center items-center gap-7 py-3 relative">
         <p className="text-white text-2xl">Post Rekomendasi Bagi Anda</p>
         <PostCard postID={samplePostId? samplePostId : ""} newtab />
       </section>}
