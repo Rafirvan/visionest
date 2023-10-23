@@ -118,15 +118,13 @@ function PostForm() {
             alert("Berhasil Edit, post anda sekarang PENDING")
             setTitleValue("")
             setAuthorValue("")
-            setCreationYearValue(2000)
             setDescriptionValue('')
             setImageURLValue('')
             setUniversityValue("")
             setPaperLinkValue("")
-            setButtonOn(true)
-            setTimeout(async () => {
-                await router.push("/")
-            }, 1);
+            setTimeout(() => {
+                void router.push(`/nest/${postId}`)
+            }, 1); 
 
         }
     });

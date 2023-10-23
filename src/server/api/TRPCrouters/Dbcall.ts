@@ -52,7 +52,7 @@ export const DBRouter = createTRPCRouter({
 
     })).mutation(async ({ ctx, input }) => {
 
-        const post = await ctx.prisma.post.update({
+        const editPost = await ctx.prisma.post.update({
             where: { id: input.id },
             data: {
                 creatorID: ctx.userId,
@@ -75,7 +75,7 @@ export const DBRouter = createTRPCRouter({
             }
         });
 
-        return post
+        return editPost.id
     }),
 
     // admin routers
