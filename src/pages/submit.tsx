@@ -62,16 +62,17 @@ function PostForm() {
     const AIrate = trpc.db.descriptionrate.useMutation();
 
     const DBpush = trpc.db.submit.useMutation({
-        onSuccess: () => {
+        onSuccess: (id) => {
             alert("Berhasil Upload, post anda sekarang PENDING")
             setTitleValue("")
             setAuthorValue("")
-            setCreationYearValue(2000)
             setDescriptionValue('')
             setImageURLValue('')
             setUniversityValue("")
             setPaperLinkValue("")
-            setButtonOn(true)
+            setTimeout(() => {
+                void router.push(`nest/${id}`)
+            }, 1); 
         }
     });
 

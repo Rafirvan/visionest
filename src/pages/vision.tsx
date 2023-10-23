@@ -101,6 +101,7 @@ export default function Vision() {
     setSelectedTitle(undefined)
     setDescription(undefined)
     setSamplePostId(undefined)
+    setActiveDescription('steps')
     setShowRating(false)
     if (!showResult) { setShowResult(true); }
     setTriggerScroll(prev => !prev);

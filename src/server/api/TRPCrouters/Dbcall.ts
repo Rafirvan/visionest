@@ -22,7 +22,7 @@ export const DBRouter = createTRPCRouter({
 
     })).mutation(async ({ ctx, input }) => {
 
-        const post = await ctx.prisma.post.create({
+        const newPost = await ctx.prisma.post.create({
             data: {
                 creatorID: ctx.userId,
                 title: input.title,
@@ -37,7 +37,7 @@ export const DBRouter = createTRPCRouter({
             }
 
         })
-        return post
+        return newPost.id
     }),
 
     edit: privateProcedure.input(z.object({

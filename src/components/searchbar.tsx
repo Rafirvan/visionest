@@ -121,7 +121,7 @@ export default function Searchbar() {
             >
                 <p className=" underline decoration-slate-300">Rekomendasi</p>
                 <ScrollArea id="posts" className="h-[280px]" >
-                    <ScrollAreaViewport className="overscroll-none snap-y snap-mandatory" >
+                    <ScrollAreaViewport className="overscroll-none snap-y snap-mandatory pb-7" >
                     {isLoading ? [1, 2, 3, 4, 5].map((e) => { return <div key={e} className=" px-4 py-1 rounded-md h-[55px]  w-full "><Skeleton delay={200 * e} className="h-full w-full " /></div> }) :
                         
                         filteredPosts?.map(post => (

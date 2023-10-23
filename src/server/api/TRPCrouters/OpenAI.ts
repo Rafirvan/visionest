@@ -33,12 +33,13 @@ export const AIRouter = createTRPCRouter({
 
       
       beberapa hal lain yang perlu dipertimbangkan:
+      -ketiga judul rekomendasi proyek dibuat seberagam sebisa mungkin
     -jika ada bidang input yang tidak masuk akal, abaikan
     - jangan takut untuk merekomendasikan penggunaan teknologi / subjek yang berdekatan dengan yang mereka berikan
     - jika mungkin, coba condongkan ke proyek yang mungkin menghasilkan literatur ilmiah
     - tolong jangan pernah menggunakan titik dua sebagai pengganti tanda sama dengan
     - Selalu jawab dengan bahasa Indonesia
-    - Setiap judul memiliki maksimal 20 kata
+    - Setiap judul memiliki maksimal 30 kata
     - Setiap jusul tidak perlu diberi deskripsi tambahan
     - Jika suatu input non-opsional tidak jelas, mohon hanya kembalikan output "Coba Lagi"`
 
@@ -60,7 +61,8 @@ export const AIRouter = createTRPCRouter({
     untuk menyelesaikan literatur ilmiah mereka. Anda tahu bahwa judul karya ilmiah adalah ${input}.
     mohon bantu mereka menyelesaikan langkah awal dari literatur ilmiah mereka, yaitu dengan membuatkan
     mereka langkah-langkah pengerjaan literatur ilmiah, mulai dari tahap penelitian hingga penyelesaian
-     Mohon jawab dengan langkah-langkah singkat(maksimal 20 kata per langkah)
+     Mohon jawab dengan langkah-langkah singkat(maksimal 20 kata per langkah) dan pastikan bahwa hasil jawaban anda
+     sangat relevan terhadap judul yang diberikan
     `
 
     const tagsprompt = `dari judul ${input}, mohon jawab dengan kategori apa saja yang cocok untuk 
@@ -78,14 +80,16 @@ export const AIRouter = createTRPCRouter({
   -jangan ubah besar kecil dari huruf dalam kategori`
 
     const abstractprompt = `dari judul ${input}, mohon jawab dengan contoh abstrak yang mungkin dihasilkan 
-    dengan maksimal 200 kata dan berbahasa indonesia tanpa kata kunci`
+    dengan maksimal 200 kata dan berbahasa indonesia tanpa kata kunci, pastikan bahwa hasil jawaban anda
+     sangat relevan terhadap judul yang diberikan`
 
     const toolsprompt =
       `tarik nafas panjang dan ikuti perintah ini, 
     anda adalah seorang yang telah membuat banyak literatur ilmiah dan ingin membantu mahasiswa anda 
     untuk menyelesaikan literatur ilmiah mereka. Anda tahu bahwa judul karya ilmiah adalah ${input}.
     mohon bantu mereka untuk mencari paling tidak 5 software maupun hardware yang dapat membantu mereka 
-    dalam penyelesaian tugas akhir mereka
+    dalam penyelesaian tugas akhir mereka, dan pastikan bahwa hasil jawaban anda
+     sangat relevan terhadap judul yang diberikan
     `
 
 
