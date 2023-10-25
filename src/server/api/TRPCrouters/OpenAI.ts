@@ -33,30 +33,35 @@ export const AIRouter = createTRPCRouter({
 
       
       beberapa hal lain yang perlu dipertimbangkan:
-      -ketiga judul rekomendasi proyek dibuat seberagam sebisa mungkin
+      -pastikan judul bersifat formal
+    -ketiga judul rekomendasi proyek dibuat seberagam mungkin
+    -judul pertama merupakan rekomendasi konvensional, judul kedua merupakan judul yang luar dari biasanya, dan judul ketiga merupakan judul yang sangat kreatif namun masih masuk akal dan dapat dijadikan literatur ilmiah
+    -Semua judul dijelaskan sejelas mungkin, hindari ketidakjelasan
+    -usahakan tidak mengulang kata terlalu banyak diantara 3 judul tersebut
     -jika ada bidang input yang tidak masuk akal, abaikan
     - jangan takut untuk merekomendasikan penggunaan teknologi / subjek yang berdekatan dengan yang mereka berikan
     - jika mungkin, coba condongkan ke proyek yang mungkin menghasilkan literatur ilmiah
     - tolong jangan pernah menggunakan titik dua sebagai pengganti tanda sama dengan
     - Selalu jawab dengan bahasa Indonesia
-    - Setiap judul memiliki maksimal 30 kata
-    - Setiap jusul tidak perlu diberi deskripsi tambahan
+    - Setiap judul memiliki minimal 25 kata dan maksimal 35 kata
+    - Setiap judul tidak perlu diberi deskripsi tambahan
     - Jika suatu input non-opsional tidak jelas, mohon hanya kembalikan output "Coba Lagi"`
 
 
 
     const ideaCompletion = await openai.chat.completions.create({
       messages: [{ role: 'user', content: prompt }],
-      model: "gpt-3.5-turbo-0613",
+      model: "gpt-4",
       max_tokens: 300,
+      temperature: 1
     });
     return ideaCompletion.choices[0]?.message.content
 
   }),
 
   ideasteps: privateProcedure.input(z.string()).mutation(async ({ input }) => {
-    const stepsprompt = 
-    `tarik nafas panjang dan ikuti perintah ini, 
+    const stepsprompt =
+      `tarik nafas panjang dan ikuti perintah ini, 
     anda adalah seorang yang telah membuat banyak literatur ilmiah dan ingin membantu mahasiswa anda 
     untuk menyelesaikan literatur ilmiah mereka. Anda tahu bahwa judul karya ilmiah adalah ${input}.
     mohon bantu mereka menyelesaikan langkah awal dari literatur ilmiah mereka, yaitu dengan membuatkan
@@ -93,24 +98,24 @@ export const AIRouter = createTRPCRouter({
     `
 
 
-    const stepsCompletion =  openai.chat.completions.create({
+    const stepsCompletion = openai.chat.completions.create({
       messages: [{ role: 'user', content: stepsprompt }],
       model: "gpt-3.5-turbo-0613",
       max_tokens: 1000,
     });
 
-    const tagsCompletion =  openai.chat.completions.create({
+    const tagsCompletion = openai.chat.completions.create({
       messages: [{ role: 'user', content: tagsprompt }],
       model: "gpt-3.5-turbo-0613",
       max_tokens: 300,
     });
 
-    const abstractCompletion =  openai.chat.completions.create({
+    const abstractCompletion = openai.chat.completions.create({
       messages: [{ role: 'user', content: abstractprompt }],
       model: "gpt-3.5-turbo-0613",
       max_tokens: 2000,
     });
-    const toolsCompletion =  openai.chat.completions.create({
+    const toolsCompletion = openai.chat.completions.create({
       messages: [{ role: 'user', content: toolsprompt }],
       model: "gpt-3.5-turbo-0613",
       max_tokens: 2000,
@@ -126,14 +131,60 @@ export const AIRouter = createTRPCRouter({
     };
   }),
 
+  embed: privateProcedure.input(z.string().array()).mutation(async ({ input }) => {
 
-  
+    const embeddings = await Promise.all(input.map(async (title) => {
+      const result = await openai.embeddings.create({
+        input: title,
+        model: "text-embedding-ada-002"
+      })
+      return result
+    }
+    )
+    )
+
+    const embeddingData = embeddings.map(e => e.data[0]?.embedding)
+
+    function cosineSimilarity(vectorA: number[], vectorB: number[]) {
+      if (vectorA.length !== vectorB.length) {
+        throw new Error("Vectors are not of the same length");
+      }
+
+      let dotProduct = 0;
+      let normA = 0;
+      let normB = 0;
+
+      for (let i = 0; i < vectorA.length; i++) {
+
+        dotProduct += vectorA[i]! * vectorB[i]!;
+        normA += vectorA[i]! * vectorA[i]!;
+        normB += vectorB[i]! * vectorB[i]!;
+
+      }
+
+      normA = Math.sqrt(normA);
+      normB = Math.sqrt(normB);
+
+      return dotProduct / (normA * normB);
+    }
+
+    const comparisons = [[0, 1], [1, 2], [0, 2]].map(e => {
+      return cosineSimilarity(embeddingData[e[0]!]!, embeddingData[e[1]!]!)
+    })
+
+    const average = (comparisons.reduce((accumulator, currentValue) => accumulator + currentValue, 0) / comparisons.length);
+
+    return ("rata-rata kesamaan antara 3 judul adalah " + (average - 0.05));
+  }),
+
+
+
 
 
   content: privateProcedure.input(z.object({
     text: z.string(),
   })).mutation(async ({ input }) => {
-    const prompt =`tarik napas beberapa saat sebelum mengerjakan tugas ini, 
+    const prompt = `tarik napas beberapa saat sebelum mengerjakan tugas ini, 
     di sini, Anda adalah seorang pembuat konten yang mengkhususkan diri dalam menghasilkan konten teks bergaya blog 
       dari abstrak makalah ilmiah, konten HARUS mengandung 
       minimal 150 kata dan maksimal 250 kata
@@ -151,8 +202,8 @@ export const AIRouter = createTRPCRouter({
         - anggaplah Anda adalah pencipta makalah tersebut, mempromosikan makalah atau produk Anda
           -Jangan mengembalikan judul, catatan, hitungan kata, atau pesan kesalahan
           -Selalu Kembalikan Output anda dalam bahasa Indonesia
-          ` 
-    
+          `
+
 
     const contentCompletion = await openai.chat.completions.create({
       messages: [{ role: 'user', content: prompt }],

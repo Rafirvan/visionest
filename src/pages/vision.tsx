@@ -25,18 +25,18 @@ export default function Vision() {
   //Section 2
   const [triggerScroll, setTriggerScroll] = useState(false);
   const [showResult, setShowResult] = useState(false)
-  const [selectedTitle, setSelectedTitle] = useState<number|undefined>()
+  const [selectedTitle, setSelectedTitle] = useState<number | undefined>()
 
   //section 3 
   const [samplePostId, setSamplePostId] = useState<string | undefined>()
 
   //AI
   const [AILoading, setAILoading] = useState(false)
-  const [titles, setTitles] = useState<string[]|undefined>()
-  const [description, setDescription] = useState<Record<TabType, string|null|undefined>>();
+  const [titles, setTitles] = useState<string[] | undefined>()
+  const [description, setDescription] = useState<Record<TabType, string | null | undefined>>();
   const [activeDescription, setActiveDescription] = useState<TabType>('steps')
   const [retries, setRetries] = useState(2)
-  const [showRating,setShowRating] = useState(false)
+  const [showRating, setShowRating] = useState(false)
 
   //form
   const [majorValue, setMajorValue] = useState<string>('');
@@ -47,25 +47,24 @@ export default function Vision() {
   //clerk
   const { isLoaded, isSignedIn } = useUser();
 
-//backend calls
+  //backend calls
   const AICallForTitles = trpc.completion.ideatitles.useMutation({
     onSuccess: (data) => {
       if (data) {
-        console.log(data)
         const matches = data.match(/=(.+)/g);
         const matches2 = data.match(/:(.+)/g);
 
         let matchArray, matchArray2;
 
         if (matches) {
-          matchArray = matches.map(match => match.slice(1).trim()); 
+          matchArray = matches.map(match => match.slice(1).trim());
         }
         if (matches2) {
-          matchArray2 = matches2.map(match => match.slice(1).trim());  
+          matchArray2 = matches2.map(match => match.slice(1).trim());
         }
 
         if (matchArray) {
-          if (matchArray[0]&& matchArray[1]&& matchArray[2]) setTitles([matchArray[0], matchArray[1], matchArray[2]]);
+          if (matchArray[0] && matchArray[1] && matchArray[2]) setTitles([matchArray[0], matchArray[1], matchArray[2]]);
         }
         else if (matchArray2) {
           if (matchArray2[0] && matchArray2[1] && matchArray2[2]) setTitles([matchArray2[0], matchArray2[1], matchArray2[2]]);
@@ -78,24 +77,29 @@ export default function Vision() {
     }
   });
 
+  const AIEmbedTitles = trpc.completion.embed.useMutation({
+    onSuccess: (data) => console.log(data)
+  })
+
   const AICallForDescription = trpc.completion.ideasteps.useMutation({
     onSuccess: (data) => {
       if (data) {
         if (data.tags) callSamplePost.mutate(data.tags.split(";"))
         setDescription({ steps: data.steps, abstract: data.abstract, tools: data.tools })
+        setAILoading(false)
       }
     }
   });
-  
+
   const callSamplePost = trpc.db.callsamplepostid.useMutation({
-      onSuccess:(data)=> setSamplePostId(data[0])
+    onSuccess: (data) => setSamplePostId(data[0])
   })
 
   const AIrate = trpc.db.visionrate.useMutation();
 
   //functions
   const handleSubmit = useCallback((e?: React.FormEvent) => {
-    if (e) { e.preventDefault(); setRetries(2)};
+    if (e) { e.preventDefault(); setRetries(2) };
     if (!retries) { setTitles(["Nilai tidak ditemukan, mohon coba lagi"]); return }
     setAILoading(true)
     setTitles(undefined)
@@ -120,20 +124,20 @@ export default function Vision() {
   }, [AICallForTitles, fieldValue, majorValue, showResult, subjectValue, typeValue]);
 
 
-  const giveRating = useCallback((rating:number) => {
+  const giveRating = useCallback((rating: number) => {
 
-    const input = majorValue + ";" + typeValue + ";" + fieldValue + ";" + subjectValue + ";" 
+    const input = majorValue + ";" + typeValue + ";" + fieldValue + ";" + subjectValue + ";"
     const output = selectedTitle + ";" + description?.steps + ";" + description?.abstract + ";" + description?.tools
     AIrate.mutate({ input: input, output: output, rating: rating })
     setTimeout(() => {
       setShowRating(false);
-    }, 4000);
+    }, 2000);
   }, [AIrate, titles, description]);
 
   useEffect(() => {
     if (description) {
       setTimeout(() => {
-        setShowRating(true);
+        if (description) setShowRating(true);
       }, 5000);
     }
   }, [description]);
@@ -144,31 +148,34 @@ export default function Vision() {
     }
   }, [showResult, triggerScroll]);
 
+  useEffect(() => { if (titles) AIEmbedTitles.mutate(titles) }, [titles])
+
 
   function handleGetDescription(title: string) {
+    setAILoading(true)
     AICallForDescription.mutate(title)
   }
 
   function handleCopy() {
-    if (selectedTitle && description?.steps && description?.abstract && description?.tools)
+    if (selectedTitle != undefined && description?.steps && description?.abstract && description?.tools)
       navigator.clipboard.writeText((
         [titles?.[selectedTitle],
-          description?.steps,
-          description?.abstract.replace(/\n\n/g, "\n"),
-          description?.tools.replace(/\n\n/g, "\n")
+        description?.steps,
+        description?.abstract.replace(/\n\n/g, "\n"),
+        description?.tools.replace(/\n\n/g, "\n")
         ].join("\n\n")
       ))
-      .then(() => {
-        alert('Teks Berhasil Dicopy');
-      }).catch(err => {
-        console.error('Failed to copy text: ', err);
-      });
+        .then(() => {
+          alert('Teks Berhasil Dicopy');
+        }).catch(err => {
+          console.error('Failed to copy text: ', err);
+        });
   };
 
 
 
   // returns blank div if clerk is not loaded
-  
+
   if (!isLoaded) return <div></div>
 
   return (
@@ -182,7 +189,7 @@ export default function Vision() {
           <p>Powered by OpenAI&trade;</p>
         </div>
 
-        
+
         {/* forms */}
         <div className="basis-3/5 h-full w-full flex place-content-center">
 
@@ -277,13 +284,13 @@ export default function Vision() {
         </div>
 
         {/* Answer Area/section2 */}
-      </section> 
+      </section>
       {showResult && <section id="Section2" className="relative py-12 min-h-[100vh] max-h-[1000vh] h-auto flex flex-col justify-center text-center">
         <VisionBG />
-        
-        
+
+
         {titles ?
-          <> 
+          <>
             {/* title select */}
             <AnimatePresence>
               {titles.map((title, index) => {
@@ -300,34 +307,34 @@ export default function Vision() {
                     </motion.p>
                   );
                 }
-              })  
+              })
               }
-              {selectedTitle==undefined&&<p className="absolute left-2 bottom-7 text-lg  animate-pulse duration-1000   text-white">Mohon pilih salah satu judul yang paling disukai</p>}
+              {selectedTitle == undefined && <p className="absolute left-2 bottom-7 text-lg  animate-pulse duration-1000   text-white">Mohon pilih salah satu judul yang paling disukai</p>}
             </AnimatePresence>
 
             {(selectedTitle != undefined) && (
               <>
                 <motion.p
-                layoutId={selectedTitle.toString()}
-                  className="absolute top-24 text-lg md:text-2xl lg:text-4xl text-white mb-8 text-center w-full overflow-hidden overflow-ellipsis line-clamp-3"
+                  layoutId={selectedTitle.toString()}
+                  className="absolute top-20 text-lg md:text-2xl lg:text-4xl text-white mb-4 text-center w-full overflow-hidden overflow-ellipsis line-clamp-3"
                 >
-                {titles[selectedTitle]?.replace(/"/g, "")}
+                  {titles[selectedTitle]?.replace(/"/g, "")}
                 </motion.p>
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1, transition: { duration: 1 } }}
-                  className="absolute animate-rainbow border-2 top-48 w-[90%] left-[5%]"
+                  className="absolute animate-rainbow border-2 top-52 w-[90%] left-[5%]"
                 >
                   <nav className="h-8 w-full flex mb-3 pl-2 pr-12">
                     {navItems.map(item => (
-                      <div key={item.value} className={`h-full w-full ${(activeDescription!=item.value)&&"hover:border-b"} border-slate-900`}>
-                      <nav
-                        className="text-white cursor-pointer  text-sm sm:text-lg border-white"
-                        onClick={() => setActiveDescription(item.value as TabType)}
-                      >
-                        {item.label}
+                      <div key={item.value} className={`h-full w-full ${(activeDescription != item.value) && "hover:border-b"} border-slate-900`}>
+                        <nav
+                          className="text-white cursor-pointer  text-sm sm:text-lg border-white"
+                          onClick={() => setActiveDescription(item.value as TabType)}
+                        >
+                          {item.label}
                         </nav>
-                        {(activeDescription==item.value) &&
+                        {(activeDescription == item.value) &&
                           <motion.div layoutId="underline" className="h-[1px] w-[80%] relative left-[10%] top-1 bg-blue-700 " ></motion.div>
                         }
                       </div>
@@ -335,33 +342,33 @@ export default function Vision() {
                   </nav>
                   <textarea
                     rows={100}
-                  className="resize-none bg-transparent border-none w-full text-white cursor-text text-lg sm:text-xl md:text-2xl max-h-[480px] p-2 "
-                    value={description?.[activeDescription]??"Loading... mohon tunggu beberapa menit"}
-                  disabled
-                >
+                    className="resize-none bg-transparent border-none w-full text-white cursor-text text-lg sm:text-xl md:text-2xl max-h-[440px] p-2 "
+                    value={description?.[activeDescription] ?? "Loading... mohon tunggu beberapa menit"}
+                    disabled
+                  >
                   </textarea>
-                  <nav
+                  {description && <nav
                     onClick={handleCopy}
                     className=" h-8 w-8 top-1 right-1 bg-slate-800 z-10 absolute flex items-center justify-center rounded-md cursor-pointer hover:outline hover:outline-1 outline-white">
-                    <Clipboard className="text-white" /></nav>
+                    <Clipboard className="text-white" /></nav>}
                 </motion.div>
-              </> 
+              </>
             )}
 
           </>
           :
           <p className="text-xl md:text-5xl lg:text-7xl text-white mb-8">Loading...</p>
-          }
+        }
 
-        
 
-          <Rating rate={giveRating} show={showRating}  />
+
+        <Rating rate={giveRating} show={showRating} />
 
       </section>}
 
       {description && <section id="section3" className="min-h-[400px] w-full full-bg-black flex flex-col md:flex-row justify-center items-center gap-7 py-3 relative">
         <p className="text-white text-2xl">Post Rekomendasi Bagi Anda</p>
-        <PostCard postID={samplePostId? samplePostId : ""} newtab />
+        <PostCard postID={samplePostId ? samplePostId : ""} newtab />
       </section>}
 
     </motion.div>
