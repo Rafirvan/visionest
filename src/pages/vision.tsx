@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState, useRef } from "react"
 import Onestwhite from "../../public/Onestwhite.png"
 import Image from 'next/image';
 import { Button } from "~/components/ui/button";
@@ -26,6 +26,7 @@ export default function Vision() {
   const [triggerScroll, setTriggerScroll] = useState(false);
   const [showResult, setShowResult] = useState(false)
   const [selectedTitle, setSelectedTitle] = useState<number | undefined>()
+  const timeoutIdRef = useRef<number | null>(null);
 
   //section 3 
   const [samplePostId, setSamplePostId] = useState<string | undefined>()
@@ -108,6 +109,7 @@ export default function Vision() {
     setSamplePostId(undefined)
     setActiveDescription('steps')
     setShowRating(false)
+    cancelTimeout()
     if (!showResult) { setShowResult(true); }
     setTriggerScroll(prev => !prev);
     document.getElementById("Section2")?.scrollIntoView({ behavior: "smooth" })
@@ -136,7 +138,7 @@ export default function Vision() {
 
   useEffect(() => {
     if (description) {
-      setTimeout(() => {
+      timeoutIdRef.current = window.setTimeout(() => {
         if (description) setShowRating(true);
       }, 5000);
     }
@@ -150,6 +152,12 @@ export default function Vision() {
 
   useEffect(() => { if (titles) AIEmbedTitles.mutate(titles) }, [titles])
 
+
+  function cancelTimeout() {
+    if (timeoutIdRef.current !== null) {
+      clearTimeout(timeoutIdRef.current);
+    }
+  };
 
   function handleGetDescription(title: string) {
     setAILoading(true)

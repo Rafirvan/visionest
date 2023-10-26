@@ -33,6 +33,7 @@ export const AIRouter = createTRPCRouter({
 
       
       beberapa hal lain yang perlu dipertimbangkan:
+      -refrain from using made-up names
       -pastikan judul bersifat formal
     -ketiga judul rekomendasi proyek dibuat seberagam mungkin
     -judul pertama merupakan rekomendasi konvensional, judul kedua merupakan judul yang luar dari biasanya, dan judul ketiga merupakan judul yang sangat kreatif namun masih masuk akal dan dapat dijadikan literatur ilmiah
@@ -51,7 +52,7 @@ export const AIRouter = createTRPCRouter({
 
     const ideaCompletion = await openai.chat.completions.create({
       messages: [{ role: 'user', content: prompt }],
-      model: "gpt-4",
+      model: "gpt-3.5-turbo-0613",
       max_tokens: 300,
       temperature: 1
     });
