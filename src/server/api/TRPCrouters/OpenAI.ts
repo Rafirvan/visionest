@@ -22,7 +22,7 @@ export const AIRouter = createTRPCRouter({
     const prompt = `
       Anda akan membantu mahasiswa menemukan ide cerdas untuk proyek mahasiswa selanjutnya, dengan daftar berikut:
       jurusan mahasiswa = ${input.major}
-      tipe proyek yang diinginkan mahasiswa(baik praktis atau teoritis) = ${input.type}
+      tipe proyek yang diinginkan mahasiswa(dari pilihan praktikal atau teoretikal) = ${input.type}
       bidang yang diinginkan mahasiswa = ${input.field}
       subjek penelitian atau teknologi yang dikenal mahasiswa = ${input.subject}
 
@@ -33,6 +33,7 @@ export const AIRouter = createTRPCRouter({
 
       
       beberapa hal lain yang perlu dipertimbangkan:
+      -tipe projek praktikal mencakup pembuatan suatu produk software maupun hardware, tipe projek teoretikal mencakup analisis dan studi lapangan
       -refrain from using made-up names
       -pastikan judul bersifat formal
     -ketiga judul rekomendasi proyek dibuat seberagam mungkin
@@ -53,8 +54,11 @@ export const AIRouter = createTRPCRouter({
     const ideaCompletion = await openai.chat.completions.create({
       messages: [{ role: 'user', content: prompt }],
       model: "gpt-3.5-turbo-0613",
+      frequency_penalty: 1.2,
+      presence_penalty: 1.2,
       max_tokens: 300,
-      temperature: 1
+      temperature: 1.2,
+
     });
     return ideaCompletion.choices[0]?.message.content
 

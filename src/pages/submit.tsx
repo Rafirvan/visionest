@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback} from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { Button } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { trpc } from "~/utils/api";
@@ -24,25 +24,25 @@ export default function Submit() {
     if (!isLoaded) return <div></div>
 
     return (
-        
+
         <motion.section
             animate="enter"
             exit="exit"
             variants={RightOut}
             id="Section1" className="h-[100vh] w-full flex flex-col justify-between place-items-center bg-[100vw] lg:flex-row gap-7 overflow-y-hidden">
-                <div id='Text' className='basis-2/5 h-full w-full flex flex-col place-content-center bg-blue-600 text-white text-center px-4'>
-                    <h1 className='font-bold text-7xl mb-2'>Submit a <div>P<span><Image priority src={Onestwhite} alt="o" className="inline w-[40px] aspect-square" /></span>st</div></h1>
-                    <p>Masukkan Penjelasan Mengenai Karya Ilmiah Anda</p>
-                </div>
+            <div id='Text' className='basis-2/5 h-full w-full flex flex-col place-content-center bg-blue-600 text-white text-center px-4'>
+                <h1 className='font-bold text-7xl mb-2'>Submit a <div>P<span><Image priority loading="eager" src={Onestwhite} alt="o" className="inline w-[40px] aspect-square" /></span>st</div></h1>
+                <p>Masukkan Penjelasan Mengenai Karya Ilmiah Anda</p>
+            </div>
 
-                <div className="basis-3/5 h-full w-full flex place-content-center">
+            <div className="basis-3/5 h-full w-full flex place-content-center">
 
-                    {(isLoaded && isSignedIn) ?
-                        <PostForm />
-                        : <p className="place-self-center font-bold text-2xl md:text-4xl text-center">Login Untuk Mengakses Fitur</p>}
-                </div>
-            </motion.section>
-            
+                {(isLoaded && isSignedIn) ?
+                    <PostForm />
+                    : <p className="place-self-center font-bold text-2xl md:text-4xl text-center">Login Untuk Mengakses Fitur</p>}
+            </div>
+        </motion.section>
+
     )
 }
 
@@ -72,7 +72,7 @@ function PostForm() {
             setPaperLinkValue("")
             setTimeout(() => {
                 void router.push(`nest/${id}`)
-            }, 1); 
+            }, 1);
         }
     });
 
@@ -103,7 +103,7 @@ function PostForm() {
         };
     }, [authorValue, descriptionValue, filledInput, imageURLValue, paperLinkValue, router, titleValue, universityValue]);
 
-    
+
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         console.log("submit")
@@ -136,9 +136,9 @@ function PostForm() {
 
 
     return (
-        
+
         <ScrollArea className="pl-2 h-full w-full pb-10">
-            
+
             <form onSubmit={handleSubmit} className="w-[90%] h-full flex flex-col justify-center">
 
                 <div id="titleinput">
@@ -216,7 +216,7 @@ function PostForm() {
                 </div>
 
                 <div id="descriptioninput" >
-                    
+
                     <Rating rate={giveRating} show={!showRatingDelay} />
 
                     <label htmlFor="description" className="block text-sm font-medium mb-2">

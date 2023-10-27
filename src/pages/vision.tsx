@@ -52,6 +52,7 @@ export default function Vision() {
   const AICallForTitles = trpc.completion.ideatitles.useMutation({
     onSuccess: (data) => {
       if (data) {
+        console.log(data)
         const matches = data.match(/=(.+)/g);
         const matches2 = data.match(/:(.+)/g);
 
@@ -193,7 +194,7 @@ export default function Vision() {
       variants={RightOut}>
       <section id="Section1" className="px-4 h-[100vh] min-h-[500px] w-full flex flex-col justify-between place-items-center bg-[100vw] md:flex-row gap-7 overflow-y-hidden ">
         <div id='Text' className='basis-2/5 h-full w-full flex flex-col place-content-center bg-green-700 text-white text-center '  >
-          <h1 className='font-bold text-7xl mb-2'>The <div>Visi<span><Image src={Onestwhite} priority alt="o" className="inline w-[40px] aspect-square" /></span>n</div></h1>
+          <h1 className='font-bold text-7xl mb-2'>The <div>Visi<span><Image src={Onestwhite} loading="eager" priority alt="o" className="inline w-[40px] aspect-square" /></span>n</div></h1>
           <p>Powered by OpenAI&trade;</p>
         </div>
 
