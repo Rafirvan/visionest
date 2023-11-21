@@ -1,0 +1,69 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table post {
+  id String [pk]
+  creatorID String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  title String [not null]
+  description String [not null]
+  authors String [not null]
+  year Int [not null]
+  university String [not null]
+  originlink String [not null]
+  imageURL String [not null]
+  status String [not null]
+  rejection String [not null]
+  favs userfavpost [not null]
+  posttag posttag [not null]
+}
+
+Table userfavpost {
+  favID String [pk]
+  userID String [not null]
+  post post [not null]
+  postID String [not null]
+  createdAt DateTime [default: `now()`, not null]
+
+  indexes {
+    (userID, postID) [unique]
+  }
+}
+
+Table tag {
+  id String [pk]
+  name String [unique, not null]
+  posts posttag [not null]
+}
+
+Table posttag {
+  post post [not null]
+  tag tag [not null]
+  postId String [not null]
+  tagId String [not null]
+
+  indexes {
+    (postId, tagId) [pk]
+  }
+}
+
+Table visionscore {
+  id String [pk]
+  input String [not null]
+  output String [not null]
+  score Int [not null]
+}
+
+Table descriptionscore {
+  id String [pk]
+  input String [not null]
+  output String [not null]
+  score Int [not null]
+}
+
+Ref: userfavpost.postID > post.id
+
+Ref: posttag.postId > post.id
+
+Ref: posttag.tagId > tag.id

@@ -403,3 +403,7 @@ const majors = [
   "Studi Film", "Teknik Elektro", "Teknik Industri", "Teknik Informatika", "Teknik Kimia", "Teknik Lingkungan",
   "Teknik Mesin", "Teknik Sipil", "Flora dan Fauna"
 ]
+
+
+
+

@@ -129,10 +129,10 @@ export const AIRouter = createTRPCRouter({
     const results = await Promise.allSettled([stepsCompletion, tagsCompletion, abstractCompletion, toolsCompletion]);
 
     return {
-      steps: results[0].status === 'fulfilled' ? results[0].value.choices[0]?.message.content : "loading...",
-      tags: results[1].status === 'fulfilled' ? results[1].value.choices[0]?.message.content : "loading...",
-      abstract: results[2].status === 'fulfilled' ? results[2].value.choices[0]?.message.content : "loading...",
-      tools: results[3].status === 'fulfilled' ? results[3].value.choices[0]?.message.content : "loading...",
+      steps: results[0].status === 'fulfilled' ? results[0].value.choices[0]?.message.content : "unable to fetch result",
+      tags: results[1].status === 'fulfilled' ? results[1].value.choices[0]?.message.content : "unable to fetch result",
+      abstract: results[2].status === 'fulfilled' ? results[2].value.choices[0]?.message.content : "unable to fetch result",
+      tools: results[3].status === 'fulfilled' ? results[3].value.choices[0]?.message.content : "unable to fetch result",
     };
   }),
 
@@ -179,7 +179,7 @@ export const AIRouter = createTRPCRouter({
 
     const average = (comparisons.reduce((accumulator, currentValue) => accumulator + currentValue, 0) / comparisons.length);
 
-    return ("rata-rata kesamaan antara 3 judul adalah " + (average - 0.05));
+    return ("rata-rata kesamaan antara 3 judul adalah " + average);
   }),
 
 
